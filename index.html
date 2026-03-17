@@ -245,21 +245,57 @@
             50% { transform: translateY(-10px); }
         }
 
+        /* iOS Hint Toast */
+        .ios-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #000;
+            padding: 15px;
+            border-radius: 18px;
+            display: none; /* Hidden by default */
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1001;
+            font-size: 0.85rem;
+            animation: slideUpToast 0.5s ease-out;
+        }
+
+        @keyframes slideUpToast {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .ios-hint i { font-size: 1.2rem; color: #007AFF; }
+        .ios-hint b { color: #000; }
+        .close-hint { margin-left: auto; cursor: pointer; color: #999; padding: 5px; }
+
         @media (max-width: 480px) {
             header h1 { font-size: 2rem; }
             .action-grid { grid-template-columns: 1fr; }
             .action-btn { flex-direction: row; justify-content: flex-start; padding: 1rem 1.5rem; gap: 15px; }
-            .install-btn { bottom: 15px; right: 15px; left: 15px; justify-content: center; } /* Full width on mobile */
+            .install-btn { bottom: 15px; right: 15px; left: 15px; justify-content: center; }
+            .ios-hint { bottom: 15px; left: 15px; right: 15px; }
         }
     </style>
 </head>
 
 <body>
-    <!-- Floating Install Button -->
+    <!-- Floating Install Button (Android/Chrome) -->
     <button id="installButton" class="install-btn">
         <i class="fas fa-download"></i>
         Instalar Radio Xero
     </button>
+
+    <!-- iOS Hint (Safari Only) -->
+    <div id="iosHint" class="ios-hint">
+        <i class="fas fa-share-square"></i>
+        <span>¿Usas iPhone? Toca <b>Compartir</b> y luego <b>"Agregar al inicio"</b> para instalar la App.</span>
+        <i class="fas fa-times close-hint" onclick="document.getElementById('iosHint').style.display='none'"></i>
+    </div>
 
     <div class="main-wrapper">
         <header>
@@ -370,6 +406,24 @@
             console.log('App installed successfully');
             installButton.style.display = 'none';
         });
+
+        // Detectar iOS para mostrar aviso manual
+        const isIos = () => {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            return /iphone|ipad|ipod/.test(userAgent);
+        };
+        const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+        if (isIos() && !isInStandaloneMode()) {
+            const hasSeenHint = localStorage.getItem('iosHintSeen');
+            if (!hasSeenHint) {
+                document.getElementById('iosHint').style.display = 'flex';
+                // Opcional: Marcar como visto después de 10 segundos
+                setTimeout(() => {
+                    localStorage.setItem('iosHintSeen', 'true');
+                }, 10000);
+            }
+        }
 
         // Service Worker Register
         if ('serviceWorker' in navigator) {
