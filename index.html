@@ -1,38 +1,34 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Radio Xero</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>
-body{
-font-family: Arial;
-text-align:center;
-background:#111;
-color:white;
-}
-</style>
+    <title>Radio Xero</title>
+
+    <link rel="manifest" href="manifest.json">
+
+    <meta name="theme-color" content="#000000">
+
+    <link rel="apple-touch-icon" href="icon-192.png">
 
 </head>
 
-<body>
+<body style="text-align:center;background:black;color:white;font-family:Arial">
 
-<h2>📻 Radio Xero !</h2>
+    <h2>📻 Radio Xero</h2>
 
-<p>En vivo</p>
+    <iframe src="https://zeno.fm/player/radio-xero" width="100%" height="250" frameborder="0">
+    </iframe>
 
-<iframe
-src="https://zeno.fm/player/radio-xero"
-width="100%"
-height="250"
-frameborder="0">
-</iframe>
-
-<p>
-Para acceso rápido → menú → agregar a pantalla principal
-</p>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
 
 </body>
+
 </html>
