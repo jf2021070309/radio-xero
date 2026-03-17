@@ -217,16 +217,50 @@
             font-size: 0.75rem;
         }
 
-        /* Responsive */
+        /* Floating Install Button */
+        .install-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: none; /* Hidden by default */
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 20px rgba(237, 28, 36, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            animation: bounce 2s infinite;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
         @media (max-width: 480px) {
             header h1 { font-size: 2rem; }
             .action-grid { grid-template-columns: 1fr; }
             .action-btn { flex-direction: row; justify-content: flex-start; padding: 1rem 1.5rem; gap: 15px; }
+            .install-btn { bottom: 15px; right: 15px; left: 15px; justify-content: center; } /* Full width on mobile */
         }
     </style>
 </head>
 
 <body>
+    <!-- Floating Install Button -->
+    <button id="installButton" class="install-btn">
+        <i class="fas fa-download"></i>
+        Instalar Radio Xero
+    </button>
+
     <div class="main-wrapper">
         <header>
             <h1>Radio Xero</h1>
@@ -302,6 +336,42 @@
     </div>
 
     <script>
+        // PWA Install Logic
+        let deferredPrompt;
+        const installButton = document.getElementById('installButton');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Nota: Este preventDefault() hará que Chrome muestre un aviso en consola 
+            // diciendo "Banner not shown". Es NORMAL, ya que estamos usando nuestro propio botón.
+            e.preventDefault();
+            // Guarda el evento para usarlo después
+            deferredPrompt = e;
+            // Muestra nuestro botón personalizado
+            installButton.style.display = 'flex';
+            console.log('PWA: Evento beforeinstallprompt capturado. Botón manual listo.');
+        });
+
+        installButton.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                // Muestra el prompt de instalación
+                deferredPrompt.prompt();
+                // Espera a que el usuario responda
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to install prompt: ${outcome}`);
+                // Limpia el prompt (solo se puede usar una vez)
+                deferredPrompt = null;
+                // Oculta el botón
+                installButton.style.display = 'none';
+            }
+        });
+
+        // Oculta el botón si la app ya se instaló
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('App installed successfully');
+            installButton.style.display = 'none';
+        });
+
+        // Service Worker Register
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
