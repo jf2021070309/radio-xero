@@ -149,11 +149,19 @@
         .player-wrapper {
             width: 100%;
             border-radius: 16px;
-            overflow: hidden;
+            overflow: hidden; /* Corta cualquier cosa que sobresalga */
             background: #000;
+            position: relative;
         }
 
-        /* Action Grid */
+        /* Iframe Styles */
+        .player-wrapper iframe {
+            display: block;
+            width: 100%;
+            height: 300px; /* Altura generosa para evitar scroll */
+            border: none;
+            overflow: hidden;
+        }
         .action-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -311,9 +319,7 @@
             <div class="player-wrapper">
                 <iframe
                     src="https://zeno.fm/player/radio-xero"
-                    width="100%"
-                    height="250"
-                    frameborder="0"
+                    scrolling="no"
                     loading="lazy">
                 </iframe>
             </div>
