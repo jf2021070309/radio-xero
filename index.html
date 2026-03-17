@@ -1,34 +1,315 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Radio Xero</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Xero | Tu Estación Digital</title>
+    
     <link rel="manifest" href="manifest.json">
-
     <meta name="theme-color" content="#000000">
-
     <link rel="apple-touch-icon" href="icon-192.png">
+    
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <style>
+        :root {
+            --primary: #ED1C24; /* Rojo Logo */
+            --secondary: #1A3B70; /* Azul Marino Logo */
+            --primary-glow: rgba(237, 28, 36, 0.3);
+            --bg-dark: #020408; /* Fondo casi negro azulado */
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text: #ffffff;
+            --text-dim: #999999;
+            --card-radius: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(237, 28, 36, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(26, 59, 112, 0.15) 0%, transparent 40%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
+        }
+
+        .main-wrapper {
+            width: 100%;
+            max-width: 600px; /* Base width for mobile */
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: max-width 0.4s ease;
+        }
+
+        @media (min-width: 900px) {
+            .main-wrapper {
+                max-width: 1000px;
+            }
+            .info-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header Section */
+        header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            background: linear-gradient(135deg, #fff 20%, var(--primary) 60%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.25rem;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(237, 28, 36, 0.1);
+            padding: 6px 16px;
+            border-radius: 100px;
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1px solid rgba(237, 28, 36, 0.2);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(237, 28, 36, 0.7); }
+            50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 15px rgba(237, 28, 36, 0.4); }
+            100% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(237, 28, 36, 0); }
+        }
+
+        /* Glass Cards */
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            height: 100%;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Player Card */
+        .player-card {
+            padding: 1rem;
+            background: rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .player-wrapper {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Action Grid */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 1.25rem;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .action-btn i { font-size: 1.5rem; }
+        
+        .whatsapp:hover { background: #25D366; border-color: #25D366; transform: translateY(-3px); }
+        .facebook:hover { background: #1877F2; border-color: #1877F2; transform: translateY(-3px); }
+        .instagram:hover { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); border-color: transparent; transform: translateY(-3px); }
+
+        /* Info Sections */
+        .info-card h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+        }
+
+        .content-list {
+            list-style: none;
+            text-align: left;
+        }
+
+        .content-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .content-item:last-child { border: none; }
+        .item-time { color: var(--primary); font-weight: 700; font-size: 0.85rem; }
+        .item-name { color: var(--text); font-size: 0.9rem; }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            header h1 { font-size: 2rem; }
+            .action-grid { grid-template-columns: 1fr; }
+            .action-btn { flex-direction: row; justify-content: flex-start; padding: 1rem 1.5rem; gap: 15px; }
+        }
+    </style>
 </head>
 
-<body style="text-align:center;background:black;color:white;font-family:Arial">
+<body>
+    <div class="main-wrapper">
+        <header>
+            <h1>Radio Xero</h1>
+            <div class="live-badge">
+                <span class="dot"></span>
+                Sintonizando... En Vivo
+            </div>
+        </header>
 
-    <h2>📻 Radio Xero</h2>
+        <!-- Player Card -->
+        <section class="card player-card">
+            <div class="player-wrapper">
+                <iframe
+                    src="https://zeno.fm/player/radio-xero"
+                    width="100%"
+                    height="250"
+                    frameborder="0"
+                    loading="lazy">
+                </iframe>
+            </div>
+        </section>
 
-    <iframe src="https://zeno.fm/player/radio-xero" width="100%" height="250" frameborder="0">
-    </iframe>
+        <!-- Social Grid -->
+        <nav class="action-grid">
+            <a href="https://wa.me/tu-numero" class="action-btn whatsapp" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+                <span>WhatsApp</span>
+            </a>
+            <a href="https://facebook.com/tu-perfil" class="action-btn facebook" target="_blank">
+                <i class="fab fa-facebook-f"></i>
+                <span>Facebook</span>
+            </a>
+            <a href="https://instagram.com/tu-perfil" class="action-btn instagram" target="_blank">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram</span>
+            </a>
+        </nav>
+
+        <!-- Desktop Info Grid -->
+        <div class="info-grid">
+            <!-- Programming -->
+            <section class="card info-card">
+                <h2><i class="far fa-calendar-alt"></i> Programación Diaria</h2>
+                <div class="content-list">
+                    <div class="content-item">
+                        <span class="item-name">Mañanas con Xero</span>
+                        <span class="item-time">08:00 AM</span>
+                    </div>
+                    <div class="content-item">
+                        <span class="item-name">Éxitos del Momento</span>
+                        <span class="item-time">02:00 PM</span>
+                    </div>
+                    <div class="content-item">
+                        <span class="item-name">Noche Retro</span>
+                        <span class="item-time">09:00 PM</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About -->
+            <section class="card info-card">
+                <h2><i class="fas fa-info-circle"></i> Nuestra Estación</h2>
+                <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; text-align: left;">
+                    Radio Xero es tu conexión directa con la mejor música y noticias. Transmitiendo 24/7 con calidad digital para acompañarte donde quiera que estés.
+                </p>
+            </section>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 Radio Xero - Todos los derechos reservados</p>
+            <p style="margin-top: 5px;">Hecho con ❤️ para nuestros oyentes</p>
+        </footer>
+    </div>
 
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('SW Registered'))
+                    .catch(err => console.log('SW Error', err));
+            });
         }
     </script>
-
 </body>
-
 </html>
+
