@@ -23,7 +23,7 @@
 
 1.  **Clona el repositorio**:
     ```bash
-    git clone https://github.com/tu-usuario/radio-xero.git
+    git clone https://github.com/jf2021070309/radio-xero.git
     ```
 2.  **Sube los archivos a GitHub Pages**:
     - Ve a `Settings` -> `Pages` en tu repositorio de GitHub.
