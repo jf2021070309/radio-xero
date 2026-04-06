@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Radio Xero | Tu Estación Digital</title>
-    
+
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="icon-192.png">
-    
+
     <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --primary: #ED1C24; /* Rojo Logo */
-            --secondary: #1A3B70; /* Azul Marino Logo */
+            --primary: #ED1C24;
+            /* Rojo Logo */
+            --secondary: #1A3B70;
+            /* Azul Marino Logo */
             --primary-glow: rgba(237, 28, 36, 0.3);
-            --bg-dark: #020408; /* Fondo casi negro azulado */
+            --bg-dark: #020408;
+            /* Fondo casi negro azulado */
             --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.08);
             --text: #ffffff;
@@ -38,7 +44,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 10%, rgba(237, 28, 36, 0.08) 0%, transparent 40%),
                 radial-gradient(circle at 90% 90%, rgba(26, 59, 112, 0.15) 0%, transparent 40%);
             color: var(--text);
@@ -52,7 +58,8 @@
 
         .main-wrapper {
             width: 100%;
-            max-width: 600px; /* Base width for mobile */
+            max-width: 600px;
+            /* Base width for mobile */
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
@@ -64,6 +71,7 @@
             .main-wrapper {
                 max-width: 1000px;
             }
+
             .info-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -72,8 +80,15 @@
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Header Section */
@@ -118,9 +133,23 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(237, 28, 36, 0.7); }
-            50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 15px rgba(237, 28, 36, 0.4); }
-            100% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(237, 28, 36, 0); }
+            0% {
+                transform: scale(0.95);
+                opacity: 0.5;
+                box-shadow: 0 0 0 0 rgba(237, 28, 36, 0.7);
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+                box-shadow: 0 0 15px rgba(237, 28, 36, 0.4);
+            }
+
+            100% {
+                transform: scale(0.95);
+                opacity: 0.5;
+                box-shadow: 0 0 0 0 rgba(237, 28, 36, 0);
+            }
         }
 
         /* Glass Cards */
@@ -142,14 +171,15 @@
         /* Player Card */
         .player-card {
             padding: 1rem;
-            background: rgba(0,0,0,0.4);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         .player-wrapper {
             width: 100%;
             border-radius: 16px;
-            overflow: hidden; /* Corta cualquier cosa que sobresalga */
+            overflow: hidden;
+            /* Corta cualquier cosa que sobresalga */
             background: #000;
             position: relative;
         }
@@ -158,10 +188,12 @@
         .player-wrapper iframe {
             display: block;
             width: 100%;
-            height: 300px; /* Altura generosa para evitar scroll */
+            height: 300px;
+            /* Altura generosa para evitar scroll */
             border: none;
             overflow: hidden;
         }
+
         .action-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -185,11 +217,27 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .action-btn i { font-size: 1.5rem; }
-        
-        .whatsapp:hover { background: #25D366; border-color: #25D366; transform: translateY(-3px); }
-        .facebook:hover { background: #1877F2; border-color: #1877F2; transform: translateY(-3px); }
-        .instagram:hover { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); border-color: transparent; transform: translateY(-3px); }
+        .action-btn i {
+            font-size: 1.5rem;
+        }
+
+        .whatsapp:hover {
+            background: #25D366;
+            border-color: #25D366;
+            transform: translateY(-3px);
+        }
+
+        .facebook:hover {
+            background: #1877F2;
+            border-color: #1877F2;
+            transform: translateY(-3px);
+        }
+
+        .instagram:hover {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            border-color: transparent;
+            transform: translateY(-3px);
+        }
 
         /* Info Sections */
         .info-card h2 {
@@ -211,12 +259,23 @@
             display: flex;
             justify-content: space-between;
             padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .content-item:last-child { border: none; }
-        .item-time { color: var(--primary); font-weight: 700; font-size: 0.85rem; }
-        .item-name { color: var(--text); font-size: 0.9rem; }
+        .content-item:last-child {
+            border: none;
+        }
+
+        .item-time {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .item-name {
+            color: var(--text);
+            font-size: 0.9rem;
+        }
 
         footer {
             margin-top: 2rem;
@@ -238,55 +297,166 @@
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
             font-size: 0.9rem;
-            display: none; /* Hidden by default */
+            display: none;
+            /* Hidden by default */
             align-items: center;
             gap: 10px;
             box-shadow: 0 10px 20px rgba(237, 28, 36, 0.4);
             cursor: pointer;
             z-index: 1000;
             animation: bounce 2s infinite;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
-        /* iOS Hint Toast */
-        .ios-hint {
+        /* iOS Install Overlay */
+        .ios-install-overlay {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            color: #000;
-            padding: 15px;
-            border-radius: 18px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 4, 8, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 9999;
             display: none; /* Hidden by default */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            color: white;
+            text-align: center;
+            animation: fadeInOverlay 0.4s ease-out;
+        }
+
+        .ios-install-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            max-width: 340px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .ios-install-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            color: #fff;
+        }
+
+        .ios-install-card > p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .ios-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .ios-step {
+            display: flex;
             align-items: center;
             gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            z-index: 1001;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 14px;
+            border-radius: 12px;
             font-size: 0.85rem;
-            animation: slideUpToast 0.5s ease-out;
+            border: 1px solid rgba(255,255,255,0.02);
         }
 
-        @keyframes slideUpToast {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .ios-step i {
+            font-size: 1.4rem;
+            color: #007AFF;
+            width: 24px;
+            text-align: center;
         }
 
-        .ios-hint i { font-size: 1.2rem; color: #007AFF; }
-        .ios-hint b { color: #000; }
-        .close-hint { margin-left: auto; cursor: pointer; color: #999; padding: 5px; }
+        .ios-step b {
+            color: #fff;
+        }
+
+        .ios-close-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .ios-close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .ios-arrow-down {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            color: var(--primary);
+            animation: bounceArrow 1.5s infinite;
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); }
+            to { opacity: 1; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+        }
+
+        @keyframes bounceArrow {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, 15px); }
+        }
 
         @media (max-width: 480px) {
-            header h1 { font-size: 2rem; }
-            .action-grid { grid-template-columns: 1fr; }
-            .action-btn { flex-direction: row; justify-content: flex-start; padding: 1rem 1.5rem; gap: 15px; }
-            .install-btn { bottom: 15px; right: 15px; left: 15px; justify-content: center; }
-            .ios-hint { bottom: 15px; left: 15px; right: 15px; }
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-btn {
+                flex-direction: row;
+                justify-content: flex-start;
+                padding: 1rem 1.5rem;
+                gap: 15px;
+            }
+
+            .install-btn {
+                bottom: 15px;
+                right: 15px;
+                left: 15px;
+                justify-content: center;
+            }
+
+
         }
     </style>
 </head>
@@ -298,11 +468,38 @@
         Instalar Radio Xero
     </button>
 
-    <!-- iOS Hint (Safari Only) -->
-    <div id="iosHint" class="ios-hint">
-        <i class="fas fa-share-square"></i>
-        <span>¿Usas iPhone? Toca <b>Compartir</b> y luego <b>"Agregar al inicio"</b> para instalar la App.</span>
-        <i class="fas fa-times close-hint" onclick="document.getElementById('iosHint').style.display='none'"></i>
+    <!-- iOS Hint Overlay (Safari Only) -->
+    <div id="iosHint" class="ios-install-overlay">
+        <div class="ios-install-card">
+            <h3>Instala Radio Xero</h3>
+            <p>Disfruta de nuestra radio sin interrupciones y con acceso directo desde tu inicio.</p>
+            
+            <div class="ios-steps">
+                <div class="ios-step">
+                    <i class="fas fa-ellipsis-h" style="color: var(--primary);"></i>
+                    <span>Presiona los <b>3 puntitos</b></span>
+                </div>
+                <div class="ios-step">
+                    <i class="fas fa-share-square"></i>
+                    <span>Toca en <b>Compartir</b></span>
+                </div>
+                <div class="ios-step">
+                    <i class="fas fa-ellipsis-v" style="color: var(--text);"></i>
+                    <span>Ve a <b>Ver más</b></span>
+                </div>
+                <div class="ios-step">
+                    <i class="far fa-plus-square" style="color: var(--text);"></i>
+                    <span>Selecciona <b>Agregar a inicio</b> y luego <b>Agregar</b></span>
+                </div>
+            </div>
+
+            <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
+                Quizás más tarde
+            </button>
+
+            <!-- Flecha apuntando al botón compartir de iOS -->
+            <i class="fas fa-arrow-down ios-arrow-down"></i>
+        </div>
     </div>
 
     <div class="main-wrapper">
@@ -317,10 +514,7 @@
         <!-- Player Card -->
         <section class="card player-card">
             <div class="player-wrapper">
-                <iframe
-                    src="https://zeno.fm/player/radio-xero"
-                    scrolling="no"
-                    loading="lazy">
+                <iframe src="https://zeno.fm/player/radio-xero" scrolling="no" loading="lazy">
                 </iframe>
             </div>
         </section>
@@ -366,7 +560,8 @@
             <section class="card info-card">
                 <h2><i class="fas fa-info-circle"></i> Nuestra Estación</h2>
                 <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; text-align: left;">
-                    Radio Xero es tu conexión directa con la mejor música y noticias. Transmitiendo 24/7 con calidad digital para acompañarte donde quiera que estés.
+                    Radio Xero es tu conexión directa con la mejor música y noticias. Transmitiendo 24/7 con calidad
+                    digital para acompañarte donde quiera que estés.
                 </p>
             </section>
         </div>
@@ -441,5 +636,5 @@
         }
     </script>
 </body>
+
 </html>
-
