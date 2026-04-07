@@ -21,17 +21,17 @@
     <style>
         :root {
             --primary: #ED1C24;
-            /* Rojo Logo */
+            --primary-rgb: 237, 28, 36;
             --secondary: #1A3B70;
-            /* Azul Marino Logo */
-            --primary-glow: rgba(237, 28, 36, 0.3);
-            --bg-dark: #020408;
-            /* Fondo casi negro azulado */
+            --secondary-rgb: 26, 59, 112;
+            --bg-dark: #05070a;
             --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-strong: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.1);
             --text: #ffffff;
-            --text-dim: #999999;
-            --card-radius: 24px;
+            --text-dim: #a0a0a0;
+            --card-radius: 28px;
+            --glow: 0 0 30px rgba(237, 28, 36, 0.2);
         }
 
         * {
@@ -165,33 +165,52 @@
         /* Glass Cards */
         .card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: var(--card-radius);
-            padding: 1.5rem;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             height: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .card:hover {
-            border-color: rgba(255, 255, 255, 0.15);
+            border-color: rgba(237, 28, 36, 0.4);
+            transform: translateY(-5px);
+            background: var(--glass-strong);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
 
         /* Player Card */
         .player-card {
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.4);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            position: relative;
+            background: rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+        }
+
+        .player-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(var(--primary-rgb), 0.15) 0%, transparent 60%);
+            z-index: 0;
+            pointer-events: none;
         }
 
         .player-wrapper {
             width: 100%;
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
-            /* Corta cualquier cosa que sobresalga */
             background: #000;
             position: relative;
+            z-index: 1;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         /* Iframe Styles */
@@ -252,12 +271,17 @@
         /* Info Sections */
         .info-card h2 {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            color: #fff;
+        }
+
+        .info-card h2 i {
             color: var(--primary);
+            filter: drop-shadow(0 0 8px rgba(var(--primary-rgb), 0.5));
         }
 
         .content-list {
@@ -268,8 +292,15 @@
         .content-item {
             display: flex;
             justify-content: space-between;
-            padding: 0.75rem 0;
+            align-items: center;
+            padding: 1rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .content-item:hover {
+            padding-left: 8px;
+            background: rgba(255, 255, 255, 0.01);
         }
 
         .content-item:last-child {
@@ -278,20 +309,25 @@
 
         .item-time {
             color: var(--primary);
-            font-weight: 700;
-            font-size: 0.85rem;
+            font-weight: 800;
+            font-size: 0.8rem;
+            background: rgba(var(--primary-rgb), 0.1);
+            padding: 4px 10px;
+            border-radius: 8px;
         }
 
         .item-name {
             color: var(--text);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         footer {
-            margin-top: 2rem;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
             text-align: center;
             color: var(--text-dim);
-            font-size: 0.75rem;
+            font-size: 0.8rem;
         }
 
         /* Floating Install Button */
