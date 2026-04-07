@@ -39,17 +39,28 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            background-image:
-                radial-gradient(circle at 10% 10%, rgba(237, 28, 36, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(26, 59, 112, 0.15) 0%, transparent 40%);
-            color: var(--text);
+            background-color: #020408; /* Fondo negro profundo */
+            color: #f1f5f9;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 2rem 1rem;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        .top-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 220px; /* Negro más arriba */
+            background-color: #020408;
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(237, 28, 36, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(26, 59, 112, 0.15) 0%, transparent 40%);
+            z-index: 0;
         }
 
         .main-wrapper {
@@ -59,6 +70,7 @@
             flex-direction: column;
             gap: 1.5rem;
             animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            z-index: 1; /* Encima del top-bg */
         }
 
         @media (min-width: 900px) {
@@ -176,93 +188,133 @@
 
         /* Cards */
         .card {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--card-radius);
+            background: #1e293b; /* Fondo oscuro ligeramente más claro */
+            border: 1px solid rgba(255, 255, 255, 0.08); /* Borde claro más visible */
+            border-radius: 16px;
             padding: 1.5rem;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             height: 100%;
+            color: #f1f5f9; /* Texto claro */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Sombra oscura */
         }
 
         .card:hover {
-            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6); 
         }
 
         /* ─── CUSTOM PLAYER ─── */
         .player-card {
             padding: 1.5rem;
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .rx-top {
+            background: #ffffff; /* Claro */
+            color: #0f172a; /* Texto oscuro */
+            background-image: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 1);
             display: flex;
+            flex-direction: row;
+            gap: 1.5rem;
             align-items: center;
-            gap: 18px;
-            margin-bottom: 20px;
-        }
-
-        .rx-art {
-            width: 80px;
-            height: 80px;
-            border-radius: 14px;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            overflow: hidden;
-            border: 2px solid rgba(237, 28, 36, 0.5);
+            border-radius: 24px;
             position: relative;
+            overflow: hidden;
         }
 
-        .rx-art img {
-            width: 100%;
+        .player-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
             height: 100%;
-            object-fit: cover;
+            background: radial-gradient(ellipse at top right, rgba(237, 28, 36, 0.05), transparent 60%);
+            pointer-events: none;
         }
 
+        .rx-art-sidebar {
+            width: 160px;
+            height: 160px;
+            border-radius: 20px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            background: #e2e8f0; 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12), 0 0 25px rgba(237, 28, 36, 0.2);
+            overflow: hidden; 
+        }
+
+        .rx-art-sidebar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 60%,
+                rgba(237, 28, 36, 1) 80%,
+                rgba(26, 59, 112, 1) 100%
+            );
+            animation: spinFrame 3s linear infinite;
+            z-index: 0;
+        }
+
+        .rx-art-sidebar img,
         .rx-art-fallback {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: absolute !important;
+            top: 3px;
+            left: 3px;
+            width: calc(100% - 6px) !important;
+            height: calc(100% - 6px) !important;
+            object-fit: cover;
+            border-radius: 17px;
+            background: #ffffff;
+            z-index: 1;
         }
 
         .rx-pulse {
             position: absolute;
             inset: 0;
-            border-radius: 14px;
-            border: 2px solid #ED1C24;
+            border-radius: 20px;
+            border: 2px solid rgba(237, 28, 36, 0.8);
             animation: pulseBorder 2s ease-in-out infinite;
             opacity: 0;
             pointer-events: none;
+            z-index: 2;
         }
 
         @keyframes pulseBorder {
-
-            0%,
-            100% {
+            0%, 100% {
                 opacity: 0;
                 transform: scale(1);
             }
-
             50% {
                 opacity: 0.7;
                 transform: scale(1.05);
             }
         }
 
-        .rx-meta {
+        @keyframes spinFrame {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .rx-player-content {
             flex: 1;
+            display: flex;
+            flex-direction: column;
             min-width: 0;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .rx-meta {
+            margin-bottom: 15px;
         }
 
         .rx-live-label {
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 800;
             letter-spacing: 1.5px;
             color: var(--primary);
@@ -297,7 +349,7 @@
         .rx-station-name {
             font-size: 17px;
             font-weight: 700;
-            color: #fff;
+            color: #0f172a;
             margin-bottom: 3px;
             white-space: nowrap;
             overflow: hidden;
@@ -306,7 +358,7 @@
 
         .rx-track {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.45);
+            color: #64748b;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -342,7 +394,7 @@
             width: 52px;
             height: 52px;
             border-radius: 50%;
-            background: #fff;
+            background: #0f172a;
             border: none;
             cursor: pointer;
             display: flex;
@@ -350,12 +402,17 @@
             justify-content: center;
             flex-shrink: 0;
             transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
-            box-shadow: 0 0 0 0 rgba(237, 28, 36, 0);
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
+        }
+
+        .rx-play-btn svg path, .rx-play-btn svg polygon, .rx-play-btn svg rect {
+            fill: #ffffff !important;
         }
 
         .rx-play-btn:hover {
             transform: scale(1.06);
-            box-shadow: 0 0 20px rgba(237, 28, 36, 0.4);
+            box-shadow: 0 12px 25px rgba(15, 23, 42, 0.25);
+            background: #1e293b;
         }
 
         .rx-play-btn:active {
@@ -370,7 +427,7 @@
         }
 
         .rx-vol-icon {
-            color: rgba(255, 255, 255, 0.4);
+            color: #94a3b8;
             flex-shrink: 0;
         }
 
@@ -378,11 +435,11 @@
             flex: 1;
             -webkit-appearance: none;
             appearance: none;
-            height: 3px;
+            height: 4px;
             border-radius: 2px;
             outline: none;
             cursor: pointer;
-            background: linear-gradient(to right, #ED1C24 80%, rgba(255, 255, 255, 0.15) 80%);
+            background: linear-gradient(to right, #ED1C24 80%, rgba(15, 23, 42, 0.1) 80%);
         }
 
         .rx-vol-slider::-webkit-slider-thumb {
@@ -390,82 +447,33 @@
             width: 14px;
             height: 14px;
             border-radius: 50%;
-            background: #fff;
+            background: #0f172a;
             cursor: pointer;
-            box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .rx-vol-slider::-moz-range-thumb {
             width: 14px;
             height: 14px;
             border-radius: 50%;
-            background: #fff;
+            background: #0f172a;
             cursor: pointer;
             border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .rx-status {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.3);
-            text-align: center;
-            margin-top: 14px;
-            min-height: 16px;
-            transition: color 0.3s;
+            display: none;
         }
 
         .rx-status.error {
-            color: #ff6b6b;
+            color: #ef4444;
         }
 
         .rx-status.playing {
-            color: rgba(255, 255, 255, 0.5);
+            color: #64748b;
         }
 
-        /* ─── Social & Info (same as original) ─── */
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-        }
-
-        .action-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 1.25rem;
-            border-radius: 20px;
-            text-decoration: none;
-            color: #fff;
-            font-size: 0.8rem;
-            font-weight: 600;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .action-btn i {
-            font-size: 1.5rem;
-        }
-
-        .whatsapp:hover {
-            background: #25D366;
-            border-color: #25D366;
-            transform: translateY(-3px);
-        }
-
-        .facebook:hover {
-            background: #1877F2;
-            border-color: #1877F2;
-            transform: translateY(-3px);
-        }
-
-        .instagram:hover {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            border-color: transparent;
-            transform: translateY(-3px);
-        }
 
         .info-card h2 {
             font-family: 'Poppins', sans-serif;
@@ -500,8 +508,14 @@
         }
 
         .item-name {
-            color: var(--text);
+            color: #e2e8f0;
             font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .info-card p {
+            color: #94a3b8 !important;
+            font-size: 0.95rem !important;
         }
 
         footer {
@@ -511,39 +525,77 @@
             font-size: 0.75rem;
         }
 
-        /* Install button */
+        /* Premium Install Button */
         .install-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 12px 24px;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(10, 15, 25, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 24px 8px 8px;
             border-radius: 100px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
             display: none;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 20px rgba(237, 28, 36, 0.4);
+            gap: 14px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             cursor: pointer;
             z-index: 1000;
-            animation: bounce 2s infinite;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            text-decoration: none;
         }
 
-        @keyframes bounce {
+        .install-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(237, 28, 36, 0.15), transparent);
+            animation: installShine 3s infinite linear;
+            pointer-events: none;
+        }
 
-            0%,
-            100% {
-                transform: translateY(0);
-            }
+        .install-btn i {
+            background: linear-gradient(135deg, var(--primary), #b3141a);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 0 15px rgba(237, 28, 36, 0.4);
+            color: #fff;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
 
-            50% {
-                transform: translateY(-10px);
-            }
+        .install-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            border-color: rgba(237, 28, 36, 0.4);
+        }
+
+        .install-btn:hover i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .install-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        @keyframes installShine {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
         }
 
         /* iOS Overlay */
@@ -684,15 +736,24 @@
             }
 
             .install-btn {
-                bottom: 15px;
-                right: 15px;
-                left: 15px;
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                padding: 10px 24px 10px 10px;
                 justify-content: center;
             }
 
-            .rx-art {
-                width: 64px;
-                height: 64px;
+            .rx-art-sidebar {
+                width: 120px;
+                height: 120px;
+            }
+            .player-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            .rx-live-label {
+                justify-content: center;
             }
         }
     </style>
@@ -736,6 +797,8 @@
         </div>
     </div>
 
+    <div class="top-bg"></div>
+
     <div class="main-wrapper">
 
         <header>
@@ -752,26 +815,26 @@
         <!-- ─── CUSTOM PLAYER CARD ─── -->
         <section class="card player-card">
 
-            <!-- Top: artwork + meta -->
-            <div class="rx-top">
-                <div class="rx-art">
-                    <div class="rx-pulse" id="artPulse"></div>
-                    <!-- Usa tu logo como artwork -->
-                    <img src="logo%20xero.png" alt="Radio Xero"
-                        onerror="this.style.display='none';document.getElementById('artFallback').style.display='flex'">
-                    <div class="rx-art-fallback" id="artFallback" style="display:none;">
-                        <svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="80" height="80" fill="white" />
-                            <circle cx="40" cy="40" r="30" fill="#ED1C24" />
-                            <circle cx="40" cy="40" r="22" fill="white" />
-                            <circle cx="40" cy="40" r="4" fill="#ED1C24" />
-                            <text x="40" y="36" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
-                                font-size="8" fill="#ED1C24">RADIO</text>
-                            <text x="40" y="48" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
-                                font-size="12" fill="#1A3B70">XERO</text>
-                        </svg>
-                    </div>
+            <!-- Left: Artwork -->
+            <div class="rx-art-sidebar">
+                <div class="rx-pulse" id="artPulse"></div>
+                <!-- Usa tu logo como artwork -->
+                <img src="icon-512.png" alt="Radio Xero"
+                    onerror="this.style.display='none';document.getElementById('artFallback').style.display='flex'">
+                <div class="rx-art-fallback" id="artFallback" style="display:none;">
+                    <svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="80" height="80" fill="white" />
+                        <circle cx="40" cy="40" r="30" fill="#ED1C24" />
+                        <circle cx="40" cy="40" r="22" fill="white" />
+                        <circle cx="40" cy="40" r="4" fill="#ED1C24" />
+                        <text x="40" y="36" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="8" fill="#ED1C24">RADIO</text>
+                        <text x="40" y="48" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="12" fill="#1A3B70">XERO</text>
+                    </svg>
                 </div>
+            </div>
+
+            <!-- Right: Metadata & Controls -->
+            <div class="rx-player-content">
                 <div class="rx-meta">
                     <div class="rx-live-label">
                         <span class="rx-dot" id="liveDot"></span>
@@ -780,47 +843,30 @@
                     <div class="rx-station-name">Radio Xero</div>
                     <div class="rx-track" id="trackInfo">Radio Xero | Al Aire</div>
                 </div>
-            </div>
 
-            <!-- Visualizer bars -->
-            <div class="rx-viz" id="rxViz"></div>
+                <!-- Visualizer bars -->
+                <div class="rx-viz" id="rxViz"></div>
 
-            <!-- Controls -->
-            <div class="rx-controls">
-                <button class="rx-play-btn" id="playBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
-                    <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
-                        <polygon points="6,4 20,12 6,20" fill="#111" />
-                    </svg>
-                </button>
+                <!-- Controls -->
+                <div class="rx-controls">
+                    <button class="rx-play-btn" id="playBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
+                        <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
+                            <polygon points="6,4 20,12 6,20" fill="#111" />
+                        </svg>
+                    </button>
 
-                <div class="rx-vol">
-                    <svg class="rx-vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.45)">
-                        <path
-                            d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
-                    </svg>
-                    <input type="range" min="0" max="100" value="80" id="volSlider" class="rx-vol-slider"
-                        oninput="rxSetVol(this.value)" aria-label="Volumen">
+                    <div class="rx-vol">
+                        <svg class="rx-vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.45)">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                        </svg>
+                        <input type="range" min="0" max="100" value="80" id="volSlider" class="rx-vol-slider" oninput="rxSetVol(this.value)" aria-label="Volumen">
+                    </div>
                 </div>
-            </div>
 
-            <div class="rx-status" id="rxStatus">Presiona play para sintonizar</div>
+                <div class="rx-status" id="rxStatus">Presiona play para sintonizar</div>
+            </div>
         </section>
 
-        <!-- Social buttons -->
-        <nav class="action-grid">
-            <a href="https://wa.me/tu-numero" class="action-btn whatsapp" target="_blank" rel="noopener">
-                <i class="fab fa-whatsapp"></i>
-                <span>WhatsApp</span>
-            </a>
-            <a href="https://facebook.com/tu-perfil" class="action-btn facebook" target="_blank" rel="noopener">
-                <i class="fab fa-facebook-f"></i>
-                <span>Facebook</span>
-            </a>
-            <a href="https://instagram.com/tu-perfil" class="action-btn instagram" target="_blank" rel="noopener">
-                <i class="fab fa-instagram"></i>
-                <span>Instagram</span>
-            </a>
-        </nav>
 
         <!-- Info grid -->
         <div class="info-grid">
@@ -890,15 +936,15 @@
         function rxSetVol(v) {
             audio.volume = v / 100;
             const slider = document.getElementById('volSlider');
-            slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(255,255,255,0.15) ${v}%)`;
+            slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(15, 23, 42, 0.1) ${v}%)`;
         }
         rxSetVol(80);
 
         // Icono play/pause
         function setIcon(playing) {
             playIcon.innerHTML = playing
-                ? '<rect x="6" y="4" width="4" height="16" fill="#111"/><rect x="14" y="4" width="4" height="16" fill="#111"/>'
-                : '<polygon points="6,4 20,12 6,20" fill="#111"/>';
+                ? '<rect x="6" y="4" width="4" height="16" fill="#fff"/><rect x="14" y="4" width="4" height="16" fill="#fff"/>'
+                : '<polygon points="6,4 20,12 6,20" fill="#fff"/>';
         }
 
         // Estado en pantalla
@@ -997,7 +1043,25 @@
             if (isPlaying) setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
         });
 
+        // ─── Zeno Now Playing Metadata ───────────────────────────────────────────
+        const sse = new EventSource('https://api.zeno.fm/mounts/metadata/subscribe/n7fm3s6537zuv');
+        const trackInfoEl = document.getElementById('trackInfo');
+        
+        sse.onmessage = function(e) {
+            try {
+                const data = JSON.parse(e.data);
+                if (data.streamTitle) {
+                    trackInfoEl.textContent = data.streamTitle;
+                } else {
+                    trackInfoEl.textContent = 'Radio Xero | Al Aire';
+                }
+            } catch (err) {
+                console.error('Error parsing metadata', err);
+            }
+        };
+
         // ─── PWA Install Logic ───────────────────────────────────────────────────
+
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
 
