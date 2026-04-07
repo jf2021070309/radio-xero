@@ -21,17 +21,17 @@
     <style>
         :root {
             --primary: #ED1C24;
-            --primary-rgb: 237, 28, 36;
+            /* Rojo Logo */
             --secondary: #1A3B70;
-            --secondary-rgb: 26, 59, 112;
-            --bg-dark: #05070a;
+            /* Azul Marino Logo */
+            --primary-glow: rgba(237, 28, 36, 0.3);
+            --bg-dark: #020408;
+            /* Fondo casi negro azulado */
             --glass: rgba(255, 255, 255, 0.03);
-            --glass-strong: rgba(255, 255, 255, 0.07);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --text: #ffffff;
-            --text-dim: #a0a0a0;
-            --card-radius: 28px;
-            --glow: 0 0 30px rgba(237, 28, 36, 0.2);
+            --text-dim: #999999;
+            --card-radius: 24px;
         }
 
         * {
@@ -165,52 +165,33 @@
         /* Glass Cards */
         .card {
             background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
             border-radius: var(--card-radius);
-            padding: 2rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, border-color 0.3s ease;
             height: 100%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .card:hover {
-            border-color: rgba(237, 28, 36, 0.4);
-            transform: translateY(-5px);
-            background: var(--glass-strong);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
         /* Player Card */
         .player-card {
-            padding: 1.5rem;
-            position: relative;
-            background: rgba(0, 0, 0, 0.6);
-            overflow: hidden;
-        }
-
-        .player-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, rgba(var(--primary-rgb), 0.15) 0%, transparent 60%);
-            z-index: 0;
-            pointer-events: none;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         .player-wrapper {
             width: 100%;
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
+            /* Corta cualquier cosa que sobresalga */
             background: #000;
             position: relative;
-            z-index: 1;
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.05);
         }
 
         /* Iframe Styles */
@@ -222,141 +203,6 @@
             border: none;
             overflow: hidden;
         }
-
-        /* Custom Premium Player */
-        .premium-player {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-            padding: 1rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .player-info {
-            text-align: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .player-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 0.25rem;
-            text-shadow: 0 0 15px rgba(var(--primary-rgb), 0.4);
-        }
-
-        .player-status {
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .player-controls {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .play-btn {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            color: white;
-            font-size: 1.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(var(--primary-rgb), 0.4);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            z-index: 2;
-        }
-
-        .play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(var(--primary-rgb), 0.6);
-        }
-
-        .play-btn:active {
-            transform: scale(0.95);
-        }
-
-        .volume-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px 18px;
-            border-radius: 100px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .volume-slider {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 14px;
-            height: 14px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
-            transition: all 0.2s;
-        }
-
-        .volume-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-            background: var(--primary);
-        }
-
-        /* Ambient Wave Visualizer */
-        .visualizer-container {
-            display: flex;
-            align-items: flex-end;
-            gap: 4px;
-            height: 40px;
-            margin-top: 0.5rem;
-        }
-
-        .bar {
-            width: 4px;
-            background: linear-gradient(to top, var(--primary), var(--secondary));
-            border-radius: 10px;
-            height: 5px;
-            transition: height 0.3s ease;
-        }
-
-        .playing .bar {
-            animation: bar-anim 1s infinite ease-in-out;
-        }
-
-        @keyframes bar-anim {
-            0%, 100% { height: 10px; }
-            50% { height: 40px; }
-        }
-
-        .bar:nth-child(2) { animation-delay: 0.1s; }
-        .bar:nth-child(3) { animation-delay: 0.2s; }
-        .bar:nth-child(4) { animation-delay: 0.3s; }
-        .bar:nth-child(5) { animation-delay: 0.4s; }
-        .bar:nth-child(6) { animation-delay: 0.5s; }
 
         .action-grid {
             display: grid;
@@ -406,17 +252,12 @@
         /* Info Sections */
         .info-card h2 {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.25rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: #fff;
-        }
-
-        .info-card h2 i {
+            gap: 10px;
             color: var(--primary);
-            filter: drop-shadow(0 0 8px rgba(var(--primary-rgb), 0.5));
         }
 
         .content-list {
@@ -427,15 +268,8 @@
         .content-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
+            padding: 0.75rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s;
-        }
-
-        .content-item:hover {
-            padding-left: 8px;
-            background: rgba(255, 255, 255, 0.01);
         }
 
         .content-item:last-child {
@@ -444,25 +278,20 @@
 
         .item-time {
             color: var(--primary);
-            font-weight: 800;
-            font-size: 0.8rem;
-            background: rgba(var(--primary-rgb), 0.1);
-            padding: 4px 10px;
-            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
         }
 
         .item-name {
             color: var(--text);
-            font-size: 0.95rem;
-            font-weight: 500;
+            font-size: 0.9rem;
         }
 
         footer {
-            margin-top: 3rem;
-            margin-bottom: 2rem;
+            margin-top: 2rem;
             text-align: center;
             color: var(--text-dim);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         /* Floating Install Button */
@@ -695,38 +524,11 @@
             </div>
         </header>
 
-        <!-- New Premium Player -->
-        <section class="card player-card" id="playerCard">
-            <div class="premium-player">
-                <div class="player-info">
-                    <div class="player-status">Señal en Vivo</div>
-                    <h2 class="player-title">Radio Xero</h2>
-                </div>
-
-                <div class="visualizer-container" id="visualizer">
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                </div>
-
-                <div class="player-controls">
-                    <button class="play-btn" id="masterPlayBtn">
-                        <i class="fas fa-play" id="playIcon"></i>
-                    </button>
-
-                    <div class="volume-container">
-                        <i class="fas fa-volume-down" style="color: var(--text-dim);"></i>
-                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.8">
-                        <i class="fas fa-volume-up" style="color: var(--text-dim);"></i>
-                    </div>
-                </div>
-
-                <audio id="radioAudio" src="https://stream.zeno.fm/sh0pvy9uvt0uv" preload="none"></audio>
+        <!-- Player Card -->
+        <section class="card player-card">
+            <div class="player-wrapper">
+                <iframe src="https://zeno.fm/player/radio-xero" scrolling="no" loading="lazy">
+                </iframe>
             </div>
         </section>
 
@@ -784,36 +586,6 @@
     </div>
 
     <script>
-        // Custom Player Logic
-        const audio = document.getElementById('radioAudio');
-        const playBtn = document.getElementById('masterPlayBtn');
-        const playIcon = document.getElementById('playIcon');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const playerCard = document.getElementById('playerCard');
-        const visualizer = document.getElementById('visualizer');
-
-        let isPlaying = false;
-
-        playBtn.addEventListener('click', () => {
-            if (!isPlaying) {
-                audio.play();
-                playIcon.classList.remove('fa-play');
-                playIcon.classList.add('fa-pause');
-                playerCard.classList.add('playing');
-                isPlaying = true;
-            } else {
-                audio.pause();
-                playIcon.classList.remove('fa-pause');
-                playIcon.classList.add('fa-play');
-                playerCard.classList.remove('playing');
-                isPlaying = false;
-            }
-        });
-
-        volumeSlider.addEventListener('input', (e) => {
-            audio.volume = e.target.value;
-        });
-
         // PWA Install Logic
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
