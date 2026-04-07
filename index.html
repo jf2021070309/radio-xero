@@ -68,9 +68,16 @@
             max-width: 600px;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 2rem;
             animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             z-index: 1; /* Encima del top-bg */
+        }
+
+        @media (max-width: 600px) {
+            .main-wrapper {
+                max-width: 100%;
+                gap: 1.8rem;
+            }
         }
 
         @media (min-width: 900px) {
@@ -205,7 +212,7 @@
 
         /* ─── CUSTOM PLAYER ─── */
         .player-card {
-            padding: 1.5rem;
+            padding: 2.2rem;
             background: #ffffff; /* Claro */
             color: #0f172a; /* Texto oscuro */
             background-image: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
@@ -350,18 +357,35 @@
             font-size: 17px;
             font-weight: 700;
             color: #0f172a;
-            margin-bottom: 3px;
+            margin-bottom: 6px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
         .rx-track {
-            font-size: 12px;
+            font-size: 14px;
             color: #64748b;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 0px;
+        }
+
+        .rx-track-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            color: #ED1C24;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-1px); }
         }
 
         /* Visualizer */
@@ -369,8 +393,8 @@
             display: flex;
             align-items: flex-end;
             gap: 3px;
-            height: 52px;
-            margin-bottom: 20px;
+            height: 32px;
+            margin-bottom: 8px;
             padding: 0 2px;
         }
 
@@ -387,12 +411,12 @@
         .rx-controls {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
         .rx-play-btn {
-            width: 52px;
-            height: 52px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             background: #0f172a;
             border: none;
@@ -422,13 +446,52 @@
         .rx-vol {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             flex: 1;
+            min-width: 0;
         }
 
-        .rx-vol-icon {
-            color: #94a3b8;
+        .rx-vol-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .rx-mute-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1a1f2e;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.15);
+        }
+
+        .rx-mute-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
+            background: #232d3e;
+        }
+
+        .rx-mute-btn:active {
+            transform: scale(0.96);
+        }
+
+        .rx-mute-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: #ffffff;
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .rx-vol-slider {
@@ -436,30 +499,53 @@
             -webkit-appearance: none;
             appearance: none;
             height: 4px;
-            border-radius: 2px;
+            border-radius: 3px;
             outline: none;
             cursor: pointer;
-            background: linear-gradient(to right, #ED1C24 80%, rgba(15, 23, 42, 0.1) 80%);
+            background: linear-gradient(to right, #ED1C24 70%, rgba(237, 28, 36, 0.2) 70%);
+            min-width: 0;
         }
 
         .rx-vol-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background: #0f172a;
+            background: #ED1C24;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 6px rgba(237, 28, 36, 0.5);
+            transition: all 0.15s;
+            border: 2px solid #ffffff;
+        }
+
+        .rx-vol-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(237, 28, 36, 0.6);
         }
 
         .rx-vol-slider::-moz-range-thumb {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background: #0f172a;
+            background: #ED1C24;
             cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(237, 28, 36, 0.5);
+            transition: all 0.15s;
+        }
+
+        .rx-vol-slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(237, 28, 36, 0.6);
+        }
+
+        .rx-vol-value {
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 500;
+            min-width: 32px;
+            text-align: right;
+            flex-shrink: 0;
         }
 
         .rx-status {
@@ -724,6 +810,57 @@
         }
 
         @media (max-width: 480px) {
+            body {
+                padding: 1.5rem 1rem;
+            }
+
+            .main-wrapper {
+                gap: 1.8rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+                border-radius: 14px;
+            }
+
+            .player-card {
+                padding: 1.9rem;
+            }
+
+            .info-card {
+                padding: 1.75rem;
+            }
+
+            .info-card h2 {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .content-list {
+                display: flex;
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+
+            .content-item {
+                padding: 0.75rem 0;
+                border: none;
+            }
+
+            .item-time {
+                font-size: 0.8rem;
+            }
+
+            .item-name {
+                font-size: 0.9rem;
+            }
+
+            .info-card p {
+                font-size: 0.9rem !important;
+                line-height: 1.6;
+                letter-spacing: 0.3px;
+            }
+
             .action-grid {
                 grid-template-columns: 1fr;
             }
@@ -754,6 +891,20 @@
             }
             .rx-live-label {
                 justify-content: center;
+            }
+
+            .rx-mute-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .rx-vol-value {
+                font-size: 12px;
+                min-width: 28px;
+            }
+
+            .rx-vol {
+                gap: 12px;
             }
         }
     </style>
@@ -841,7 +992,7 @@
                         En Vivo
                     </div>
                     <div class="rx-station-name">Radio Xero</div>
-                    <div class="rx-track" id="trackInfo">Radio Xero | Al Aire</div>
+                    <div class="rx-track" id="trackInfo"><i class="fas fa-music rx-track-icon"></i><span id="trackText">Radio Xero | Al Aire</span></div>
                 </div>
 
                 <!-- Visualizer bars -->
@@ -856,10 +1007,15 @@
                     </button>
 
                     <div class="rx-vol">
-                        <svg class="rx-vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.45)">
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
-                        </svg>
-                        <input type="range" min="0" max="100" value="80" id="volSlider" class="rx-vol-slider" oninput="rxSetVol(this.value)" aria-label="Volumen">
+                        <button class="rx-mute-btn" id="muteBtn" onclick="rxToggleMute()" aria-label="Silenciar">
+                            <svg id="muteIcon" viewBox="0 0 24 24">
+                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                            </svg>
+                        </button>
+                        <div class="rx-vol-container">
+                            <input type="range" min="0" max="100" value="80" id="volSlider" class="rx-vol-slider" oninput="rxSetVol(this.value)" aria-label="Volumen">
+                            <span class="rx-vol-value" id="volValue">80%</span>
+                        </div>
                     </div>
                 </div>
 
@@ -899,7 +1055,6 @@
 
         <footer>
             <p>&copy; 2025 Radio Xero - Todos los derechos reservados</p>
-            <p style="margin-top:5px;">Hecho con ❤️ para nuestros oyentes</p>
         </footer>
     </div>
 
@@ -936,9 +1091,39 @@
         function rxSetVol(v) {
             audio.volume = v / 100;
             const slider = document.getElementById('volSlider');
-            slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(15, 23, 42, 0.1) ${v}%)`;
+            const volValue = document.getElementById('volValue');
+            slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
+            volValue.textContent = v + '%';
+            
+            // Si se sube volumen mientras está muteado, desmutearlo
+            if (v > 0 && audio.muted) {
+                rxToggleMute();
+            }
         }
         rxSetVol(80);
+
+        // Mute / Unmute
+        let isMuted = false;
+        let volumeBeforeMute = 80;
+
+        function rxToggleMute() {
+            const muteBtn = document.getElementById('muteBtn');
+            const muteIcon = document.getElementById('muteIcon');
+            
+            isMuted = !isMuted;
+            audio.muted = isMuted;
+            
+            if (isMuted) {
+                volumeBeforeMute = parseInt(document.getElementById('volSlider').value);
+                // Ícono de mute (volumen tachado)
+                muteIcon.innerHTML = '<g><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/><line x1="2.5" y1="21.5" x2="21.5" y2="2.5"/></g>';
+                muteBtn.style.opacity = '0.65';
+            } else {
+                // Ícono de volumen normal
+                muteIcon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>';
+                muteBtn.style.opacity = '1';
+            }
+        }
 
         // Icono play/pause
         function setIcon(playing) {
@@ -1046,14 +1231,15 @@
         // ─── Zeno Now Playing Metadata ───────────────────────────────────────────
         const sse = new EventSource('https://api.zeno.fm/mounts/metadata/subscribe/n7fm3s6537zuv');
         const trackInfoEl = document.getElementById('trackInfo');
+        const trackTextEl = document.getElementById('trackText');
         
         sse.onmessage = function(e) {
             try {
                 const data = JSON.parse(e.data);
                 if (data.streamTitle) {
-                    trackInfoEl.textContent = data.streamTitle;
+                    trackTextEl.textContent = data.streamTitle;
                 } else {
-                    trackInfoEl.textContent = 'Radio Xero | Al Aire';
+                    trackTextEl.textContent = 'Radio Xero | Al Aire';
                 }
             } catch (err) {
                 console.error('Error parsing metadata', err);
