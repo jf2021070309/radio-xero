@@ -21,12 +21,9 @@
     <style>
         :root {
             --primary: #ED1C24;
-            /* Rojo Logo */
             --secondary: #1A3B70;
-            /* Azul Marino Logo */
             --primary-glow: rgba(237, 28, 36, 0.3);
             --bg-dark: #020408;
-            /* Fondo casi negro azulado */
             --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.08);
             --text: #ffffff;
@@ -59,7 +56,6 @@
         .main-wrapper {
             width: 100%;
             max-width: 600px;
-            /* Base width for mobile */
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
@@ -91,7 +87,7 @@
             }
         }
 
-        /* Header Section */
+        /* Header */
         header {
             display: flex;
             flex-direction: column;
@@ -153,16 +149,34 @@
             animation: audio-wave-anim 1s infinite ease-in-out;
         }
 
-        .audio-wave span:nth-child(2) { animation-delay: 0.2s; height: 8px; }
-        .audio-wave span:nth-child(3) { animation-delay: 0.4s; height: 6px; }
-        .audio-wave span:nth-child(4) { animation-delay: 0.1s; height: 10px; }
-
-        @keyframes audio-wave-anim {
-            0%, 100% { height: 4px; }
-            50% { height: 12px; }
+        .audio-wave span:nth-child(2) {
+            animation-delay: 0.2s;
+            height: 8px;
         }
 
-        /* Glass Cards */
+        .audio-wave span:nth-child(3) {
+            animation-delay: 0.4s;
+            height: 6px;
+        }
+
+        .audio-wave span:nth-child(4) {
+            animation-delay: 0.1s;
+            height: 10px;
+        }
+
+        @keyframes audio-wave-anim {
+
+            0%,
+            100% {
+                height: 4px;
+            }
+
+            50% {
+                height: 12px;
+            }
+        }
+
+        /* Cards */
         .card {
             background: var(--glass);
             backdrop-filter: blur(15px);
@@ -178,32 +192,187 @@
             border-color: rgba(255, 255, 255, 0.15);
         }
 
-        /* Player Card */
+        /* ─── CUSTOM PLAYER ─── */
         .player-card {
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.4);
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.5);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        .player-wrapper {
-            width: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            /* Corta cualquier cosa que sobresalga */
-            background: #000;
-            position: relative;
+        .rx-top {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
         }
 
-        /* Iframe Styles */
-        .player-wrapper iframe {
-            display: block;
-            width: 100%;
-            height: 300px;
-            /* Altura generosa para evitar scroll */
+        .rx-cover {
+            width: 72px;
+            height: 72px;
+            border-radius: 12px;
+            border: 1px solid rgba(237, 28, 36, 0.3);
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #1a0a0a;
+        }
+
+        .rx-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .rx-live-tag {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .rx-station {
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .rx-song {
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Visualizador */
+        #rxViz {
+            height: 56px;
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            margin-bottom: 1.25rem;
+            padding: 0 2px;
+        }
+
+        .rx-bar {
+            flex: 1;
+            background: var(--primary);
+            border-radius: 2px 2px 0 0;
+            min-height: 3px;
+            height: 3px;
+            transition: height 0.08s ease, opacity 0.08s ease;
+            opacity: 0.5;
+        }
+
+        /* Barra de fondo del visualizador cuando está pausado */
+        .rx-bar-idle {
+            height: 3px !important;
+            opacity: 0.25 !important;
+        }
+
+        /* Controles */
+        .rx-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .rx-play-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--primary);
             border: none;
-            overflow: hidden;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease, background 0.2s ease;
+            flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(237, 28, 36, 0.4);
         }
 
+        .rx-play-btn:hover {
+            background: #c0151b;
+            transform: scale(1.05);
+        }
+
+        .rx-play-btn:active {
+            transform: scale(0.97);
+        }
+
+        .rx-play-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
+        }
+
+        .rx-vol-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .rx-vol-wrap svg {
+            width: 16px;
+            height: 16px;
+            fill: #666;
+            flex-shrink: 0;
+        }
+
+        .rx-vol-wrap input[type=range] {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .rx-vol-wrap input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .rx-vol-wrap input[type=range]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+        }
+
+        .rx-status {
+            font-size: 0.72rem;
+            color: #555;
+            white-space: nowrap;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .rx-status.live {
+            color: var(--primary);
+        }
+
+        /* ─── Botones de acción ─── */
         .action-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -249,7 +418,7 @@
             transform: translateY(-3px);
         }
 
-        /* Info Sections */
+        /* Info */
         .info-card h2 {
             font-family: 'Poppins', sans-serif;
             font-size: 1.1rem;
@@ -294,7 +463,7 @@
             font-size: 0.75rem;
         }
 
-        /* Floating Install Button */
+        /* Botón flotante instalar */
         .install-btn {
             position: fixed;
             bottom: 20px;
@@ -308,7 +477,6 @@
             font-weight: 700;
             font-size: 0.9rem;
             display: none;
-            /* Hidden by default */
             align-items: center;
             gap: 10px;
             box-shadow: 0 10px 20px rgba(237, 28, 36, 0.4);
@@ -330,7 +498,7 @@
             }
         }
 
-        /* iOS Install Overlay */
+        /* iOS overlay */
         .ios-install-overlay {
             position: fixed;
             top: 0;
@@ -341,7 +509,7 @@
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             z-index: 9999;
-            display: none; /* Hidden by default */
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -366,10 +534,9 @@
             font-family: 'Poppins', sans-serif;
             font-size: 1.4rem;
             margin-bottom: 0.75rem;
-            color: #fff;
         }
 
-        .ios-install-card > p {
+        .ios-install-card>p {
             font-size: 0.9rem;
             color: var(--text-dim);
             line-height: 1.5;
@@ -392,7 +559,7 @@
             padding: 10px 14px;
             border-radius: 12px;
             font-size: 0.85rem;
-            border: 1px solid rgba(255,255,255,0.02);
+            border: 1px solid rgba(255, 255, 255, 0.02);
         }
 
         .ios-step i {
@@ -434,20 +601,28 @@
         }
 
         @keyframes fadeInOverlay {
-            from { opacity: 0; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); }
-            to { opacity: 1; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes bounceArrow {
-            0%, 100% { transform: translate(-50%, 0); }
-            50% { transform: translate(-50%, 15px); }
+
+            0%,
+            100% {
+                transform: translate(-50%, 0);
+            }
+
+            50% {
+                transform: translate(-50%, 15px);
+            }
         }
 
         @media (max-width: 480px) {
-            header h1 {
-                font-size: 2rem;
-            }
-
             .action-grid {
                 grid-template-columns: 1fr;
             }
@@ -465,28 +640,26 @@
                 left: 15px;
                 justify-content: center;
             }
-
-
         }
     </style>
 </head>
 
 <body>
-    <!-- Floating Install Button (Android/Chrome) -->
+
+    <!-- Botón flotante instalar (Android/Chrome) -->
     <button id="installButton" class="install-btn">
         <i class="fas fa-download"></i>
         Instalar Radio Xero
     </button>
 
-    <!-- iOS Hint Overlay (Safari Only) -->
+    <!-- iOS Hint Overlay -->
     <div id="iosHint" class="ios-install-overlay">
         <div class="ios-install-card">
             <h3>Instala Radio Xero</h3>
             <p>Disfruta de nuestra radio sin interrupciones y con acceso directo desde tu inicio.</p>
-            
             <div class="ios-steps">
                 <div class="ios-step">
-                    <i class="fas fa-ellipsis-h" style="color: var(--primary);"></i>
+                    <i class="fas fa-ellipsis-h" style="color:var(--primary);"></i>
                     <span>Presiona los <b>3 puntitos</b></span>
                 </div>
                 <div class="ios-step">
@@ -494,25 +667,23 @@
                     <span>Toca en <b>Compartir</b></span>
                 </div>
                 <div class="ios-step">
-                    <i class="fas fa-ellipsis-v" style="color: var(--text);"></i>
+                    <i class="fas fa-ellipsis-v" style="color:var(--text);"></i>
                     <span>Ve a <b>Ver más</b></span>
                 </div>
                 <div class="ios-step">
-                    <i class="far fa-plus-square" style="color: var(--text);"></i>
+                    <i class="far fa-plus-square" style="color:var(--text);"></i>
                     <span>Selecciona <b>Agregar a inicio</b> y luego <b>Agregar</b></span>
                 </div>
             </div>
-
             <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
                 Quizás más tarde
             </button>
-
-            <!-- Flecha apuntando al botón compartir de iOS -->
             <i class="fas fa-arrow-down ios-arrow-down"></i>
         </div>
     </div>
 
     <div class="main-wrapper">
+
         <header>
             <h1 class="visually-hidden">Radio Xero</h1>
             <img src="logo%20xero.png" alt="Radio Xero Logo" class="main-logo">
@@ -524,33 +695,64 @@
             </div>
         </header>
 
-        <!-- Player Card -->
+        <!-- ─── REPRODUCTOR PERSONALIZADO ─── -->
         <section class="card player-card">
-            <div class="player-wrapper">
-                <iframe src="https://zeno.fm/player/radio-xero" scrolling="no" loading="lazy">
-                </iframe>
-            </div>
-        </section>
 
-        <!-- Social Grid -->
+            <!-- Carátula + info -->
+            <div class="rx-top">
+                <img src="logo%20xero.png" alt="Radio Xero" class="rx-cover" id="rxCover">
+                <div class="rx-meta">
+                    <span class="rx-live-tag">En Vivo</span>
+                    <p class="rx-station">Radio Xero</p>
+                    <p class="rx-song" id="rxSong">Radio Xero | Al Aire</p>
+                </div>
+            </div>
+
+            <!-- Visualizador de barras -->
+            <div id="rxViz"></div>
+
+            <!-- Controles -->
+            <div class="rx-controls">
+                <button class="rx-play-btn" id="rxPlayBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
+                    <svg id="rxPlayIcon" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </button>
+
+                <div class="rx-vol-wrap">
+                    <!-- Icono volumen -->
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                    </svg>
+                    <input type="range" min="0" max="1" step="0.05" value="0.8" id="rxVol"
+                        oninput="rxSetVol(this.value)" aria-label="Volumen">
+                </div>
+
+                <span class="rx-status" id="rxStatus">Listo</span>
+            </div>
+
+        </section>
+        <!-- ─── FIN REPRODUCTOR ─── -->
+
+        <!-- Redes Sociales -->
         <nav class="action-grid">
-            <a href="https://wa.me/tu-numero" class="action-btn whatsapp" target="_blank">
+            <a href="https://wa.me/tu-numero" class="action-btn whatsapp" target="_blank" rel="noopener">
                 <i class="fab fa-whatsapp"></i>
                 <span>WhatsApp</span>
             </a>
-            <a href="https://facebook.com/tu-perfil" class="action-btn facebook" target="_blank">
+            <a href="https://facebook.com/tu-perfil" class="action-btn facebook" target="_blank" rel="noopener">
                 <i class="fab fa-facebook-f"></i>
                 <span>Facebook</span>
             </a>
-            <a href="https://instagram.com/tu-perfil" class="action-btn instagram" target="_blank">
+            <a href="https://instagram.com/tu-perfil" class="action-btn instagram" target="_blank" rel="noopener">
                 <i class="fab fa-instagram"></i>
                 <span>Instagram</span>
             </a>
         </nav>
 
-        <!-- Desktop Info Grid -->
+        <!-- Programación + Acerca -->
         <div class="info-grid">
-            <!-- Programming -->
             <section class="card info-card">
                 <h2><i class="far fa-calendar-alt"></i> Programación Diaria</h2>
                 <div class="content-list">
@@ -569,10 +771,9 @@
                 </div>
             </section>
 
-            <!-- About -->
             <section class="card info-card">
                 <h2><i class="fas fa-info-circle"></i> Nuestra Estación</h2>
-                <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; text-align: left;">
+                <p style="color:var(--text-dim);font-size:0.9rem;line-height:1.6;text-align:left;">
                     Radio Xero es tu conexión directa con la mejor música y noticias. Transmitiendo 24/7 con calidad
                     digital para acompañarte donde quiera que estés.
                 </p>
@@ -581,73 +782,172 @@
 
         <footer>
             <p>&copy; 2024 Radio Xero - Todos los derechos reservados</p>
-            <p style="margin-top: 5px;">Hecho con ❤️ para nuestros oyentes</p>
+            <p style="margin-top:5px;">Hecho con ❤️ para nuestros oyentes</p>
         </footer>
-    </div>
+
+    </div><!-- /.main-wrapper -->
+
 
     <script>
-        // PWA Install Logic
+        /* ═══════════════════════════════════════
+           REPRODUCTOR PERSONALIZADO RADIO XERO
+           Usa el stream directo de Zeno.fm sin iframe
+        ═══════════════════════════════════════ */
+        const RX_STREAM = 'https://stream.zeno.fm/0r0xa792kwzuv';
+        const NUM_BARS = 28;
+
+        /* Crear barras del visualizador */
+        const vizEl = document.getElementById('rxViz');
+        for (let i = 0; i < NUM_BARS; i++) {
+            const b = document.createElement('div');
+            b.className = 'rx-bar';
+            vizEl.appendChild(b);
+        }
+        const bars = vizEl.querySelectorAll('.rx-bar');
+
+        /* Estado global */
+        let rxAudio = null;
+        let rxCtx = null;
+        let rxAnalyser = null;
+        let rxSrcNode = null;
+        let rxAnimId = null;
+        let rxPlaying = false;
+
+        /* ── Toggle play/pause ── */
+        function rxToggle() {
+            rxPlaying ? rxStop() : rxPlay();
+        }
+
+        /* ── Reproducir ── */
+        function rxPlay() {
+            const statusEl = document.getElementById('rxStatus');
+            statusEl.textContent = 'Conectando...';
+            statusEl.className = 'rx-status';
+
+            if (!rxAudio) {
+                rxAudio = new Audio();
+                rxAudio.crossOrigin = 'anonymous';
+                rxAudio.src = RX_STREAM;
+                rxAudio.volume = parseFloat(document.getElementById('rxVol').value);
+
+                /* Manejar error de red */
+                rxAudio.onerror = () => {
+                    statusEl.textContent = 'Sin conexión';
+                    statusEl.className = 'rx-status';
+                    rxPlaying = false;
+                    document.getElementById('rxPlayIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
+                    bars.forEach(b => b.style.height = '3px');
+                };
+            }
+
+            rxAudio.play()
+                .then(() => {
+                    rxSetupAnalyser();
+                    rxPlaying = true;
+                    document.getElementById('rxPlayIcon').innerHTML =
+                        '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                    statusEl.textContent = 'Al Aire';
+                    statusEl.className = 'rx-status live';
+                })
+                .catch(() => {
+                    statusEl.textContent = 'Error';
+                    statusEl.className = 'rx-status';
+                });
+        }
+
+        /* ── Pausar ── */
+        function rxStop() {
+            if (rxAudio) rxAudio.pause();
+            rxPlaying = false;
+            cancelAnimationFrame(rxAnimId);
+            document.getElementById('rxPlayIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
+            const statusEl = document.getElementById('rxStatus');
+            statusEl.textContent = 'Pausado';
+            statusEl.className = 'rx-status';
+            bars.forEach(b => { b.style.height = '3px'; b.style.opacity = '0.25'; });
+        }
+
+        /* ── Configurar Web Audio API para el visualizador ── */
+        function rxSetupAnalyser() {
+            if (rxCtx) {
+                /* Si el contexto estaba suspendido (política autoplay) lo reanudamos */
+                if (rxCtx.state === 'suspended') rxCtx.resume();
+                rxDraw();
+                return;
+            }
+            rxCtx = new (window.AudioContext || window.webkitAudioContext)();
+            rxAnalyser = rxCtx.createAnalyser();
+            rxAnalyser.fftSize = 64;
+            rxSrcNode = rxCtx.createMediaElementSource(rxAudio);
+            rxSrcNode.connect(rxAnalyser);
+            rxAnalyser.connect(rxCtx.destination);
+            rxDraw();
+        }
+
+        /* ── Loop de animación del visualizador ── */
+        function rxDraw() {
+            rxAnimId = requestAnimationFrame(rxDraw);
+            const data = new Uint8Array(rxAnalyser.frequencyBinCount);
+            rxAnalyser.getByteFrequencyData(data);
+            bars.forEach((b, i) => {
+                const v = data[i] || 0;
+                b.style.height = Math.max(3, (v / 255) * 52) + 'px';
+                b.style.opacity = 0.35 + (v / 255) * 0.65;
+            });
+        }
+
+        /* ── Volumen ── */
+        function rxSetVol(v) {
+            if (rxAudio) rxAudio.volume = parseFloat(v);
+        }
+
+
+        /* ═══════════════════════════════════════
+           PWA – Instalación
+        ═══════════════════════════════════════ */
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Nota: Este preventDefault() hará que Chrome muestre un aviso en consola 
-            // diciendo "Banner not shown". Es NORMAL, ya que estamos usando nuestro propio botón.
             e.preventDefault();
-            // Guarda el evento para usarlo después
             deferredPrompt = e;
-            // Muestra nuestro botón personalizado
             installButton.style.display = 'flex';
-            console.log('PWA: Evento beforeinstallprompt capturado. Botón manual listo.');
         });
 
         installButton.addEventListener('click', async () => {
             if (deferredPrompt) {
-                // Muestra el prompt de instalación
                 deferredPrompt.prompt();
-                // Espera a que el usuario responda
                 const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to install prompt: ${outcome}`);
-                // Limpia el prompt (solo se puede usar una vez)
                 deferredPrompt = null;
-                // Oculta el botón
                 installButton.style.display = 'none';
             }
         });
 
-        // Oculta el botón si la app ya se instaló
-        window.addEventListener('appinstalled', (evt) => {
-            console.log('App installed successfully');
+        window.addEventListener('appinstalled', () => {
             installButton.style.display = 'none';
         });
 
-        // Detectar iOS para mostrar aviso manual
-        const isIos = () => {
-            const userAgent = window.navigator.userAgent.toLowerCase();
-            return /iphone|ipad|ipod/.test(userAgent);
-        };
-        const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+        /* iOS install hint */
+        const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        const isStandalone = () => ('standalone' in window.navigator) && window.navigator.standalone;
 
-        if (isIos() && !isInStandaloneMode()) {
-            const hasSeenHint = localStorage.getItem('iosHintSeen');
-            if (!hasSeenHint) {
+        if (isIos() && !isStandalone()) {
+            if (!localStorage.getItem('iosHintSeen')) {
                 document.getElementById('iosHint').style.display = 'flex';
-                // Opcional: Marcar como visto después de 10 segundos
-                setTimeout(() => {
-                    localStorage.setItem('iosHintSeen', 'true');
-                }, 10000);
+                setTimeout(() => localStorage.setItem('iosHintSeen', 'true'), 10000);
             }
         }
 
-        // Service Worker Register
+        /* Service Worker */
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('SW Registered'))
+                    .then(() => console.log('SW Registered'))
                     .catch(err => console.log('SW Error', err));
             });
         }
     </script>
+
 </body>
 
 </html>
