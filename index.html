@@ -178,30 +178,180 @@
             border-color: rgba(255, 255, 255, 0.15);
         }
 
-        /* Player Card */
-        .player-card {
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.4);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .player-wrapper {
+        /* Player Card Custom Design */
+        .custom-player-container {
+            background: #0a0507; /* Fondo parecido al de la imagen */
+            border-radius: 20px;
+            padding: 1.5rem;
             width: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            /* Corta cualquier cosa que sobresalga */
-            background: #000;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             position: relative;
         }
 
-        /* Iframe Styles */
-        .player-wrapper iframe {
-            display: block;
-            width: 100%;
-            height: 300px;
-            /* Altura generosa para evitar scroll */
-            border: none;
+        .player-layout {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .player-logo {
+            width: 110px;
+            height: 110px;
+            flex-shrink: 0;
+            background: #fff;
+            border-radius: 16px;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .player-logo img {
+            width: 90%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .player-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .top-status {
+            color: #ddd;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .station-title {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .station-title i, .top-status i {
+            color: var(--primary);
+        }
+
+        /* Equalizer Bar Design */
+        .player-eq {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 30px;
+            margin: 5px 0;
+            width: 100%;
+            background: rgba(237, 28, 36, 0.05);
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        .player-eq span {
+            flex: 1;
+            background-color: var(--primary);
+            border-radius: 2px 2px 0 0;
+            box-shadow: 0 0 5px rgba(237, 28, 36, 0.3);
+            animation: player-wave 1.2s infinite ease-in-out alternate;
+        }
+
+        .player-eq span:nth-child(1) { height: 30%; animation-delay: -0.1s; }
+        .player-eq span:nth-child(2) { height: 50%; animation-delay: -0.5s; }
+        .player-eq span:nth-child(3) { height: 80%; animation-delay: -0.2s; }
+        .player-eq span:nth-child(4) { height: 40%; animation-delay: -0.8s; }
+        .player-eq span:nth-child(5) { height: 90%; animation-delay: -0.3s; }
+        .player-eq span:nth-child(6) { height: 60%; animation-delay: -0.6s; }
+        .player-eq span:nth-child(7) { height: 30%; animation-delay: -0.9s; }
+        .player-eq span:nth-child(8) { height: 75%; animation-delay: -0.4s; }
+        .player-eq span:nth-child(9) { height: 45%; animation-delay: -0.7s; }
+        .player-eq span:nth-child(10) { height: 65%; animation-delay: -1.1s; }
+        .player-eq span:nth-child(11) { height: 55%; animation-delay: -0.5s; }
+        .player-eq span:nth-child(12) { height: 85%; animation-delay: -0.2s; }
+        .player-eq span:nth-child(13) { height: 40%; animation-delay: -0.8s; }
+        .player-eq span:nth-child(14) { height: 70%; animation-delay: -0.3s; }
+        .player-eq span:nth-child(15) { height: 35%; animation-delay: -0.6s; }
+
+        @keyframes player-wave {
+            0% { height: 10%; }
+            100% { height: 100%; }
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .play-btn {
+            width: 45px;
+            height: 45px;
+            background: #fff;
+            border-radius: 50%;
+            border: none;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255,255,255,0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255,255,255,0.4);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.05);
+            padding: 8px 12px;
+            border-radius: 50px;
+        }
+
+        .volume-control i {
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .volume-control input[type=range] {
+            -webkit-appearance: none;
+            width: 70px;
+            background: transparent;
+        }
+
+        .volume-control input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            margin-top: -3px;
+            box-shadow: 0 0 5px rgba(255,255,255,0.5);
+        }
+
+        .volume-control input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
         }
 
         .action-grid {
@@ -448,6 +598,17 @@
                 font-size: 2rem;
             }
 
+            .player-layout {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .player-logo {
+                width: 100%;
+                height: 150px;
+                border-radius: 12px;
+            }
+
             .action-grid {
                 grid-template-columns: 1fr;
             }
@@ -524,11 +685,46 @@
             </div>
         </header>
 
-        <!-- Player Card -->
-        <section class="card player-card">
-            <div class="player-wrapper">
-                <iframe src="https://zeno.fm/player/radio-xero" scrolling="no" loading="lazy">
-                </iframe>
+        <!-- Custom Player Card -->
+        <section class="custom-player-container">
+            <audio id="custom-audio" src="https://stream.zeno.fm/agxzfnplbm8tc3RhdHNyMgsSCkF1dGhDbGllbnQYgICQj5KBtAkMCxIOU3RhdGlvblByb2ZpbGUYgICQt-Cp5QgMogEEemVubw" crossorigin="anonymous"></audio>
+            
+            <div class="player-layout">
+                <!-- Portada / Logo -->
+                <div class="player-logo">
+                    <img src="logo%20xero.png" alt="Radio Xero Cover">
+                </div>
+                
+                <!-- Info y Controles -->
+                <div class="player-content">
+                    <div class="top-status">
+                        <i class="fas fa-microphone-alt"></i> Radio Xero
+                    </div>
+                    <div class="station-title">
+                        <i class="fas fa-music"></i> Radio Xero | Al Aire
+                    </div>
+                    
+                    <!-- EQ Animado -->
+                    <div class="player-eq">
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+
+                    <div class="player-controls">
+                        <!-- Play / Pause -->
+                        <button id="play-btn" class="play-btn" aria-label="Reproducir">
+                            <i class="fas fa-play" style="margin-left: 2px;"></i>
+                        </button>
+                        
+                        <!-- Volumen -->
+                        <div class="volume-control">
+                            <i class="fas fa-volume-down"></i>
+                            <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.8">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -647,6 +843,49 @@
                     .catch(err => console.log('SW Error', err));
             });
         }
+
+        // Custom Audio Player Logic
+        const audioEl = document.getElementById('custom-audio');
+        const playBtn = document.getElementById('play-btn');
+        const eqBars = document.querySelectorAll('.player-eq span');
+        const volumeSlider = document.getElementById('volume-slider');
+        
+        // Empezamos con el EQ detenido visualmente
+        eqBars.forEach(bar => bar.style.animationPlayState = 'paused');
+
+        let isPlaying = false;
+
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audioEl.pause();
+                playBtn.innerHTML = '<i class="fas fa-play" style="margin-left: 2px;"></i>';
+                eqBars.forEach(bar => bar.style.animationPlayState = 'paused');
+            } else {
+                audioEl.play().catch(e => {
+                    console.error("Error al reproducir el stream:", e);
+                    alert("Asegúrate de haber interactuado con la página primero o que la transmisión esté activa.");
+                });
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                eqBars.forEach(bar => bar.style.animationPlayState = 'running');
+            }
+            isPlaying = !isPlaying;
+        });
+
+        volumeSlider.addEventListener('input', (e) => {
+            audioEl.volume = e.target.value;
+        });
+
+        audioEl.addEventListener('playing', () => {
+             isPlaying = true;
+             playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+             eqBars.forEach(bar => bar.style.animationPlayState = 'running');
+        });
+
+        audioEl.addEventListener('pause', () => {
+             isPlaying = false;
+             playBtn.innerHTML = '<i class="fas fa-play" style="margin-left: 2px;"></i>';
+             eqBars.forEach(bar => bar.style.animationPlayState = 'paused');
+        });
     </script>
 </body>
 
