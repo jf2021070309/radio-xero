@@ -10,7 +10,6 @@
     <meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="icon-192.png">
 
-    <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -60,7 +59,6 @@
             flex-direction: column;
             gap: 1.5rem;
             animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-            transition: max-width 0.4s ease;
         }
 
         @media (min-width: 900px) {
@@ -202,18 +200,60 @@
         .rx-top {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.25rem;
+            gap: 18px;
+            margin-bottom: 20px;
         }
 
-        .rx-cover {
-            width: 72px;
-            height: 72px;
-            border-radius: 12px;
-            border: 1px solid rgba(237, 28, 36, 0.3);
-            object-fit: cover;
+        .rx-art {
+            width: 80px;
+            height: 80px;
+            border-radius: 14px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
-            background: #1a0a0a;
+            overflow: hidden;
+            border: 2px solid rgba(237, 28, 36, 0.5);
+            position: relative;
+        }
+
+        .rx-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .rx-art-fallback {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rx-pulse {
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            border: 2px solid #ED1C24;
+            animation: pulseBorder 2s ease-in-out infinite;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes pulseBorder {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: scale(1.05);
+            }
         }
 
         .rx-meta {
@@ -221,46 +261,64 @@
             min-width: 0;
         }
 
-        .rx-live-tag {
-            display: inline-block;
-            background: var(--primary);
-            color: #fff;
+        .rx-live-label {
             font-size: 10px;
             font-weight: 800;
-            padding: 2px 8px;
-            border-radius: 4px;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            color: var(--primary);
             text-transform: uppercase;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .rx-station {
-            color: #fff;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
+        .rx-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: inline-block;
+            animation: blink 1.2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.2;
+            }
+        }
+
+        .rx-station-name {
+            font-size: 17px;
             font-weight: 700;
-            margin: 0;
+            color: #fff;
+            margin-bottom: 3px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .rx-song {
-            color: var(--text-dim);
-            font-size: 0.8rem;
-            margin-top: 2px;
+        .rx-track {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.45);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        /* Visualizador */
-        #rxViz {
-            height: 56px;
+        /* Visualizer */
+        .rx-viz {
             display: flex;
             align-items: flex-end;
             gap: 3px;
-            margin-bottom: 1.25rem;
+            height: 52px;
+            margin-bottom: 20px;
             padding: 0 2px;
         }
 
@@ -269,110 +327,101 @@
             background: var(--primary);
             border-radius: 2px 2px 0 0;
             min-height: 3px;
-            height: 3px;
-            transition: height 0.08s ease, opacity 0.08s ease;
-            opacity: 0.5;
+            opacity: 0.85;
+            transition: height 0.08s ease;
         }
 
-        /* Barra de fondo del visualizador cuando está pausado */
-        .rx-bar-idle {
-            height: 3px !important;
-            opacity: 0.25 !important;
-        }
-
-        /* Controles */
+        /* Controls */
         .rx-controls {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 16px;
         }
 
         .rx-play-btn {
             width: 52px;
             height: 52px;
             border-radius: 50%;
-            background: var(--primary);
+            background: #fff;
             border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.15s ease, background 0.2s ease;
             flex-shrink: 0;
-            box-shadow: 0 0 20px rgba(237, 28, 36, 0.4);
+            transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 0 0 rgba(237, 28, 36, 0);
         }
 
         .rx-play-btn:hover {
-            background: #c0151b;
-            transform: scale(1.05);
+            transform: scale(1.06);
+            box-shadow: 0 0 20px rgba(237, 28, 36, 0.4);
         }
 
         .rx-play-btn:active {
-            transform: scale(0.97);
+            transform: scale(0.94);
         }
 
-        .rx-play-btn svg {
-            width: 22px;
-            height: 22px;
-            fill: white;
-        }
-
-        .rx-vol-wrap {
+        .rx-vol {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             flex: 1;
         }
 
-        .rx-vol-wrap svg {
-            width: 16px;
-            height: 16px;
-            fill: #666;
+        .rx-vol-icon {
+            color: rgba(255, 255, 255, 0.4);
             flex-shrink: 0;
         }
 
-        .rx-vol-wrap input[type=range] {
+        .rx-vol-slider {
             flex: 1;
-            height: 4px;
             -webkit-appearance: none;
             appearance: none;
-            background: rgba(255, 255, 255, 0.12);
+            height: 3px;
             border-radius: 2px;
             outline: none;
             cursor: pointer;
+            background: linear-gradient(to right, #ED1C24 80%, rgba(255, 255, 255, 0.15) 80%);
         }
 
-        .rx-vol-wrap input[type=range]::-webkit-slider-thumb {
+        .rx-vol-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             width: 14px;
             height: 14px;
             border-radius: 50%;
-            background: var(--primary);
+            background: #fff;
             cursor: pointer;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
         }
 
-        .rx-vol-wrap input[type=range]::-moz-range-thumb {
+        .rx-vol-slider::-moz-range-thumb {
             width: 14px;
             height: 14px;
             border-radius: 50%;
-            background: var(--primary);
+            background: #fff;
             cursor: pointer;
             border: none;
         }
 
         .rx-status {
-            font-size: 0.72rem;
-            color: #555;
-            white-space: nowrap;
-            min-width: 60px;
-            text-align: right;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            text-align: center;
+            margin-top: 14px;
+            min-height: 16px;
+            transition: color 0.3s;
         }
 
-        .rx-status.live {
-            color: var(--primary);
+        .rx-status.error {
+            color: #ff6b6b;
         }
 
-        /* ─── Botones de acción ─── */
+        .rx-status.playing {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* ─── Social & Info (same as original) ─── */
         .action-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -418,7 +467,6 @@
             transform: translateY(-3px);
         }
 
-        /* Info */
         .info-card h2 {
             font-family: 'Poppins', sans-serif;
             font-size: 1.1rem;
@@ -463,7 +511,7 @@
             font-size: 0.75rem;
         }
 
-        /* Botón flotante instalar */
+        /* Install button */
         .install-btn {
             position: fixed;
             bottom: 20px;
@@ -498,7 +546,7 @@
             }
         }
 
-        /* iOS overlay */
+        /* iOS Overlay */
         .ios-install-overlay {
             position: fixed;
             top: 0;
@@ -534,6 +582,7 @@
             font-family: 'Poppins', sans-serif;
             font-size: 1.4rem;
             margin-bottom: 0.75rem;
+            color: #fff;
         }
 
         .ios-install-card>p {
@@ -640,13 +689,18 @@
                 left: 15px;
                 justify-content: center;
             }
+
+            .rx-art {
+                width: 64px;
+                height: 64px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Botón flotante instalar (Android/Chrome) -->
+    <!-- Floating Install Button -->
     <button id="installButton" class="install-btn">
         <i class="fas fa-download"></i>
         Instalar Radio Xero
@@ -659,7 +713,7 @@
             <p>Disfruta de nuestra radio sin interrupciones y con acceso directo desde tu inicio.</p>
             <div class="ios-steps">
                 <div class="ios-step">
-                    <i class="fas fa-ellipsis-h" style="color:var(--primary);"></i>
+                    <i class="fas fa-ellipsis-h" style="color: var(--primary);"></i>
                     <span>Presiona los <b>3 puntitos</b></span>
                 </div>
                 <div class="ios-step">
@@ -667,11 +721,11 @@
                     <span>Toca en <b>Compartir</b></span>
                 </div>
                 <div class="ios-step">
-                    <i class="fas fa-ellipsis-v" style="color:var(--text);"></i>
+                    <i class="fas fa-ellipsis-v" style="color: var(--text);"></i>
                     <span>Ve a <b>Ver más</b></span>
                 </div>
                 <div class="ios-step">
-                    <i class="far fa-plus-square" style="color:var(--text);"></i>
+                    <i class="far fa-plus-square" style="color: var(--text);"></i>
                     <span>Selecciona <b>Agregar a inicio</b> y luego <b>Agregar</b></span>
                 </div>
             </div>
@@ -695,47 +749,64 @@
             </div>
         </header>
 
-        <!-- ─── REPRODUCTOR PERSONALIZADO ─── -->
+        <!-- ─── CUSTOM PLAYER CARD ─── -->
         <section class="card player-card">
 
-            <!-- Carátula + info -->
+            <!-- Top: artwork + meta -->
             <div class="rx-top">
-                <img src="logo%20xero.png" alt="Radio Xero" class="rx-cover" id="rxCover">
+                <div class="rx-art">
+                    <div class="rx-pulse" id="artPulse"></div>
+                    <!-- Usa tu logo como artwork -->
+                    <img src="logo%20xero.png" alt="Radio Xero"
+                        onerror="this.style.display='none';document.getElementById('artFallback').style.display='flex'">
+                    <div class="rx-art-fallback" id="artFallback" style="display:none;">
+                        <svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="80" height="80" fill="white" />
+                            <circle cx="40" cy="40" r="30" fill="#ED1C24" />
+                            <circle cx="40" cy="40" r="22" fill="white" />
+                            <circle cx="40" cy="40" r="4" fill="#ED1C24" />
+                            <text x="40" y="36" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
+                                font-size="8" fill="#ED1C24">RADIO</text>
+                            <text x="40" y="48" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
+                                font-size="12" fill="#1A3B70">XERO</text>
+                        </svg>
+                    </div>
+                </div>
                 <div class="rx-meta">
-                    <span class="rx-live-tag">En Vivo</span>
-                    <p class="rx-station">Radio Xero</p>
-                    <p class="rx-song" id="rxSong">Radio Xero | Al Aire</p>
+                    <div class="rx-live-label">
+                        <span class="rx-dot" id="liveDot"></span>
+                        En Vivo
+                    </div>
+                    <div class="rx-station-name">Radio Xero</div>
+                    <div class="rx-track" id="trackInfo">Radio Xero | Al Aire</div>
                 </div>
             </div>
 
-            <!-- Visualizador de barras -->
-            <div id="rxViz"></div>
+            <!-- Visualizer bars -->
+            <div class="rx-viz" id="rxViz"></div>
 
-            <!-- Controles -->
+            <!-- Controls -->
             <div class="rx-controls">
-                <button class="rx-play-btn" id="rxPlayBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
-                    <svg id="rxPlayIcon" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
+                <button class="rx-play-btn" id="playBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
+                    <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
+                        <polygon points="6,4 20,12 6,20" fill="#111" />
                     </svg>
                 </button>
 
-                <div class="rx-vol-wrap">
-                    <!-- Icono volumen -->
-                    <svg viewBox="0 0 24 24">
+                <div class="rx-vol">
+                    <svg class="rx-vol-icon" width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.45)">
                         <path
                             d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
                     </svg>
-                    <input type="range" min="0" max="1" step="0.05" value="0.8" id="rxVol"
+                    <input type="range" min="0" max="100" value="80" id="volSlider" class="rx-vol-slider"
                         oninput="rxSetVol(this.value)" aria-label="Volumen">
                 </div>
-
-                <span class="rx-status" id="rxStatus">Listo</span>
             </div>
 
+            <div class="rx-status" id="rxStatus">Presiona play para sintonizar</div>
         </section>
-        <!-- ─── FIN REPRODUCTOR ─── -->
 
-        <!-- Redes Sociales -->
+        <!-- Social buttons -->
         <nav class="action-grid">
             <a href="https://wa.me/tu-numero" class="action-btn whatsapp" target="_blank" rel="noopener">
                 <i class="fab fa-whatsapp"></i>
@@ -751,7 +822,7 @@
             </a>
         </nav>
 
-        <!-- Programación + Acerca -->
+        <!-- Info grid -->
         <div class="info-grid">
             <section class="card info-card">
                 <h2><i class="far fa-calendar-alt"></i> Programación Diaria</h2>
@@ -773,7 +844,7 @@
 
             <section class="card info-card">
                 <h2><i class="fas fa-info-circle"></i> Nuestra Estación</h2>
-                <p style="color:var(--text-dim);font-size:0.9rem;line-height:1.6;text-align:left;">
+                <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; text-align: left;">
                     Radio Xero es tu conexión directa con la mejor música y noticias. Transmitiendo 24/7 con calidad
                     digital para acompañarte donde quiera que estés.
                 </p>
@@ -781,130 +852,152 @@
         </div>
 
         <footer>
-            <p>&copy; 2024 Radio Xero - Todos los derechos reservados</p>
+            <p>&copy; 2025 Radio Xero - Todos los derechos reservados</p>
             <p style="margin-top:5px;">Hecho con ❤️ para nuestros oyentes</p>
         </footer>
+    </div>
 
-    </div><!-- /.main-wrapper -->
-
+    <!-- Audio element oculto -->
+    <audio id="rxAudio" crossorigin="anonymous" preload="none"></audio>
 
     <script>
-        /* ═══════════════════════════════════════
-           REPRODUCTOR PERSONALIZADO RADIO XERO
-           Usa el stream directo de Zeno.fm sin iframe
-        ═══════════════════════════════════════ */
-        const RX_STREAM = 'https://stream.zeno.fm/0r0xa792kwzuv';
-        const NUM_BARS = 28;
+        // ─── RADIO XERO PLAYER ───────────────────────────────────────────────────
+        const STREAM_URL = 'https://stream.zeno.fm/n7fm3s6537zuv';
 
-        /* Crear barras del visualizador */
+        const audio = document.getElementById('rxAudio');
+        const statusEl = document.getElementById('rxStatus');
+        const playIcon = document.getElementById('playIcon');
         const vizEl = document.getElementById('rxViz');
-        for (let i = 0; i < NUM_BARS; i++) {
+
+        let isPlaying = false;
+        let animId = null;
+        let audioCtx = null;
+        let analyser = null;
+        let srcNode = null;
+        let dataArr = null;
+        const bars = [];
+
+        // Crear barras del visualizador
+        for (let i = 0; i < 36; i++) {
             const b = document.createElement('div');
             b.className = 'rx-bar';
+            b.style.height = '3px';
             vizEl.appendChild(b);
-        }
-        const bars = vizEl.querySelectorAll('.rx-bar');
-
-        /* Estado global */
-        let rxAudio = null;
-        let rxCtx = null;
-        let rxAnalyser = null;
-        let rxSrcNode = null;
-        let rxAnimId = null;
-        let rxPlaying = false;
-
-        /* ── Toggle play/pause ── */
-        function rxToggle() {
-            rxPlaying ? rxStop() : rxPlay();
+            bars.push(b);
         }
 
-        /* ── Reproducir ── */
-        function rxPlay() {
-            const statusEl = document.getElementById('rxStatus');
-            statusEl.textContent = 'Conectando...';
-            statusEl.className = 'rx-status';
-
-            if (!rxAudio) {
-                rxAudio = new Audio();
-                rxAudio.crossOrigin = 'anonymous';
-                rxAudio.src = RX_STREAM;
-                rxAudio.volume = parseFloat(document.getElementById('rxVol').value);
-
-                /* Manejar error de red */
-                rxAudio.onerror = () => {
-                    statusEl.textContent = 'Sin conexión';
-                    statusEl.className = 'rx-status';
-                    rxPlaying = false;
-                    document.getElementById('rxPlayIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
-                    bars.forEach(b => b.style.height = '3px');
-                };
-            }
-
-            rxAudio.play()
-                .then(() => {
-                    rxSetupAnalyser();
-                    rxPlaying = true;
-                    document.getElementById('rxPlayIcon').innerHTML =
-                        '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-                    statusEl.textContent = 'Al Aire';
-                    statusEl.className = 'rx-status live';
-                })
-                .catch(() => {
-                    statusEl.textContent = 'Error';
-                    statusEl.className = 'rx-status';
-                });
-        }
-
-        /* ── Pausar ── */
-        function rxStop() {
-            if (rxAudio) rxAudio.pause();
-            rxPlaying = false;
-            cancelAnimationFrame(rxAnimId);
-            document.getElementById('rxPlayIcon').innerHTML = '<path d="M8 5v14l11-7z"/>';
-            const statusEl = document.getElementById('rxStatus');
-            statusEl.textContent = 'Pausado';
-            statusEl.className = 'rx-status';
-            bars.forEach(b => { b.style.height = '3px'; b.style.opacity = '0.25'; });
-        }
-
-        /* ── Configurar Web Audio API para el visualizador ── */
-        function rxSetupAnalyser() {
-            if (rxCtx) {
-                /* Si el contexto estaba suspendido (política autoplay) lo reanudamos */
-                if (rxCtx.state === 'suspended') rxCtx.resume();
-                rxDraw();
-                return;
-            }
-            rxCtx = new (window.AudioContext || window.webkitAudioContext)();
-            rxAnalyser = rxCtx.createAnalyser();
-            rxAnalyser.fftSize = 64;
-            rxSrcNode = rxCtx.createMediaElementSource(rxAudio);
-            rxSrcNode.connect(rxAnalyser);
-            rxAnalyser.connect(rxCtx.destination);
-            rxDraw();
-        }
-
-        /* ── Loop de animación del visualizador ── */
-        function rxDraw() {
-            rxAnimId = requestAnimationFrame(rxDraw);
-            const data = new Uint8Array(rxAnalyser.frequencyBinCount);
-            rxAnalyser.getByteFrequencyData(data);
-            bars.forEach((b, i) => {
-                const v = data[i] || 0;
-                b.style.height = Math.max(3, (v / 255) * 52) + 'px';
-                b.style.opacity = 0.35 + (v / 255) * 0.65;
-            });
-        }
-
-        /* ── Volumen ── */
+        // Volumen
         function rxSetVol(v) {
-            if (rxAudio) rxAudio.volume = parseFloat(v);
+            audio.volume = v / 100;
+            const slider = document.getElementById('volSlider');
+            slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(255,255,255,0.15) ${v}%)`;
+        }
+        rxSetVol(80);
+
+        // Icono play/pause
+        function setIcon(playing) {
+            playIcon.innerHTML = playing
+                ? '<rect x="6" y="4" width="4" height="16" fill="#111"/><rect x="14" y="4" width="4" height="16" fill="#111"/>'
+                : '<polygon points="6,4 20,12 6,20" fill="#111"/>';
         }
 
+        // Estado en pantalla
+        function setStatus(msg, type) {
+            statusEl.innerHTML = msg;
+            statusEl.className = 'rx-status' + (type ? ' ' + type : '');
+        }
 
-        /* ═══════════════════════════════════════
-           PWA – Instalación
-        ═══════════════════════════════════════ */
+        // Animación idle (barras bajas cuando no reproduce)
+        function idleAnim() {
+            let t = 0;
+            function frame() {
+                if (isPlaying) return;
+                animId = requestAnimationFrame(frame);
+                t += 0.05;
+                bars.forEach((b, i) => {
+                    const h = 3 + Math.abs(Math.sin(t + i * 0.28)) * 7;
+                    b.style.height = h + 'px';
+                    b.style.opacity = '0.25';
+                });
+            }
+            frame();
+        }
+        idleAnim();
+
+        // Iniciar Web Audio API para visualizador real
+        function startAnalyser() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 128;
+                srcNode = audioCtx.createMediaElementSource(audio);
+                srcNode.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                dataArr = new Uint8Array(analyser.frequencyBinCount);
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            function draw() {
+                if (!isPlaying) return;
+                animId = requestAnimationFrame(draw);
+                analyser.getByteFrequencyData(dataArr);
+                bars.forEach((b, i) => {
+                    const v = dataArr[i] || 0;
+                    b.style.height = Math.max(3, (v / 255) * 48) + 'px';
+                    b.style.opacity = 0.45 + (v / 255) * 0.55;
+                });
+            }
+            draw();
+        }
+
+        // Toggle play / pause
+        function rxToggle() {
+            if (!isPlaying) {
+                setStatus('Conectando con Radio Xero...');
+                audio.src = STREAM_URL;
+                audio.load();
+                audio.play()
+                    .then(() => {
+                        isPlaying = true;
+                        setIcon(true);
+                        document.getElementById('artPulse').style.animationPlayState = 'running';
+                        setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
+                        if (animId) cancelAnimationFrame(animId);
+                        startAnalyser();
+                    })
+                    .catch(() => {
+                        setStatus('No se pudo conectar. Reintenta.', 'error');
+                        isPlaying = false;
+                    });
+            } else {
+                audio.pause();
+                audio.src = '';
+                isPlaying = false;
+                setIcon(false);
+                document.getElementById('artPulse').style.animationPlayState = 'paused';
+                setStatus('Pausado');
+                if (animId) cancelAnimationFrame(animId);
+                idleAnim();
+            }
+        }
+
+        audio.addEventListener('error', () => {
+            isPlaying = false;
+            setIcon(false);
+            setStatus('Error de conexión. Reintenta.', 'error');
+            if (animId) cancelAnimationFrame(animId);
+            idleAnim();
+        });
+
+        audio.addEventListener('waiting', () => {
+            if (isPlaying) setStatus('Buffering...', 'playing');
+        });
+
+        audio.addEventListener('playing', () => {
+            if (isPlaying) setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
+        });
+
+        // ─── PWA Install Logic ───────────────────────────────────────────────────
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
 
@@ -927,9 +1020,9 @@
             installButton.style.display = 'none';
         });
 
-        /* iOS install hint */
-        const isIos = () => /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-        const isStandalone = () => ('standalone' in window.navigator) && window.navigator.standalone;
+        // ─── iOS Install Hint ────────────────────────────────────────────────────
+        const isIos = () => /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+        const isStandalone = () => ('standalone' in navigator) && navigator.standalone;
 
         if (isIos() && !isStandalone()) {
             if (!localStorage.getItem('iosHintSeen')) {
@@ -938,16 +1031,15 @@
             }
         }
 
-        /* Service Worker */
+        // ─── Service Worker ──────────────────────────────────────────────────────
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
-                    .then(() => console.log('SW Registered'))
+                    .then(() => console.log('SW OK'))
                     .catch(err => console.log('SW Error', err));
             });
         }
     </script>
-
 </body>
 
 </html>
