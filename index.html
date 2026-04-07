@@ -899,50 +899,38 @@
 
         let isPlaying = false;
 
-        let audioCtx, analyser, source, animationId;
+        let animationId;
         const bars = document.querySelectorAll('.eq-bar');
         const numBars = bars.length;
 
-        function initVisualizer() {
-            if (audioCtx) return;
-            
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                analyser = audioCtx.createAnalyser();
-                
-                // Habilitar CORS para análisis de audio
-                audio.crossOrigin = "anonymous";
-                
-                source = audioCtx.createMediaElementSource(audio);
-                source.connect(analyser);
-                analyser.connect(audioCtx.destination);
-                
-                analyser.fftSize = 64; 
-                const bufferLength = analyser.frequencyBinCount;
-                const dataArray = new Uint8Array(bufferLength);
+        function startSimulation() {
+            function renderFrame() {
+                animationId = requestAnimationFrame(renderFrame);
 
-                function renderFrame() {
-                    animationId = requestAnimationFrame(renderFrame);
-                    analyser.getByteFrequencyData(dataArray);
-
-                    for (let i = 0; i < numBars; i++) {
-                        const val = dataArray[i % bufferLength];
-                        const heightPercent = (val / 255) * 100;
-                        bars[i].style.height = `${Math.max(4, heightPercent)}%`;
-                        bars[i].style.opacity = 0.5 + (heightPercent / 200);
+                for (let i = 0; i < numBars; i++) {
+                    // Generamos una altura aleatoria suave (simulando frecuencias)
+                    // Usamos Math.random() con un multiplicador de frecuencia para que las barras se muevan diferente
+                    const freqMulti = (i % 5) + 1;
+                    const randomHeight = Math.random() * (70 + freqMulti * 5); 
+                    
+                    // Aplicamos solo si estamos en estado playing
+                    if (isPlaying) {
+                        bars[i].style.height = `${Math.max(4, randomHeight)}%`;
+                        bars[i].style.opacity = 0.5 + (randomHeight / 200);
+                    } else {
+                        bars[i].style.height = '4px';
+                        bars[i].style.opacity = '0.4';
                     }
                 }
-                renderFrame();
-            } catch (e) {
-                console.error("Visualizer init failed:", e);
             }
+            renderFrame();
         }
+
+        // Iniciamos la simulación visual (es ligera y no consume el contexto de audio)
+        startSimulation();
 
         playBtn.addEventListener('click', () => {
             if (!isPlaying) {
-                initVisualizer();
-                if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-                
                 audio.play();
                 playIcon.classList.remove('fa-play');
                 playIcon.classList.add('fa-pause');
