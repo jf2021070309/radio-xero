@@ -121,9 +121,9 @@
         }
 
         .main-logo {
-            max-height: 120px;
+            max-height: 100px;
             width: auto;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
         }
 
@@ -1301,6 +1301,14 @@
                     .catch(err => console.log('SW Error', err));
             });
         }
+
+        // ─── Auto-play on load ───────────────────────────────────────────────────
+        window.addEventListener('load', () => {
+            // Pequeño delay para asegurar que todo está listo
+            setTimeout(() => {
+                rxToggle();
+            }, 500);
+        });
     </script>
 </body>
 
