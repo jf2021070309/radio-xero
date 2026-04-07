@@ -929,15 +929,39 @@
         // Iniciamos la simulación visual (es ligera y no consume el contexto de audio)
         startSimulation();
 
+        const streamUrl1 = 'https://stream.zeno.fm/sh0pvy9uvt0uv';
+        const streamUrl2 = 'https://stream.zeno.fm/radio-xero';
+
         playBtn.addEventListener('click', () => {
             if (!isPlaying) {
-                audio.play();
+                // Forzamos la carga del stream para evitar estados trabados
+                if (!audio.src || audio.src === "") {
+                    audio.src = streamUrl1;
+                }
+                
+                audio.load();
+                const playPromise = audio.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log("Streaming iniciado con éxito");
+                    }).catch(error => {
+                        console.log("Primer intento fallido, probando fallback...", error);
+                        // Si el primer enlace falla, probamos el segundo automáticamente
+                        audio.src = streamUrl2;
+                        audio.load();
+                        audio.play();
+                    });
+                }
+
                 playIcon.classList.remove('fa-play');
                 playIcon.classList.add('fa-pause');
                 playerCard.classList.add('playing');
                 isPlaying = true;
             } else {
                 audio.pause();
+                // Opcional: limpiar src al pausar para ahorrar batería/datos
+                // audio.src = ""; 
                 playIcon.classList.remove('fa-pause');
                 playIcon.classList.add('fa-play');
                 playerCard.classList.remove('playing');
