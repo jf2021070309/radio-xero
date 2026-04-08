@@ -22,11 +22,11 @@
             --primary: #ED1C24;
             --secondary: #1A3B70;
             --primary-glow: rgba(237, 28, 36, 0.3);
-            --bg-dark: #020408;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text: #ffffff;
-            --text-dim: #999999;
+            --bg-light: #f1f5f9; /* Fondo claro profesional */
+            --glass: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --text-dark: #0f172a;
+            --text-dim: #64748b;
             --card-radius: 24px;
         }
 
@@ -39,8 +39,8 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #020408; /* Fondo negro profundo */
-            color: #f1f5f9;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -55,12 +55,11 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 220px; /* Negro más arriba */
-            background-color: #020408;
-            background-image:
-                radial-gradient(circle at 10% 10%, rgba(237, 28, 36, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(26, 59, 112, 0.15) 0%, transparent 40%);
+            height: 380px;
+            /* Degradado ajustado: Predomina el Guinda del lado derecho */
+            background: linear-gradient(110deg, #020617 0%, #0f172a 35%, #991b1b 85%, #b3141a 100%);
             z-index: 0;
+            clip-path: ellipse(150% 100% at 50% 0%); /* Curva elegante en la transición */
         }
 
         .main-wrapper {
@@ -70,7 +69,8 @@
             flex-direction: column;
             gap: 2.2rem;
             animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-            z-index: 1; /* Encima del top-bg */
+            z-index: 1;
+            position: relative;
         }
 
         @media (max-width: 600px) {
@@ -201,14 +201,14 @@
 
         /* Cards */
         .card {
-            background: #1e293b; /* Fondo oscuro ligeramente más claro */
-            border: 1px solid rgba(255, 255, 255, 0.08); /* Borde claro más visible */
-            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: var(--card-radius);
             padding: 1.5rem;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             height: 100%;
-            color: #f1f5f9; /* Texto claro */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Sombra oscura */
+            color: var(--text-dark);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
         }
 
         .card:hover {
@@ -219,16 +219,16 @@
         /* ─── CUSTOM PLAYER ─── */
         .player-card {
             padding: 2.2rem;
-            background: #ffffff; /* Claro */
-            color: #0f172a; /* Texto oscuro */
-            background-image: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+            background: #ffffff;
+            color: var(--text-dark);
+            background-image: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
             border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 1);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
             display: flex;
             flex-direction: row;
             gap: 1.5rem;
             align-items: center;
-            border-radius: 24px;
+            border-radius: var(--card-radius);
             position: relative;
             overflow: hidden;
         }
@@ -394,23 +394,79 @@
             50% { transform: translateY(-1px); }
         }
 
-        /* Visualizer */
-        .rx-viz {
+        /* ─── SEAMLESS INTEGRATED VU METER ─── */
+        .rx-viz-container {
             display: flex;
-            align-items: flex-end;
-            gap: 3px;
-            height: 32px;
-            margin-bottom: 8px;
-            padding: 0 2px;
+            flex-direction: column;
+            gap: 10px;
+            margin: 10px 0 20px 0;
+            padding: 15px;
+            /* Efecto de superficie rehundida en la tarjeta blanca */
+            background: rgba(241, 245, 249, 0.6); 
+            border-radius: 16px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.03);
         }
 
-        .rx-bar {
+        .rx-vu-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rx-vu-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: #94a3b8;
+            width: 12px;
+            text-align: center;
+        }
+
+        .rx-vu-meter {
+            display: flex;
+            gap: 2px; /* Un poco más juntos */
             flex: 1;
-            background: var(--primary);
-            border-radius: 2px 2px 0 0;
-            min-height: 3px;
-            opacity: 0.85;
-            transition: height 0.08s ease;
+        }
+
+        .rx-vu-segment {
+            flex: 1;
+            height: 12px; /* Más gordito y visible */
+            border-radius: 2.5px;
+            background: #e2e8f0; /* Gris muy suave e inactivo */
+            transition: all 0.08s ease;
+        }
+
+        /* Ambient color (Inactive) - Now subtle light gray */
+        .rx-vu-segment.low, .rx-vu-segment.mid, .rx-vu-segment.high { 
+            background: #e2e8f0; 
+        }
+
+        /* Glowing LEDs (Active) - More vibrant on light background */
+        .rx-vu-segment.active.low { 
+            background: #22c55e;
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+        }
+        .rx-vu-segment.active.mid { 
+            background: #f59e0b;
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+        }
+        .rx-vu-segment.active.high { 
+            background: #ef4444;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Scale Labels - More minimalist */
+        .rx-vu-scale {
+            display: flex;
+            justify-content: space-between;
+            padding-left: 24px;
+            margin-top: 2px;
+        }
+
+        .rx-vu-scale span {
+            font-size: 8px;
+            font-weight: 600;
+            color: #cbd5e1;
         }
 
         /* Controls */
@@ -566,15 +622,14 @@
             color: #64748b;
         }
 
-
         .info-card h2 {
             font-family: 'Poppins', sans-serif;
             font-size: 1.1rem;
-            margin-bottom: 1rem;
+            color: var(--primary);
+            margin-bottom: 1.2rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--primary);
+            gap: 12px;
         }
 
         .content-list {
@@ -585,8 +640,9 @@
         .content-item {
             display: flex;
             justify-content: space-between;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            align-items: center;
+            padding: 0.85rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
         }
 
         .content-item:last-child {
@@ -596,18 +652,22 @@
         .item-time {
             color: var(--primary);
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
+            background: rgba(237, 28, 36, 0.06);
+            padding: 4px 12px;
+            border-radius: 8px;
         }
 
         .item-name {
-            color: #e2e8f0;
-            font-size: 0.9rem;
-            font-weight: 500;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            font-weight: 600;
         }
         
         .info-card p {
-            color: #94a3b8 !important;
-            font-size: 0.95rem !important;
+            color: var(--text-dim) !important;
+            font-size: 0.9rem !important;
+            line-height: 1.6;
         }
 
         footer {
@@ -632,7 +692,7 @@
             font-family: 'Inter', sans-serif;
             font-weight: 600;
             font-size: 0.95rem;
-            display: none;
+            display: flex;
             align-items: center;
             gap: 14px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -923,6 +983,7 @@
 </head>
 
 <body>
+    <div class="top-bg"></div>
 
     <!-- Floating Install Button -->
     <button id="installButton" class="install-btn">
@@ -960,7 +1021,7 @@
         </div>
     </div>
 
-    <div class="top-bg"></div>
+
 
     <div class="main-wrapper">
 
@@ -1008,7 +1069,28 @@
                 </div>
 
                 <!-- Visualizer bars -->
-                <div class="rx-viz" id="rxViz"></div>
+                <!-- VU Meter Container -->
+                <div class="rx-viz-container" id="rxVizContainer">
+                    <div class="rx-vu-row">
+                        <span class="rx-vu-label">L</span>
+                        <div class="rx-vu-meter" id="vuL"></div>
+                    </div>
+                    <div class="rx-vu-row">
+                        <span class="rx-vu-label">R</span>
+                        <div class="rx-vu-meter" id="vuR"></div>
+                    </div>
+                    <!-- Decibel Scale -->
+                    <div class="rx-vu-scale">
+                        <span>-∞</span>
+                        <span>-18</span>
+                        <span>-12</span>
+                        <span>-6</span>
+                        <span>-3</span>
+                        <span>0</span>
+                        <span>+3</span>
+                        <span>+6</span>
+                    </div>
+                </div>
 
                 <!-- Controls -->
                 <div class="rx-controls">
@@ -1025,8 +1107,8 @@
                             </svg>
                         </button>
                         <div class="rx-vol-container">
-                            <input type="range" min="0" max="100" value="80" id="volSlider" class="rx-vol-slider" oninput="rxSetVol(this.value)" aria-label="Volumen">
-                            <span class="rx-vol-value" id="volValue">80%</span>
+                            <input type="range" min="0" max="100" value="50" id="volSlider" class="rx-vol-slider" oninput="rxSetVol(this.value)" aria-label="Volumen">
+                            <span class="rx-vol-value" id="volValue">50%</span>
                         </div>
                     </div>
                 </div>
@@ -1080,7 +1162,30 @@
         const audio = document.getElementById('rxAudio');
         const statusEl = document.getElementById('rxStatus');
         const playIcon = document.getElementById('playIcon');
-        const vizEl = document.getElementById('rxViz');
+        const vuL = document.getElementById('vuL');
+        const vuR = document.getElementById('vuR');
+        const barsL = [];
+        const barsR = [];
+        const SEGMENT_COUNT = 24;
+
+        function createSegments(container, array) {
+            for (let i = 0; i < SEGMENT_COUNT; i++) {
+                const seg = document.createElement('div');
+                seg.className = 'rx-vu-segment';
+                
+                // Assign color class based on position
+                const percent = (i / SEGMENT_COUNT) * 100;
+                if (percent < 50) seg.classList.add('low'); // Menos verdes (antes 65)
+                else if (percent < 80) seg.classList.add('mid'); // Más amarillos
+                else seg.classList.add('high'); // Más rojos
+                
+                container.appendChild(seg);
+                array.push(seg);
+            }
+        }
+
+        createSegments(vuL, barsL);
+        createSegments(vuR, barsR);
 
         let isPlaying = false;
         let animId = null;
@@ -1088,16 +1193,6 @@
         let analyser = null;
         let srcNode = null;
         let dataArr = null;
-        const bars = [];
-
-        // Crear barras del visualizador
-        for (let i = 0; i < 36; i++) {
-            const b = document.createElement('div');
-            b.className = 'rx-bar';
-            b.style.height = '3px';
-            vizEl.appendChild(b);
-            bars.push(b);
-        }
 
         // Volumen
         function rxSetVol(v) {
@@ -1150,17 +1245,27 @@
             statusEl.className = 'rx-status' + (type ? ' ' + type : '');
         }
 
-        // Animación idle (barras bajas cuando no reproduce)
+        // Animación idle (VU meter suave)
         function idleAnim() {
             let t = 0;
             function frame() {
                 if (isPlaying) return;
                 animId = requestAnimationFrame(frame);
                 t += 0.05;
-                bars.forEach((b, i) => {
-                    const h = 3 + Math.abs(Math.sin(t + i * 0.28)) * 7;
-                    b.style.height = h + 'px';
-                    b.style.opacity = '0.25';
+                
+                const valL = Math.abs(Math.sin(t)) * 0.35; // Aumentado de 0.2
+                const valR = Math.abs(Math.cos(t)) * 0.35;
+                
+                const activeL = Math.round(valL * SEGMENT_COUNT);
+                const activeR = Math.round(valR * SEGMENT_COUNT);
+
+                barsL.forEach((seg, i) => {
+                    if (i < activeL) seg.classList.add('active');
+                    else seg.classList.remove('active');
+                });
+                barsR.forEach((seg, i) => {
+                    if (i < activeR) seg.classList.add('active');
+                    else seg.classList.remove('active');
                 });
             }
             frame();
@@ -1173,6 +1278,7 @@
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 analyser = audioCtx.createAnalyser();
                 analyser.fftSize = 128;
+                analyser.smoothingTimeConstant = 0.8; // Más suavizado = menos parpadeo y más estable
                 srcNode = audioCtx.createMediaElementSource(audio);
                 srcNode.connect(analyser);
                 analyser.connect(audioCtx.destination);
@@ -1184,10 +1290,30 @@
                 if (!isPlaying) return;
                 animId = requestAnimationFrame(draw);
                 analyser.getByteFrequencyData(dataArr);
-                bars.forEach((b, i) => {
-                    const v = dataArr[i] || 0;
-                    b.style.height = Math.max(3, (v / 255) * 48) + 'px';
-                    b.style.opacity = 0.45 + (v / 255) * 0.55;
+                
+                // Buscamos picos (máximos) en lugar de promedios para que "salte" más el vúmetro
+                let maxL = 0;
+                let maxR = 0;
+                const half = Math.floor(dataArr.length / 2);
+                
+                for(let i=0; i<half; i++) { if(dataArr[i] > maxL) maxL = dataArr[i]; }
+                for(let i=half; i<dataArr.length; i++) { if(dataArr[i] > maxR) maxR = dataArr[i]; }
+                
+                // Curva de respuesta refinada: Exponente 2.2 para rango dinámico amplio
+                // Multiplicador 1.1 para permitir que los picos reales toquen el rojo
+                const valL = Math.pow(maxL / 255, 2.2);
+                const valR = Math.pow(maxR / 255, 2.2);
+
+                const activeL = Math.round(valL * SEGMENT_COUNT * 1.1); 
+                const activeR = Math.round(valR * SEGMENT_COUNT * 1.1);
+
+                barsL.forEach((seg, i) => {
+                    if (i < activeL) seg.classList.add('active');
+                    else seg.classList.remove('active');
+                });
+                barsR.forEach((seg, i) => {
+                    if (i < activeR) seg.classList.add('active');
+                    else seg.classList.remove('active');
                 });
             }
             draw();
@@ -1274,12 +1400,15 @@
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
                 deferredPrompt = null;
-                installButton.style.display = 'none';
+            } else {
+                // Fallback: mostrar instrucciones si no hay prompt nativo disponible
+                document.getElementById('iosHint').style.display = 'flex';
             }
         });
 
         window.addEventListener('appinstalled', () => {
-            installButton.style.display = 'none';
+             console.log('App instalada');
+             // Mantener el botón según petición "siempre activo"
         });
 
         // ─── iOS Install Hint ────────────────────────────────────────────────────
@@ -1302,9 +1431,12 @@
             });
         }
 
-        // ─── Auto-play on load ───────────────────────────────────────────────────
+        // ─── Auto-play & Default Volume on load ───────────────────────────────────────
         window.addEventListener('load', () => {
-            // Pequeño delay para asegurar que todo está listo
+            // Inicializar volumen al 50%
+            rxSetVol(50);
+            
+            // Pequeño delay para iniciar la radio automáticamente
             setTimeout(() => {
                 rxToggle();
             }, 500);
