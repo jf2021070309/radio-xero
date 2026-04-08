@@ -1229,26 +1229,33 @@
         function rxSetVol(v) {
             const vol = v / 100;
             audio.volume = vol;
-            if (gainNode) {
-                // Control por software para bypass de restricciones iOS
-                gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+            
+            // Sincronización estricta con GainNode para iOS
+            if (gainNode && audioCtx) {
+                const gainVal = isMuted ? 0 : vol;
+                gainNode.gain.setTargetAtTime(gainVal, audioCtx.currentTime, 0.05);
             }
+            
             const slider = document.getElementById('volSlider');
             const volValueText = document.getElementById('volValue');
             
             if (slider) {
-                slider.value = v; // Sincronizar posición de la bolita
+                slider.value = v;
                 slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
             }
             if (volValueText) {
                 volValueText.textContent = v + '%';
             }
             
-            // Si se sube volumen mientras está muteado, desmutearlo
-            if (v > 0 && (audio.muted || isMuted)) {
+            // Si el usuario sube volumen manualmente estando muteado, lo desmuteamos
+            if (v > 0 && isMuted && !muteLock) {
+                // Usamos un pequeño lock para evitar loops infinitos
+                muteLock = true;
                 rxToggleMute();
+                muteLock = false;
             }
         }
+        let muteLock = false;
         rxSetVol(50);
 
         // Mute / Unmute
@@ -1258,22 +1265,17 @@
         function rxToggleMute() {
             const muteBtn = document.getElementById('muteBtn');
             const muteIcon = document.getElementById('muteIcon');
+            const slider = document.getElementById('volSlider');
             
             isMuted = !isMuted;
-            audio.muted = isMuted;
-            
-            // Sincronizar gainNode para iOS
-            if (gainNode) {
-                gainNode.gain.setValueAtTime(isMuted ? 0 : audio.volume, audioCtx.currentTime);
-            }
             
             if (isMuted) {
-                volumeBeforeMute = parseInt(document.getElementById('volSlider').value);
-                // Ícono de mute (volumen tachado)
+                volumeBeforeMute = parseInt(slider.value);
+                rxSetVol(0);
                 muteIcon.innerHTML = '<g><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/><line x1="2.5" y1="21.5" x2="21.5" y2="2.5"/></g>';
                 muteBtn.style.opacity = '0.65';
             } else {
-                // Ícono de volumen normal
+                rxSetVol(volumeBeforeMute || 50);
                 muteIcon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>';
                 muteBtn.style.opacity = '1';
             }
@@ -1351,12 +1353,28 @@
             for(let i=0; i<half; i++) { if(dataArr[i] > maxL) maxL = dataArr[i]; }
             for(let i=half; i<dataArr.length; i++) { if(dataArr[i] > maxR) maxR = dataArr[i]; }
             
-            // MODO RESPALDO iOS: Si Safari bloquea el análisis, simulamos el ritmo
+            // MODO RESPALDO iOS: Animación orgánica avanzada (no repetitiva)
             if (maxL === 0 && maxR === 0 && isPlaying) {
-                const t = performance.now() / 150;
-                const vL = (Math.sin(t) * 0.3 + Math.sin(t * 1.5) * 0.2 + 0.5) * 0.7;
-                const vR = (Math.cos(t * 1.2) * 0.3 + Math.sin(t * 0.8) * 0.2 + 0.5) * 0.7;
-                updateBars(vL, vR);
+                const t = performance.now() / 100;
+                
+                // Mezcla de armónicos para evitar patrones cíclicos simples
+                const noiseL = (
+                    Math.sin(t * 0.8) * 0.25 + 
+                    Math.sin(t * 1.7 + 1.2) * 0.15 + 
+                    Math.sin(t * 4.2) * 0.05 + 
+                    (Math.random() * 0.12) + // Jitter rítmico
+                    0.4
+                ) * 0.9;
+
+                const noiseR = (
+                    Math.sin(t * 0.9 + 0.5) * 0.25 + 
+                    Math.sin(t * 2.1 + 2.1) * 0.15 + 
+                    Math.sin(t * 3.7) * 0.05 + 
+                    (Math.random() * 0.12) + // Jitter rítmico
+                    0.4
+                ) * 0.9;
+                
+                updateBars(Math.max(0, noiseL), Math.max(0, noiseR));
             } else {
                 const vL = Math.pow(maxL / 255, 2.2);
                 const vR = Math.pow(maxR / 255, 2.2);
@@ -1381,21 +1399,15 @@
 
         // Toggle play / pause
         function rxToggle() {
-            // EL DESPERTADOR DE iOS: Safari necesita que el AudioContext rinda cuentas
-            // exactamente en el trigger del click.
             if (!audioCtx) {
                 startAnalyser();
             }
-            
-            // "Kickstart" para Safari: Resumir inmediatamente
             if (audioCtx && audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
 
             if (!isPlaying) {
                 setStatus('Conectando con Radio Xero...');
-                
-                // Configuración crítica de fuente para iOS
                 audio.crossOrigin = "anonymous";
                 audio.src = STREAM_URL;
                 
@@ -1406,6 +1418,9 @@
                         document.getElementById('artPulse').style.animationPlayState = 'running';
                         setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
                         if (animId) cancelAnimationFrame(animId);
+                        
+                        // RECONEXIÓN CRÍTICA PARA iOS: Asegurar que el volumen se aplique al iniciar
+                        rxSetVol(document.getElementById('volSlider').value);
                         drawVisualizer();
                     })
                     .catch(() => {
