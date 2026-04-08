@@ -1320,10 +1320,13 @@
 
                 if (isIosDevice || !analyser) {
                     // --- SIMULACIÓN REALISTA PARA IOS O FALLBACK ---
-                    const base = 0.4 + Math.random() * 0.2; 
-                    const peak = Math.random() > 0.92 ? 0.4 : 0; 
-                    simL += (Math.min(1, base + peak + (Math.random()*0.1)) - simL) * 0.2;
-                    activeVal = Math.round(Math.pow(simL, 1.8) * SEGMENT_COUNT * 1.15);
+                    // Aumentamos base y picos para que llegue al rojo
+                    const base = 0.5 + Math.random() * 0.2; 
+                    const peak = Math.random() > 0.88 ? 0.45 : 0; 
+                    simL += (Math.min(1.2, base + peak + (Math.random()*0.1)) - simL) * 0.25;
+                    // Ajustamos la curva (pow 1.5) y multiplicador (1.3) para más energía
+                    activeVal = Math.round(Math.pow(simL, 1.5) * SEGMENT_COUNT * 1.3);
+                    if (activeVal > SEGMENT_COUNT) activeVal = SEGMENT_COUNT;
                 } else {
                     // --- ANÁLISIS REAL (Android / PC) ---
                     analyser.getByteFrequencyData(dataArr);
@@ -1426,6 +1429,8 @@
 
         if (isIosDevice) {
             installButton.style.display = 'none';
+            const volContainer = document.querySelector('.rx-vol-container');
+            if (volContainer) volContainer.style.display = 'none';
         }
 
         if ('serviceWorker' in navigator) {
