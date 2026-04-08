@@ -1431,6 +1431,8 @@
             installButton.style.display = 'none';
             const volContainer = document.querySelector('.rx-vol-container');
             if (volContainer) volContainer.style.display = 'none';
+            const volDiv = document.querySelector('.rx-vol');
+            if (volDiv) volDiv.style.justifyContent = 'flex-end';
         }
 
         if ('serviceWorker' in navigator) {
