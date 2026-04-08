@@ -1222,20 +1222,26 @@
                 gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
             }
             const slider = document.getElementById('volSlider');
-            const volValue = document.getElementById('volValue');
-            slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
-            volValue.textContent = v + '%';
+            const volValueText = document.getElementById('volValue');
+            
+            if (slider) {
+                slider.value = v; // Sincronizar posición de la bolita
+                slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
+            }
+            if (volValueText) {
+                volValueText.textContent = v + '%';
+            }
             
             // Si se sube volumen mientras está muteado, desmutearlo
             if (v > 0 && (audio.muted || isMuted)) {
                 rxToggleMute();
             }
         }
-        rxSetVol(80);
+        rxSetVol(50);
 
         // Mute / Unmute
         let isMuted = false;
-        let volumeBeforeMute = 80;
+        let volumeBeforeMute = 50;
 
         function rxToggleMute() {
             const muteBtn = document.getElementById('muteBtn');
@@ -1353,18 +1359,24 @@
 
         // Toggle play / pause
         function rxToggle() {
-            // REGLA DE ORO PARA iOS: El AudioContext debe activarse/resumirse 
-            // directamente en el hilo del evento 'click', no dentro de promesas.
+            // EL DESPERTADOR DE iOS: Safari necesita que el AudioContext rinda cuentas
+            // exactamente en el trigger del click.
             if (!audioCtx) {
-                startAnalyser(); // Creamos el contexto en el primer toque
-            } else if (audioCtx.state === 'suspended') {
+                startAnalyser();
+            }
+            
+            // "Kickstart" para Safari: Resumir inmediatamente
+            if (audioCtx && audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
 
             if (!isPlaying) {
                 setStatus('Conectando con Radio Xero...');
+                
+                // Configuración crítica de fuente para iOS
+                audio.crossOrigin = "anonymous";
                 audio.src = STREAM_URL;
-                audio.load();
+                
                 audio.play()
                     .then(() => {
                         isPlaying = true;
@@ -1372,7 +1384,6 @@
                         document.getElementById('artPulse').style.animationPlayState = 'running';
                         setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
                         if (animId) cancelAnimationFrame(animId);
-                        // El analizador ya está configurado, solo iniciamos el loop de dibujo
                         drawVisualizer();
                     })
                     .catch(() => {
@@ -1472,15 +1483,11 @@
             });
         }
 
-        // ─── Auto-play & Default Volume on load ───────────────────────────────────────
+        // ─── Default Volume on load ───────────────────────────────────────
         window.addEventListener('load', () => {
             // Inicializar volumen al 50%
             rxSetVol(50);
-            
-            // Pequeño delay para iniciar la radio automáticamente
-            setTimeout(() => {
-                rxToggle();
-            }, 500);
+            // NOTA: Auto-play eliminado para no romper permisos de Audio en iOS
         });
     </script>
 </body>
