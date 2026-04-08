@@ -1231,27 +1231,16 @@
         function rxSetVol(v) {
             const vol = v / 100;
             audio.volume = vol;
-            
-            // Sincronización estricta con GainNode para iOS
             if (gainNode && audioCtx) {
-                const gainVal = isMuted ? 0 : vol;
-                gainNode.gain.setTargetAtTime(gainVal, audioCtx.currentTime, 0.05);
+                gainNode.gain.setTargetAtTime(isMuted ? 0 : vol, audioCtx.currentTime, 0.02);
             }
-            
             const slider = document.getElementById('volSlider');
-            const volValueText = document.getElementById('volValue');
-            
             if (slider) {
-                slider.value = v;
                 slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
             }
-            if (volValueText) {
-                volValueText.textContent = v + '%';
-            }
+            document.getElementById('volValue').textContent = v + '%';
             
-            // Si el usuario sube volumen manualmente estando muteado, lo desmuteamos
             if (v > 0 && isMuted && !muteLock) {
-                // Usamos un pequeño lock para evitar loops infinitos
                 muteLock = true;
                 rxToggleMute();
                 muteLock = false;
@@ -1346,41 +1335,27 @@
             if (!isPlaying) return;
             animId = requestAnimationFrame(drawVisualizer);
             
-            analyser.getByteFrequencyData(dataArr);
-            
-            let maxL = 0;
-            let maxR = 0;
-            const half = Math.floor(dataArr.length / 2);
-            
-            for(let i=0; i<half; i++) { if(dataArr[i] > maxL) maxL = dataArr[i]; }
-            for(let i=half; i<dataArr.length; i++) { if(dataArr[i] > maxR) maxR = dataArr[i]; }
-            
-            // MODO RESPALDO iOS: Animación orgánica avanzada (no repetitiva)
-            if (maxL === 0 && maxR === 0 && isPlaying) {
-                const t = performance.now() / 100;
+            if (analyser) {
+                analyser.getByteFrequencyData(dataArr);
                 
-                // Mezcla de armónicos para evitar patrones cíclicos simples
-                const noiseL = (
-                    Math.sin(t * 0.8) * 0.25 + 
-                    Math.sin(t * 1.7 + 1.2) * 0.15 + 
-                    Math.sin(t * 4.2) * 0.05 + 
-                    (Math.random() * 0.12) + // Jitter rítmico
-                    0.4
-                ) * 0.9;
-
-                const noiseR = (
-                    Math.sin(t * 0.9 + 0.5) * 0.25 + 
-                    Math.sin(t * 2.1 + 2.1) * 0.15 + 
-                    Math.sin(t * 3.7) * 0.05 + 
-                    (Math.random() * 0.12) + // Jitter rítmico
-                    0.4
-                ) * 0.9;
+                let maxL = 0;
+                let maxR = 0;
+                for(let i=0; i<dataArr.length/2; i++) { if(dataArr[i] > maxL) maxL = dataArr[i]; }
+                for(let i=dataArr.length/2; i<dataArr.length; i++) { if(dataArr[i] > maxR) maxR = dataArr[i]; }
                 
-                updateBars(Math.max(0, noiseL), Math.max(0, noiseR));
+                // Si safari bloquea datos reales, usamos generativo
+                if (maxL === 0 && maxR === 0) {
+                    const t = performance.now() / 100;
+                    const vL = (Math.sin(t * 0.8) * 0.2 + Math.sin(t * 1.7) * 0.15 + 0.5) * 0.8;
+                    const vR = (Math.cos(t * 0.9) * 0.2 + Math.sin(t * 1.9) * 0.15 + 0.5) * 0.8;
+                    updateBars(vL, vR);
+                } else {
+                    updateBars(Math.pow(maxL/255, 2), Math.pow(maxR/255, 2));
+                }
             } else {
-                const vL = Math.pow(maxL / 255, 2.2);
-                const vR = Math.pow(maxR / 255, 2.2);
-                updateBars(vL, vR);
+                // Fallback total si no hay analizador
+                const t = performance.now() / 100;
+                updateBars(Math.sin(t)*0.5+0.5, Math.cos(t)*0.5+0.5);
             }
         }
 
@@ -1401,12 +1376,7 @@
 
         // Toggle play / pause
         function rxToggle() {
-            if (!audioCtx) {
-                startAnalyser();
-            }
-            if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
+            if (!audioCtx) startAnalyser();
 
             if (!isPlaying) {
                 setStatus('Conectando con Radio Xero...');
@@ -1416,14 +1386,17 @@
                 audio.play()
                     .then(() => {
                         isPlaying = true;
+                        if (audioCtx.state === 'suspended') audioCtx.resume();
                         setIcon(true);
                         document.getElementById('artPulse').style.animationPlayState = 'running';
                         setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
-                        if (animId) cancelAnimationFrame(animId);
                         
-                        // RECONEXIÓN CRÍTICA PARA iOS: Asegurar que el volumen se aplique al iniciar
-                        rxSetVol(document.getElementById('volSlider').value);
+                        if (animId) cancelAnimationFrame(animId);
                         drawVisualizer();
+                        
+                        // Sincronizar volumen actual al iniciar
+                        const curVol = document.getElementById('volSlider').value;
+                        rxSetVol(curVol);
                     })
                     .catch(() => {
                         setStatus('No se pudo conectar. Reintenta.', 'error');
