@@ -1422,19 +1422,19 @@
         const installButton = document.getElementById('installButton');
 
         window.addEventListener('beforeinstallprompt', (e) => {
+            if (isIosDevice) return; // Bloqueo total en iOS
             e.preventDefault();
             deferredPrompt = e;
             installButton.style.display = 'flex';
         });
 
         installButton.addEventListener('click', async () => {
+            if (isIosDevice) return; 
+            
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
                 deferredPrompt = null;
-            } else {
-                // Fallback: mostrar instrucciones si no hay prompt nativo disponible
-                document.getElementById('iosHint').style.display = 'flex';
             }
         });
 
@@ -1443,15 +1443,9 @@
              // Mantener el botón según petición "siempre activo"
         });
 
-        // ─── iOS Install Hint ────────────────────────────────────────────────────
-        const isIos = () => /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
-        const isStandalone = () => ('standalone' in navigator) && navigator.standalone;
-
-        if (isIos() && !isStandalone()) {
-            if (!localStorage.getItem('iosHintSeen')) {
-                document.getElementById('iosHint').style.display = 'flex';
-                setTimeout(() => localStorage.setItem('iosHintSeen', 'true'), 10000);
-            }
+        // ─── Lógica para iOS (Ocultar instalación) ──────────────────────────────
+        if (isIosDevice) {
+            installButton.style.display = 'none';
         }
 
         // ─── Service Worker ──────────────────────────────────────────────────────
