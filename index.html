@@ -676,7 +676,6 @@
             color: var(--text-dim);
             font-size: 0.75rem;
         }
-
         /* Premium Install Button */
         .install-btn {
             display: none; /* Oculto por defecto, se muestra por JS en Android/PC */
@@ -693,7 +692,6 @@
             font-family: 'Inter', sans-serif;
             font-weight: 600;
             font-size: 0.95rem;
-            display: flex;
             align-items: center;
             gap: 14px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -1215,7 +1213,8 @@
         // Detección robusta de iOS (incluye iPads nuevos)
         const isIosDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) || 
                            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        let simL = 0; // Para la simulación de iOS
+        let simL = 0; 
+        let analyser = null; // Declarado explícitamente
 
         // Volumen
         function rxSetVol(v) {
@@ -1225,7 +1224,6 @@
             slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
             volValue.textContent = v + '%';
             
-            // Si se sube volumen mientras está muteado, desmutearlo
             if (v > 0 && audio.muted) {
                 rxToggleMute();
             }
@@ -1245,30 +1243,25 @@
             
             if (isMuted) {
                 volumeBeforeMute = parseInt(document.getElementById('volSlider').value);
-                // Ícono de mute (volumen tachado)
                 muteIcon.innerHTML = '<g><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/><line x1="2.5" y1="21.5" x2="21.5" y2="2.5"/></g>';
                 muteBtn.style.opacity = '0.65';
             } else {
-                // Ícono de volumen normal
                 muteIcon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>';
                 muteBtn.style.opacity = '1';
             }
         }
 
-        // Icono play/pause
         function setIcon(playing) {
             playIcon.innerHTML = playing
                 ? '<rect x="6" y="4" width="4" height="16" fill="#fff"/><rect x="14" y="4" width="4" height="16" fill="#fff"/>'
                 : '<polygon points="6,4 20,12 6,20" fill="#fff"/>';
         }
 
-        // Estado en pantalla
         function setStatus(msg, type) {
             statusEl.innerHTML = msg;
             statusEl.className = 'rx-status' + (type ? ' ' + type : '');
         }
 
-        // Animación idle (VU meter suave)
         function idleAnim() {
             let t = 0;
             function frame() {
@@ -1276,7 +1269,7 @@
                 animId = requestAnimationFrame(frame);
                 t += 0.05;
                 
-                const valL = Math.abs(Math.sin(t)) * 0.35; // Aumentado de 0.2
+                const valL = Math.abs(Math.sin(t)) * 0.35; 
                 const valR = Math.abs(Math.cos(t)) * 0.35;
                 
                 const activeL = Math.round(valL * SEGMENT_COUNT);
@@ -1295,50 +1288,53 @@
         }
         idleAnim();
 
-        // Iniciar Web Audio API para visualizador real
         function startAnalyser() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                analyser = audioCtx.createAnalyser();
-                analyser.fftSize = 128;
-                analyser.smoothingTimeConstant = 0.8; // Más suavizado = menos parpadeo y más estable
-                srcNode = audioCtx.createMediaElementSource(audio);
-                srcNode.connect(analyser);
-                analyser.connect(audioCtx.destination);
-                dataArr = new Uint8Array(analyser.frequencyBinCount);
+            // En iOS/Safari, MediaElementSource suele fallar con streams externos por CORS.
+            // Para iOS, usamos directamente la simulación sin intentar inicializar el AudioContext
+            // que podría bloquear el hilo o fallar silenciosamente.
+            if (!isIosDevice) {
+                try {
+                    if (!audioCtx) {
+                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        analyser = audioCtx.createAnalyser();
+                        analyser.fftSize = 128;
+                        analyser.smoothingTimeConstant = 0.8;
+                        srcNode = audioCtx.createMediaElementSource(audio);
+                        srcNode.connect(analyser);
+                        analyser.connect(audioCtx.destination);
+                        dataArr = new Uint8Array(analyser.frequencyBinCount);
+                    }
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                } catch (e) {
+                    console.error("AudioContext error, switching to simulation", e);
+                    // Si falla inicializar el contexto real, forzamos modo simulación
+                    // Pero isIosDevice ya maneja la bifurcación abajo.
+                }
             }
-            if (audioCtx.state === 'suspended') audioCtx.resume();
 
             function draw() {
                 if (!isPlaying) return;
                 animId = requestAnimationFrame(draw);
-                analyser.getByteFrequencyData(dataArr);
                 
-                // Buscamos picos (máximos) en lugar de promedios para que "salte" más el vúmetro
                 let activeVal = 0;
 
-                if (isIosDevice) {
-                    // --- SIMULACIÓN REALISTA SINCRONIZADA PARA IOS ---
+                if (isIosDevice || !analyser) {
+                    // --- SIMULACIÓN REALISTA PARA IOS O FALLBACK ---
                     const base = 0.4 + Math.random() * 0.2; 
                     const peak = Math.random() > 0.92 ? 0.4 : 0; 
-                    
-                    // Usamos una sola variable simL para ambos canales
                     simL += (Math.min(1, base + peak + (Math.random()*0.1)) - simL) * 0.2;
                     activeVal = Math.round(Math.pow(simL, 1.8) * SEGMENT_COUNT * 1.15);
                 } else {
-                    // --- ANÁLISIS REAL SINCRONIZADO (Android / PC) ---
+                    // --- ANÁLISIS REAL (Android / PC) ---
                     analyser.getByteFrequencyData(dataArr);
                     let maxVal = 0;
-                    // Analizamos todo el espectro para una lectura global balanceada
                     for(let i=0; i < dataArr.length; i++) { 
                         if(dataArr[i] > maxVal) maxVal = dataArr[i]; 
                     }
-                    
                     const val = Math.pow(maxVal / 255, 2.2);
                     activeVal = Math.round(val * SEGMENT_COUNT * 1.1); 
                 }
 
-                // Aplicamos el mismo valor a ambos canales para que estén parejos
                 barsL.forEach((seg, i) => {
                     if (i < activeVal) seg.classList.add('active');
                     else seg.classList.remove('active');
@@ -1351,7 +1347,6 @@
             draw();
         }
 
-        // Toggle play / pause
         function rxToggle() {
             if (!isPlaying) {
                 setStatus('Conectando con Radio Xero...');
@@ -1367,7 +1362,7 @@
                         startAnalyser();
                     })
                     .catch(() => {
-                        setStatus('No se pudo conectar. Reintenta.', 'error');
+                        setStatus('Presiona PLAY para escuchar.', 'playing');
                         isPlaying = false;
                     });
             } else {
@@ -1398,31 +1393,23 @@
             if (isPlaying) setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
         });
 
-        // ─── Zeno Now Playing Metadata ───────────────────────────────────────────
         const sse = new EventSource('https://api.zeno.fm/mounts/metadata/subscribe/n7fm3s6537zuv');
-        const trackInfoEl = document.getElementById('trackInfo');
         const trackTextEl = document.getElementById('trackText');
         
         sse.onmessage = function(e) {
             try {
                 const data = JSON.parse(e.data);
-                if (data.streamTitle) {
-                    trackTextEl.textContent = data.streamTitle;
-                } else {
-                    trackTextEl.textContent = 'Radio Xero | Al Aire';
-                }
+                trackTextEl.textContent = data.streamTitle || 'Radio Xero | Al Aire';
             } catch (err) {
                 console.error('Error parsing metadata', err);
             }
         };
 
-        // ─── PWA Install Logic ───────────────────────────────────────────────────
-
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            if (isIosDevice) return; // Bloqueo total en iOS
+            if (isIosDevice) return; 
             e.preventDefault();
             deferredPrompt = e;
             installButton.style.display = 'flex';
@@ -1430,42 +1417,30 @@
 
         installButton.addEventListener('click', async () => {
             if (isIosDevice) return; 
-            
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
+                await deferredPrompt.userChoice;
                 deferredPrompt = null;
             }
         });
 
-        window.addEventListener('appinstalled', () => {
-             console.log('App instalada');
-             // Mantener el botón según petición "siempre activo"
-        });
-
-        // ─── Lógica para iOS (Ocultar instalación) ──────────────────────────────
         if (isIosDevice) {
-            installButton.style.setProperty('display', 'none', 'important');
+            installButton.style.display = 'none';
         }
 
-        // ─── Service Worker ──────────────────────────────────────────────────────
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
                     .then(() => console.log('SW OK'))
-                    .catch(err => console.log('SW Error', err));
+                    .catch(e => console.log('SW Error', e));
             });
         }
 
-        // ─── Auto-play & Default Volume on load ───────────────────────────────────────
         window.addEventListener('load', () => {
-            // Inicializar volumen al 50%
             rxSetVol(50);
-            
-            // Pequeño delay para iniciar la radio automáticamente
-            setTimeout(() => {
-                rxToggle();
-            }, 500);
+            if (!isIosDevice) {
+                setTimeout(() => { rxToggle(); }, 500);
+            }
         });
     </script>
 </body>
