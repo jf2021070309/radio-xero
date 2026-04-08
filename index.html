@@ -1209,39 +1209,27 @@
         let animId = null;
         let audioCtx = null;
         let analyser = null;
-        let gainNode = null; // Nodo de ganancia para control de volumen en iOS
         let srcNode = null;
         let dataArr = null;
 
         // Volumen
         function rxSetVol(v) {
-            const vol = v / 100;
-            audio.volume = vol;
-            if (gainNode) {
-                // Control por software para bypass de restricciones iOS
-                gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
-            }
+            audio.volume = v / 100;
             const slider = document.getElementById('volSlider');
-            const volValueText = document.getElementById('volValue');
-            
-            if (slider) {
-                slider.value = v; // Sincronizar posición de la bolita
-                slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
-            }
-            if (volValueText) {
-                volValueText.textContent = v + '%';
-            }
+            const volValue = document.getElementById('volValue');
+            slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
+            volValue.textContent = v + '%';
             
             // Si se sube volumen mientras está muteado, desmutearlo
-            if (v > 0 && (audio.muted || isMuted)) {
+            if (v > 0 && audio.muted) {
                 rxToggleMute();
             }
         }
-        rxSetVol(50);
+        rxSetVol(80);
 
         // Mute / Unmute
         let isMuted = false;
-        let volumeBeforeMute = 50;
+        let volumeBeforeMute = 80;
 
         function rxToggleMute() {
             const muteBtn = document.getElementById('muteBtn');
@@ -1249,11 +1237,6 @@
             
             isMuted = !isMuted;
             audio.muted = isMuted;
-            
-            // Sincronizar gainNode para iOS
-            if (gainNode) {
-                gainNode.gain.setValueAtTime(isMuted ? 0 : audio.volume, audioCtx.currentTime);
-            }
             
             if (isMuted) {
                 volumeBeforeMute = parseInt(document.getElementById('volSlider').value);
@@ -1313,22 +1296,17 @@
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 analyser = audioCtx.createAnalyser();
                 analyser.fftSize = 128;
-                analyser.smoothingTimeConstant = 0.8;
-                
-                gainNode = audioCtx.createGain();
-                gainNode.gain.value = audio.volume;
-
+                analyser.smoothingTimeConstant = 0.8; // Más suavizado = menos parpadeo y más estable
                 srcNode = audioCtx.createMediaElementSource(audio);
                 srcNode.connect(analyser);
-                analyser.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
+                analyser.connect(audioCtx.destination);
                 dataArr = new Uint8Array(analyser.frequencyBinCount);
             }
-        }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
 
-        function drawVisualizer() {
-            if (!isPlaying) return;
-            animId = requestAnimationFrame(drawVisualizer);
+            function draw() {
+                if (!isPlaying) return;
+                animId = requestAnimationFrame(draw);
                 analyser.getByteFrequencyData(dataArr);
                 
                 // Buscamos picos (máximos) en lugar de promedios para que "salte" más el vúmetro
@@ -1355,28 +1333,16 @@
                     if (i < activeR) seg.classList.add('active');
                     else seg.classList.remove('active');
                 });
+            }
+            draw();
         }
 
         // Toggle play / pause
         function rxToggle() {
-            // EL DESPERTADOR DE iOS: Safari necesita que el AudioContext rinda cuentas
-            // exactamente en el trigger del click.
-            if (!audioCtx) {
-                startAnalyser();
-            }
-            
-            // "Kickstart" para Safari: Resumir inmediatamente
-            if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-
             if (!isPlaying) {
                 setStatus('Conectando con Radio Xero...');
-                
-                // Configuración crítica de fuente para iOS
-                audio.crossOrigin = "anonymous";
                 audio.src = STREAM_URL;
-                
+                audio.load();
                 audio.play()
                     .then(() => {
                         isPlaying = true;
@@ -1384,7 +1350,7 @@
                         document.getElementById('artPulse').style.animationPlayState = 'running';
                         setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
                         if (animId) cancelAnimationFrame(animId);
-                        drawVisualizer();
+                        startAnalyser();
                     })
                     .catch(() => {
                         setStatus('No se pudo conectar. Reintenta.', 'error');
@@ -1483,11 +1449,15 @@
             });
         }
 
-        // ─── Default Volume on load ───────────────────────────────────────
+        // ─── Auto-play & Default Volume on load ───────────────────────────────────────
         window.addEventListener('load', () => {
             // Inicializar volumen al 50%
             rxSetVol(50);
-            // NOTA: Auto-play eliminado para no romper permisos de Audio en iOS
+            
+            // Pequeño delay para iniciar la radio automáticamente
+            setTimeout(() => {
+                rxToggle();
+            }, 500);
         });
     </script>
 </body>
