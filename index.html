@@ -1128,6 +1128,10 @@
                             <input type="range" min="0" max="100" value="50" id="volSlider" class="rx-vol-slider" oninput="rxSetVol(this.value)" aria-label="Volumen">
                             <span class="rx-vol-value" id="volValue">50%</span>
                         </div>
+                        <!-- iOS hint -->
+                        <div id="iosVolNotice" style="display:none; font-size: 9px; color: var(--text-dim); margin-top: 5px; font-weight: 500;">
+                            <i class="fas fa-info-circle"></i> En iOS, usa los botones del teléfono
+                        </div>
                     </div>
                 </div>
 
@@ -1204,6 +1208,14 @@
 
         createSegments(vuL, barsL);
         createSegments(vuR, barsR);
+
+        const isIosDevice = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+        if (isIosDevice) {
+            setTimeout(() => {
+                const notice = document.getElementById('iosVolNotice');
+                if (notice) notice.style.display = 'block';
+            }, 1000);
+        }
 
         let isPlaying = false;
         let animId = null;
@@ -1329,33 +1341,43 @@
         function drawVisualizer() {
             if (!isPlaying) return;
             animId = requestAnimationFrame(drawVisualizer);
-                analyser.getByteFrequencyData(dataArr);
-                
-                // Buscamos picos (máximos) en lugar de promedios para que "salte" más el vúmetro
-                let maxL = 0;
-                let maxR = 0;
-                const half = Math.floor(dataArr.length / 2);
-                
-                for(let i=0; i<half; i++) { if(dataArr[i] > maxL) maxL = dataArr[i]; }
-                for(let i=half; i<dataArr.length; i++) { if(dataArr[i] > maxR) maxR = dataArr[i]; }
-                
-                // Curva de respuesta refinada: Exponente 2.2 para rango dinámico amplio
-                // Multiplicador 1.1 para permitir que los picos reales toquen el rojo
-                const valL = Math.pow(maxL / 255, 2.2);
-                const valR = Math.pow(maxR / 255, 2.2);
-
-                const activeL = Math.round(valL * SEGMENT_COUNT * 1.1); 
-                const activeR = Math.round(valR * SEGMENT_COUNT * 1.1);
-
-                barsL.forEach((seg, i) => {
-                    if (i < activeL) seg.classList.add('active');
-                    else seg.classList.remove('active');
-                });
-                barsR.forEach((seg, i) => {
-                    if (i < activeR) seg.classList.add('active');
-                    else seg.classList.remove('active');
-                });
+            
+            analyser.getByteFrequencyData(dataArr);
+            
+            let maxL = 0;
+            let maxR = 0;
+            const half = Math.floor(dataArr.length / 2);
+            
+            for(let i=0; i<half; i++) { if(dataArr[i] > maxL) maxL = dataArr[i]; }
+            for(let i=half; i<dataArr.length; i++) { if(dataArr[i] > maxR) maxR = dataArr[i]; }
+            
+            // MODO RESPALDO iOS: Si Safari bloquea el análisis, simulamos el ritmo
+            if (maxL === 0 && maxR === 0 && isPlaying) {
+                const t = performance.now() / 150;
+                const vL = (Math.sin(t) * 0.3 + Math.sin(t * 1.5) * 0.2 + 0.5) * 0.7;
+                const vR = (Math.cos(t * 1.2) * 0.3 + Math.sin(t * 0.8) * 0.2 + 0.5) * 0.7;
+                updateBars(vL, vR);
+            } else {
+                const vL = Math.pow(maxL / 255, 2.2);
+                const vR = Math.pow(maxR / 255, 2.2);
+                updateBars(vL, vR);
+            }
         }
+
+        function updateBars(vL, vR) {
+            const activeL = Math.round(vL * SEGMENT_COUNT * 1.1); 
+            const activeR = Math.round(vR * SEGMENT_COUNT * 1.1);
+
+            barsL.forEach((seg, i) => {
+                if (i < activeL) seg.classList.add('active');
+                else seg.classList.remove('active');
+            });
+            barsR.forEach((seg, i) => {
+                if (i < activeR) seg.classList.add('active');
+                else seg.classList.remove('active');
+            });
+        }
+
 
         // Toggle play / pause
         function rxToggle() {
