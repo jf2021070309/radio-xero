@@ -1212,6 +1212,11 @@
         let srcNode = null;
         let dataArr = null;
 
+        // Variables para simulación en iOS
+        const isIosDevice = /iPhone|iPad|iPod/.test(navigator.userAgent);
+        let simL = 0;
+        let simR = 0;
+
         // Volumen
         function rxSetVol(v) {
             audio.volume = v / 100;
@@ -1310,27 +1315,36 @@
                 analyser.getByteFrequencyData(dataArr);
                 
                 // Buscamos picos (máximos) en lugar de promedios para que "salte" más el vúmetro
-                let maxL = 0;
-                let maxR = 0;
-                const half = Math.floor(dataArr.length / 2);
-                
-                for(let i=0; i<half; i++) { if(dataArr[i] > maxL) maxL = dataArr[i]; }
-                for(let i=half; i<dataArr.length; i++) { if(dataArr[i] > maxR) maxR = dataArr[i]; }
-                
-                // Curva de respuesta refinada: Exponente 2.2 para rango dinámico amplio
-                // Multiplicador 1.1 para permitir que los picos reales toquen el rojo
-                const valL = Math.pow(maxL / 255, 2.2);
-                const valR = Math.pow(maxR / 255, 2.2);
+                let activeVal = 0;
 
-                const activeL = Math.round(valL * SEGMENT_COUNT * 1.1); 
-                const activeR = Math.round(valR * SEGMENT_COUNT * 1.1);
+                if (isIosDevice) {
+                    // --- SIMULACIÓN REALISTA SINCRONIZADA PARA IOS ---
+                    const base = 0.4 + Math.random() * 0.2; 
+                    const peak = Math.random() > 0.92 ? 0.4 : 0; 
+                    
+                    // Usamos una sola variable simL para ambos canales
+                    simL += (Math.min(1, base + peak + (Math.random()*0.1)) - simL) * 0.2;
+                    activeVal = Math.round(Math.pow(simL, 1.8) * SEGMENT_COUNT * 1.15);
+                } else {
+                    // --- ANÁLISIS REAL SINCRONIZADO (Android / PC) ---
+                    analyser.getByteFrequencyData(dataArr);
+                    let maxVal = 0;
+                    // Analizamos todo el espectro para una lectura global balanceada
+                    for(let i=0; i < dataArr.length; i++) { 
+                        if(dataArr[i] > maxVal) maxVal = dataArr[i]; 
+                    }
+                    
+                    const val = Math.pow(maxVal / 255, 2.2);
+                    activeVal = Math.round(val * SEGMENT_COUNT * 1.1); 
+                }
 
+                // Aplicamos el mismo valor a ambos canales para que estén parejos
                 barsL.forEach((seg, i) => {
-                    if (i < activeL) seg.classList.add('active');
+                    if (i < activeVal) seg.classList.add('active');
                     else seg.classList.remove('active');
                 });
                 barsR.forEach((seg, i) => {
-                    if (i < activeR) seg.classList.add('active');
+                    if (i < activeVal) seg.classList.add('active');
                     else seg.classList.remove('active');
                 });
             }
