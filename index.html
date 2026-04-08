@@ -896,11 +896,29 @@
             }
 
             .player-card {
-                padding: 1.9rem;
+                padding: 1.5rem; /* Padding uniforme para que nada toque los bordes */
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+                align-items: center;
+            }
+
+            .rx-player-content {
+                width: 100%;
+                gap: 1rem;
+            }
+
+            .rx-station-name, .rx-track {
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                display: block; /* Asegura que el truncado funcione */
+                padding: 0 5px;
             }
 
             .info-card {
-                padding: 1.75rem;
+                padding: 1.5rem;
             }
 
             .info-card h2 {
@@ -1191,19 +1209,25 @@
         let animId = null;
         let audioCtx = null;
         let analyser = null;
+        let gainNode = null; // Nodo de ganancia para control de volumen en iOS
         let srcNode = null;
         let dataArr = null;
 
         // Volumen
         function rxSetVol(v) {
-            audio.volume = v / 100;
+            const vol = v / 100;
+            audio.volume = vol;
+            if (gainNode) {
+                // Control por software para bypass de restricciones iOS
+                gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+            }
             const slider = document.getElementById('volSlider');
             const volValue = document.getElementById('volValue');
             slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
             volValue.textContent = v + '%';
             
             // Si se sube volumen mientras está muteado, desmutearlo
-            if (v > 0 && audio.muted) {
+            if (v > 0 && (audio.muted || isMuted)) {
                 rxToggleMute();
             }
         }
@@ -1219,6 +1243,11 @@
             
             isMuted = !isMuted;
             audio.muted = isMuted;
+            
+            // Sincronizar gainNode para iOS
+            if (gainNode) {
+                gainNode.gain.setValueAtTime(isMuted ? 0 : audio.volume, audioCtx.currentTime);
+            }
             
             if (isMuted) {
                 volumeBeforeMute = parseInt(document.getElementById('volSlider').value);
@@ -1278,17 +1307,22 @@
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 analyser = audioCtx.createAnalyser();
                 analyser.fftSize = 128;
-                analyser.smoothingTimeConstant = 0.8; // Más suavizado = menos parpadeo y más estable
+                analyser.smoothingTimeConstant = 0.8;
+                
+                gainNode = audioCtx.createGain();
+                gainNode.gain.value = audio.volume;
+
                 srcNode = audioCtx.createMediaElementSource(audio);
                 srcNode.connect(analyser);
-                analyser.connect(audioCtx.destination);
+                analyser.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
                 dataArr = new Uint8Array(analyser.frequencyBinCount);
             }
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
 
-            function draw() {
-                if (!isPlaying) return;
-                animId = requestAnimationFrame(draw);
+        function drawVisualizer() {
+            if (!isPlaying) return;
+            animId = requestAnimationFrame(drawVisualizer);
                 analyser.getByteFrequencyData(dataArr);
                 
                 // Buscamos picos (máximos) en lugar de promedios para que "salte" más el vúmetro
@@ -1315,12 +1349,18 @@
                     if (i < activeR) seg.classList.add('active');
                     else seg.classList.remove('active');
                 });
-            }
-            draw();
         }
 
         // Toggle play / pause
         function rxToggle() {
+            // REGLA DE ORO PARA iOS: El AudioContext debe activarse/resumirse 
+            // directamente en el hilo del evento 'click', no dentro de promesas.
+            if (!audioCtx) {
+                startAnalyser(); // Creamos el contexto en el primer toque
+            } else if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
             if (!isPlaying) {
                 setStatus('Conectando con Radio Xero...');
                 audio.src = STREAM_URL;
@@ -1332,7 +1372,8 @@
                         document.getElementById('artPulse').style.animationPlayState = 'running';
                         setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
                         if (animId) cancelAnimationFrame(animId);
-                        startAnalyser();
+                        // El analizador ya está configurado, solo iniciamos el loop de dibujo
+                        drawVisualizer();
                     })
                     .catch(() => {
                         setStatus('No se pudo conectar. Reintenta.', 'error');
