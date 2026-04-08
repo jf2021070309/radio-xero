@@ -679,6 +679,7 @@
 
         /* Premium Install Button */
         .install-btn {
+            display: none; /* Oculto por defecto, se muestra por JS en Android/PC */
             position: fixed;
             bottom: 24px;
             right: 24px;
@@ -1208,14 +1209,13 @@
         let isPlaying = false;
         let animId = null;
         let audioCtx = null;
-        let analyser = null;
         let srcNode = null;
         let dataArr = null;
 
-        // Variables para simulación en iOS
-        const isIosDevice = /iPhone|iPad|iPod/.test(navigator.userAgent);
-        let simL = 0;
-        let simR = 0;
+        // Detección robusta de iOS (incluye iPads nuevos)
+        const isIosDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) || 
+                           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        let simL = 0; // Para la simulación de iOS
 
         // Volumen
         function rxSetVol(v) {
@@ -1445,7 +1445,7 @@
 
         // ─── Lógica para iOS (Ocultar instalación) ──────────────────────────────
         if (isIosDevice) {
-            installButton.style.display = 'none';
+            installButton.style.setProperty('display', 'none', 'important');
         }
 
         // ─── Service Worker ──────────────────────────────────────────────────────
