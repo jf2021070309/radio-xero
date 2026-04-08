@@ -1211,6 +1211,8 @@
 
         const isIosDevice = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
         if (isIosDevice) {
+            const installBtn = document.getElementById('installBtn');
+            if (installBtn) installBtn.style.display = 'none';
             setTimeout(() => {
                 const notice = document.getElementById('iosVolNotice');
                 if (notice) notice.style.display = 'block';
