@@ -1412,13 +1412,16 @@
         const installButton = document.getElementById('installButton');
         const isAndroid = /Android/i.test(navigator.userAgent);
 
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
         // Mostrar botón siempre en Android (según solicitud del usuario)
-        if (isAndroid) {
+        // Pero lo ocultamos si ya están DENTRO de la app instalada
+        if (isAndroid && !isStandalone) {
             installButton.style.display = 'flex';
         }
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            if (isIosDevice) return; 
+            if (isIosDevice || isStandalone) return; 
             e.preventDefault();
             deferredPrompt = e;
             installButton.style.display = 'flex';
@@ -1430,15 +1433,26 @@
                 deferredPrompt.prompt();
                 await deferredPrompt.userChoice;
                 deferredPrompt = null;
+            } else if (!isStandalone) {
+                // Feedback visual integrado si no hay prompt (ej. ya instalada)
+                const originalContent = installButton.innerHTML;
+                installButton.innerHTML = '<i class="fas fa-check"></i> Ya tienes Radio Xero';
+                installButton.style.background = 'rgba(22, 101, 52, 0.9)'; // Tinte verde premium
+                setTimeout(() => {
+                    installButton.innerHTML = originalContent;
+                    installButton.style.background = '';
+                }, 3000);
             }
         });
 
-        if (isIosDevice) {
+        if (isIosDevice || isStandalone) {
             installButton.style.display = 'none';
-            const volContainer = document.querySelector('.rx-vol-container');
-            if (volContainer) volContainer.style.display = 'none';
-            const volDiv = document.querySelector('.rx-vol');
-            if (volDiv) volDiv.style.justifyContent = 'flex-end';
+            if (isIosDevice) {
+                const volContainer = document.querySelector('.rx-vol-container');
+                if (volContainer) volContainer.style.display = 'none';
+                const volDiv = document.querySelector('.rx-vol');
+                if (volDiv) volDiv.style.justifyContent = 'flex-end';
+            }
         }
 
         if ('serviceWorker' in navigator) {
