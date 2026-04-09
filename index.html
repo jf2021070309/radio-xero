@@ -1430,9 +1430,6 @@
                 deferredPrompt.prompt();
                 await deferredPrompt.userChoice;
                 deferredPrompt = null;
-            } else {
-                // Fallback para Android si no hay prompt dinámico (ej. ya instalado o navegador incompatible)
-                alert("Para instalar: Toca los 3 puntos del navegador y selecciona 'Instalar aplicación' o 'Agregar a la pantalla de inicio'.");
             }
         });
 
