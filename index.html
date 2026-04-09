@@ -1480,11 +1480,21 @@
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
 
-        // Mostrar botón siempre en Android (según solicitud del usuario)
-        // Pero lo ocultamos si ya están DENTRO de la app instalada
-        if (isAndroid && !isStandalone) {
-            installButton.style.display = 'flex';
+        // --- REFUERZO DE VISIBILIDAD PARA ANDROID / EDGE ---
+        function forceInstallButton() {
+            const isAndroidSystem = /Android/i.test(navigator.userAgent) || /EdgA/i.test(navigator.userAgent) || isEdgeAndroid || isAndroid;
+            
+            if (isAndroidSystem && !isStandalone && !isIosDevice) {
+                installButton.style.display = 'flex';
+                // Aseguramos que sea visible incluso si algo intentó ocultarlo
+                installButton.setAttribute('style', 'display: flex !important;');
+            }
         }
+
+        // Ejecutamos el refuerzo en varios puntos de carga
+        forceInstallButton();
+        window.addEventListener('load', forceInstallButton);
+        setTimeout(forceInstallButton, 1500); // Refuerzo final tras 1.5s
 
         window.addEventListener('beforeinstallprompt', (e) => {
             if (isIosDevice || isStandalone) return; 
