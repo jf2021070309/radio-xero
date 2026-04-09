@@ -1040,6 +1040,27 @@
 
 
 
+    <!-- Already Installed Modal (Premium) -->
+    <div id="installedModal" class="ios-install-overlay">
+        <div class="ios-install-card" style="text-align: center;">
+            <div style="background: linear-gradient(135deg, var(--primary), #b3141a); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 15px 30px rgba(237, 28, 36, 0.4); animation: iconPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                <i class="fas fa-check" style="color: white; font-size: 2rem;"></i>
+            </div>
+            <h3 style="color: #0f172a; margin-bottom: 1rem;">¡Radio Xero ya es tuya!</h3>
+            <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">La aplicación ya está instalada en tu dispositivo. Búscala en tu pantalla de inicio o menú de apps para disfrutar de nuestra señal sin límites.</p>
+            <button class="ios-close-btn" style="background: #0f172a; border: none; color: white; transition: all 0.3s;" onclick="document.getElementById('installedModal').style.display='none'">
+                Continuar Escuchando
+            </button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes iconPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+
     <div class="main-wrapper">
 
         <header>
@@ -1434,14 +1455,8 @@
                 await deferredPrompt.userChoice;
                 deferredPrompt = null;
             } else if (!isStandalone) {
-                // Feedback visual integrado si no hay prompt (ej. ya instalada)
-                const originalContent = installButton.innerHTML;
-                installButton.innerHTML = '<i class="fas fa-check"></i> Ya tienes Radio Xero';
-                installButton.style.background = 'rgba(22, 101, 52, 0.9)'; // Tinte verde premium
-                setTimeout(() => {
-                    installButton.innerHTML = originalContent;
-                    installButton.style.background = '';
-                }, 3000);
+                // Mostrar modal elegante si no hay prompt (ej. ya instalada)
+                document.getElementById('installedModal').style.display = 'flex';
             }
         });
 
