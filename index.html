@@ -1410,6 +1410,12 @@
 
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
+        const isAndroid = /Android/i.test(navigator.userAgent);
+
+        // Mostrar botón siempre en Android (según solicitud del usuario)
+        if (isAndroid) {
+            installButton.style.display = 'flex';
+        }
 
         window.addEventListener('beforeinstallprompt', (e) => {
             if (isIosDevice) return; 
@@ -1424,6 +1430,9 @@
                 deferredPrompt.prompt();
                 await deferredPrompt.userChoice;
                 deferredPrompt = null;
+            } else {
+                // Fallback para Android si no hay prompt dinámico (ej. ya instalado o navegador incompatible)
+                alert("Para instalar: Toca los 3 puntos del navegador y selecciona 'Instalar aplicación' o 'Agregar a la pantalla de inicio'.");
             }
         });
 
