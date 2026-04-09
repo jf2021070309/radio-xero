@@ -1206,6 +1206,13 @@
         const barsR = [];
         const SEGMENT_COUNT = 24;
 
+        // Detección de Dispositivos y Navegadores
+        const isIosDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) || 
+                           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isEdgeAndroid = /EdgA/i.test(navigator.userAgent);
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
         function createSegments(container, array) {
             for (let i = 0; i < SEGMENT_COUNT; i++) {
                 const seg = document.createElement('div');
@@ -1213,9 +1220,9 @@
                 
                 // Assign color class based on position
                 const percent = (i / SEGMENT_COUNT) * 100;
-                if (percent < 50) seg.classList.add('low'); // Menos verdes (antes 65)
-                else if (percent < 80) seg.classList.add('mid'); // Más amarillos
-                else seg.classList.add('high'); // Más rojos
+                if (percent < 50) seg.classList.add('low');
+                else if (percent < 80) seg.classList.add('mid');
+                else seg.classList.add('high');
                 
                 container.appendChild(seg);
                 array.push(seg);
@@ -1230,12 +1237,8 @@
         let audioCtx = null;
         let srcNode = null;
         let dataArr = null;
-
-        // Detección robusta de iOS (incluye iPads nuevos)
-        const isIosDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) || 
-                           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         let simL = 0; 
-        let analyser = null; // Declarado explícitamente
+        let analyser = null; 
 
         // Volumen
         function rxSetVol(v) {
@@ -1310,10 +1313,9 @@
         idleAnim();
 
         function startAnalyser() {
-            // En iOS/Safari, MediaElementSource suele fallar con streams externos por CORS.
-            // Para iOS, usamos directamente la simulación sin intentar inicializar el AudioContext
-            // que podría bloquear el hilo o fallar silenciosamente.
-            if (!isIosDevice) {
+            // En iOS y Edge Android, el análisis real puede bloquear el audio por CORS.
+            // Usamos simulación para estos casos problemáticos.
+            if (!isIosDevice && !isEdgeAndroid) {
                 try {
                     if (!audioCtx) {
                         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1328,8 +1330,6 @@
                     if (audioCtx.state === 'suspended') audioCtx.resume();
                 } catch (e) {
                     console.error("AudioContext error, switching to simulation", e);
-                    // Si falla inicializar el contexto real, forzamos modo simulación
-                    // Pero isIosDevice ya maneja la bifurcación abajo.
                 }
             }
 
@@ -1339,8 +1339,8 @@
                 
                 let activeVal = 0;
 
-                if (isIosDevice || !analyser) {
-                    // --- SIMULACIÓN REALISTA PARA IOS O FALLBACK ---
+                if (isIosDevice || isEdgeAndroid || !analyser) {
+                    // --- SIMULACIÓN REALISTA PARA IOS O EDGE ANDROID O FALLBACK ---
                     // Aumentamos base y picos para que llegue al rojo
                     const base = 0.5 + Math.random() * 0.2; 
                     const peak = Math.random() > 0.88 ? 0.45 : 0; 
@@ -1431,9 +1431,6 @@
 
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
-        const isAndroid = /Android/i.test(navigator.userAgent);
-
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
         // Mostrar botón siempre en Android (según solicitud del usuario)
         // Pero lo ocultamos si ya están DENTRO de la app instalada

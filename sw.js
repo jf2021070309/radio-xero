@@ -9,6 +9,12 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Solo manejamos el evento, no es necesario cachear todo para que sea instalable
+  // Manejo explícito de fetch para mayor compatibilidad en Edge y Chrome
+  event.respondWith(
+    fetch(event.request).catch(() => {
+      // Fallback si no hay red, aunque no estamos cacheando archivos para streaming
+      return null;
+    })
+  );
 });
 
