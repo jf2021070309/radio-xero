@@ -1191,7 +1191,7 @@
     </div>
 
     <!-- Audio element oculto -->
-    <audio id="rxAudio" crossorigin="anonymous" preload="none"></audio>
+    <audio id="rxAudio" preload="none"></audio>
 
     <script>
         // ─── RADIO XERO PLAYER ───────────────────────────────────────────────────
@@ -1374,6 +1374,15 @@
         function rxToggle() {
             if (!isPlaying) {
                 setStatus('Conectando con Radio Xero...');
+                
+                // Si NO es iPhone o Edge móvil, activamos CORS para el visualizador real
+                // En dispositivos con problemas (Edge/iOS), quitamos CORS para asegurar la carga
+                if (!isIosDevice && !isEdgeAndroid) {
+                    audio.crossOrigin = "anonymous";
+                } else {
+                    audio.removeAttribute('crossorigin');
+                }
+
                 audio.src = STREAM_URL;
                 audio.load();
                 audio.play()
