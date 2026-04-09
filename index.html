@@ -622,6 +622,26 @@
             color: #64748b;
         }
 
+        /* Loading Spinner */
+        .rx-loader {
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: rx-spin 0.8s linear infinite;
+        }
+
+        @keyframes rx-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .rx-play-btn.loading {
+            background: #1e293b;
+            cursor: wait;
+            transform: scale(0.95);
+        }
+
         .info-card h2 {
             font-family: 'Poppins', sans-serif;
             font-size: 1.1rem;
@@ -1275,10 +1295,22 @@
             }
         }
 
-        function setIcon(playing) {
-            playIcon.innerHTML = playing
-                ? '<rect x="6" y="4" width="4" height="16" fill="#fff"/><rect x="14" y="4" width="4" height="16" fill="#fff"/>'
-                : '<polygon points="6,4 20,12 6,20" fill="#fff"/>';
+        function setIcon(state) {
+            const btn = document.getElementById('playBtn');
+            if (state === 'loading') {
+                btn.innerHTML = '<div class="rx-loader"></div>';
+                btn.classList.add('loading');
+                btn.disabled = true;
+                return;
+            }
+            
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                ${state === 'playing' 
+                    ? '<rect x="6" y="4" width="3.5" height="16" rx="1" fill="#fff"/><rect x="14.5" y="4" width="3.5" height="16" rx="1" fill="#fff"/>'
+                    : '<polygon points="6,4 20,12 6,20" fill="#fff"/>'}
+            </svg>`;
         }
 
         function setStatus(msg, type) {
@@ -1374,35 +1406,42 @@
         function rxToggle() {
             if (!isPlaying) {
                 setStatus('Conectando con Radio Xero...');
+                setIcon('loading');
                 
                 // Si NO es iPhone o Edge móvil, activamos CORS para el visualizador real
-                // En dispositivos con problemas (Edge/iOS), quitamos CORS para asegurar la carga
                 if (!isIosDevice && !isEdgeAndroid) {
                     audio.crossOrigin = "anonymous";
                 } else {
                     audio.removeAttribute('crossorigin');
                 }
 
-                audio.src = STREAM_URL;
+                const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
+                audio.src = STREAM_URL + cacheBuster;
+                
                 audio.load();
-                audio.play()
-                    .then(() => {
+                
+                const playPromise = audio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
                         isPlaying = true;
-                        setIcon(true);
+                        setIcon('playing');
                         document.getElementById('artPulse').style.animationPlayState = 'running';
                         setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
                         if (animId) cancelAnimationFrame(animId);
                         startAnalyser();
-                    })
-                    .catch(() => {
+                    }).catch(error => {
+                        console.error("Error de reproducción:", error);
                         setStatus('Presiona PLAY para escuchar.', 'playing');
                         isPlaying = false;
+                        setIcon('paused');
                     });
+                }
             } else {
                 audio.pause();
                 audio.src = '';
                 isPlaying = false;
-                setIcon(false);
+                setIcon('paused');
                 document.getElementById('artPulse').style.animationPlayState = 'paused';
                 setStatus('Pausado');
                 if (animId) cancelAnimationFrame(animId);
