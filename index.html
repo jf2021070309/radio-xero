@@ -1461,6 +1461,29 @@
             if (isPlaying) setStatus('Buffering...', 'playing');
         });
 
+        // Sincronización con controles nativos del OS y llamadas telefónicas
+        audio.addEventListener('pause', () => {
+            if (isPlaying) {
+                isPlaying = false;
+                setIcon('paused');
+                document.getElementById('artPulse').style.animationPlayState = 'paused';
+                setStatus('Pausado por sistema');
+                if (animId) cancelAnimationFrame(animId);
+                idleAnim();
+            }
+        });
+
+        audio.addEventListener('play', () => {
+            if (!isPlaying) {
+                isPlaying = true;
+                setIcon('playing');
+                document.getElementById('artPulse').style.animationPlayState = 'running';
+                setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
+                if (animId) cancelAnimationFrame(animId);
+                startAnalyser();
+            }
+        });
+
         audio.addEventListener('playing', () => {
             if (isPlaying) setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
         });
