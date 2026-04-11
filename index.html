@@ -997,14 +997,6 @@
                 gap: 15px;
             }
 
-            .install-btn {
-                bottom: 20px;
-                right: 20px;
-                left: 20px;
-                padding: 10px 24px 10px 10px;
-                justify-content: center;
-            }
-
             .rx-art-sidebar {
                 width: 120px;
                 height: 120px;
@@ -1024,18 +1016,12 @@
             }
 
             .install-btn {
-                bottom: 20px;
+                bottom: 25px;
                 right: 20px;
-                left: 20px;
-                padding: 10px 24px 10px 10px;
-                justify-content: center;
-                animation: installPulseMobile 2s infinite;
-            }
-
-            @keyframes installPulseMobile {
-                0% { box-shadow: 0 5px 15px rgba(237, 28, 36, 0.4); transform: scale(1); }
-                50% { box-shadow: 0 10px 25px rgba(237, 28, 36, 0.6); transform: scale(1.02); }
-                100% { box-shadow: 0 5px 15px rgba(237, 28, 36, 0.4); transform: scale(1); }
+                left: auto; /* Dejar de ocupar todo el ancho para mantener el aura circular */
+                width: auto;
+                padding: 10px 28px 10px 10px;
+                animation: installWakeUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), installPulse 2s infinite;
             }
         }
     </style>
