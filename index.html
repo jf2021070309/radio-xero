@@ -387,19 +387,49 @@
         .track-row {
             display: flex;
             align-items: center;
-            gap: 7px;
+            gap: 10px;
             font-size: 13px;
             color: var(--muted);
-            margin-bottom: 14px;
-            white-space: nowrap;
+            margin-bottom: 25px;
             overflow: hidden;
-            text-overflow: ellipsis;
+            width: 100%;
+            position: relative;
+        }
+
+        .track-row::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.8));
+            z-index: 2;
+            pointer-events: none;
         }
 
         .track-row i {
             color: var(--red);
-            font-size: 11px;
+            font-size: 12px;
             flex-shrink: 0;
+            background: #fff;
+            z-index: 3;
+            padding-right: 5px;
+        }
+
+        #trackText {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 5px;
+            animation: radioMarquee 15s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes radioMarquee {
+            0% { transform: translateX(0); }
+            10% { transform: translateX(0); }
+            85% { transform: translateX(-40%); }
+            100% { transform: translateX(0); }
         }
 
         /* VU */
