@@ -657,6 +657,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            font-weight: 800;
         }
 
         .content-list {
@@ -668,8 +669,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.85rem 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .content-item:last-child {
@@ -678,24 +679,65 @@
 
         .item-time {
             color: var(--primary);
-            font-weight: 700;
-            font-size: 0.82rem;
-            background: rgba(237, 28, 36, 0.06);
-            padding: 4px 12px;
-            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            background: #fff1f2;
+            padding: 6px 16px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(237, 28, 36, 0.05);
         }
 
         .item-name {
-            color: var(--text-dark);
-            font-size: 0.95rem;
-            font-weight: 600;
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
         }
         
         .info-card p {
-            color: var(--text-dim) !important;
-            font-size: 0.9rem !important;
+            color: #64748b !important;
+            font-size: 0.95rem !important;
             line-height: 1.6;
+            margin-bottom: 1.5rem;
         }
+
+        .card-divider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.05);
+            margin: 1.5rem 0;
+            width: 100%;
+        }
+
+        .social-grid {
+            display: flex;
+            gap: 14px;
+            margin-top: 1.2rem;
+        }
+
+        .social-btn {
+            width: 46px;
+            height: 46px;
+            background: #000000;
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .social-btn.whatsapp:hover { background: #25D366; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3); }
+        .social-btn.facebook:hover { background: #1877F2; box-shadow: 0 10px 20px rgba(24, 119, 242, 0.3); }
+        .social-btn.twitter:hover { background: #1DA1F2; box-shadow: 0 10px 20px rgba(29, 161, 242, 0.3); }
+        .social-btn.copy-link:hover { background: #475569; box-shadow: 0 10px 20px rgba(71, 85, 105, 0.3); }
 
         footer {
             margin-top: 2rem;
@@ -1188,7 +1230,7 @@
         <!-- Info grid -->
         <div class="info-grid">
             <section class="card info-card">
-                <h2><i class="far fa-calendar-alt"></i> Programación Diaria</h2>
+                <h2><i class="fas fa-calendar-day"></i> Programación Diaria</h2>
                 <div class="content-list">
                     <div class="content-item">
                         <span class="item-name">Mañanas con Xero</span>
@@ -1207,10 +1249,30 @@
 
             <section class="card info-card">
                 <h2><i class="fas fa-info-circle"></i> Nuestra Estación</h2>
-                <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; text-align: left;">
+                <p>
                     Radio Xero es tu conexión directa con la mejor música y noticias. Transmitiendo 24/7 con calidad
                     digital para acompañarte donde quiera que estés.
                 </p>
+                
+                <div class="card-divider"></div>
+
+                <h2><i class="fas fa-share-alt"></i> Comparte la Señal</h2>
+                <p style="margin-bottom: 0.5rem !important;">Invita a tus amigos a sintonizar Radio Xero</p>
+                
+                <div class="social-grid">
+                    <a href="https://wa.me/?text=*Radio%20Xero*%0A*EN%20VIVO*%0A%0AM%C3%BAsica%20sin%20parar%2024/7%0ADale%20play%20y%20s%C3%BAbele%20al%20volumen%0A%0Ahttps://jf2021070309.github.io/radio-xero/" target="_blank" class="social-btn whatsapp" aria-label="Compartir en WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://jf2021070309.github.io/radio-xero/&quote=Radio%20Xero%20EN%20VIVO%0AM%C3%BAsica%20sin%20parar%2024/7" target="_blank" class="social-btn facebook" aria-label="Compartir en Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?text=Radio%20Xero%20EN%20VIVO%0AM%C3%BAsica%20sin%20parar%2024/7%0ADale%20play%20y%20s%C3%BAbele%20al%20volumen&url=https://jf2021070309.github.io/radio-xero/" target="_blank" class="social-btn twitter" aria-label="Compartir en Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" onclick="navigator.clipboard.writeText('https://jf2021070309.github.io/radio-xero/'); alert('¡Enlace copiado!'); return false;" class="social-btn copy-link" aria-label="Copiar Enlace">
+                        <i class="fas fa-link"></i>
+                    </a>
+                </div>
             </section>
         </div>
 
