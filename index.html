@@ -7,7 +7,6 @@
     <title>Radio Xero | Tu Estación Digital</title>
 
     <meta name="color-scheme" content="light">
-    <meta name="supported-color-schemes" content="light">
     <meta name="theme-color" content="#f1f5f9">
     <link rel="apple-touch-icon" href="icon-192.png">
 
@@ -20,15 +19,15 @@
 
     <style>
         :root {
-            color-scheme: light !important;
+            color-scheme: light;
             --primary: #ED1C24;
             --secondary: #1A3B70;
             --primary-glow: rgba(237, 28, 36, 0.3);
-            --bg-light: #f1f5f9 !important; /* Fondo claro profesional forzado */
-            --glass: rgba(255, 255, 255, 0.8) !important;
-            --glass-border: rgba(0, 0, 0, 0.05) !important;
-            --text-dark: #0f172a !important;
-            --text-dim: #64748b !important;
+            --bg-light: #f1f5f9; /* Fondo claro profesional */
+            --glass: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --text-dark: #0f172a;
+            --text-dim: #64748b;
             --card-radius: 24px;
         }
 
@@ -40,12 +39,10 @@
         }
 
         body {
-            color-scheme: light !important;
+            color-scheme: light;
             font-family: 'Inter', sans-serif;
-            /* Usamos un degradado lineal para evitar que Edge Android invierta el color sólido */
-            background: linear-gradient(0deg, #f1f5f9, #f1f5f9) !important;
-            background-color: #f1f5f9 !important;
-            color: var(--text-dark) !important;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -701,59 +698,56 @@
             color: var(--text-dim);
             font-size: 0.75rem;
         }
-        /* Hyper-Premium Install Button - Cyber Glass Style */
+        /* Premium Install Button - Ultra Eye-Catching */
         .install-btn {
-            display: none;
+            display: none; /* Oculto por defecto, se muestra por JS en Android/PC */
             position: fixed;
             bottom: 24px;
             right: 24px;
-            background: #0f172a;
+            background: #0f172a; /* Fondo sólido oscuro para mejor contraste */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             color: #ffffff;
-            padding: 4px; /* Espacio para el borde animado */
+            border: 2px solid rgba(237, 28, 36, 0.4);
+            padding: 10px 28px 10px 10px;
             border-radius: 100px;
-            border: none;
-            cursor: pointer;
-            z-index: 1000;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-weight: 700;
             font-size: 1rem;
-            text-decoration: none;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 15px 35px rgba(237, 28, 36, 0.25), 
+                        0 0 0 0 rgba(237, 28, 36, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(237, 28, 36, 0.2);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: installFloating 3s ease-in-out infinite;
+            text-decoration: none;
+            
+            /* Animación constante de pulso y brillo */
+            animation: installPulse 2s ease-in-out infinite, 
+                       installShadowGlow 2s ease-in-out infinite;
         }
 
-        /* El borde de luz rotativo */
         .install-btn::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(
-                transparent, 
-                transparent, 
-                transparent, 
-                var(--primary)
-            );
-            animation: installRotate 2s linear infinite;
-            z-index: 1;
-        }
-
-        /* El cuerpo del botón (Capa interna) */
-        .install-btn-inner {
-            position: relative;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            padding: 10px 28px 10px 12px;
-            border-radius: 100px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            z-index: 2;
-            width: 100%;
+            top: 0;
+            left: -150%;
+            width: 150%;
             height: 100%;
+            /* Brillo blanco intenso tipo ráfaga */
+            background: linear-gradient(
+                90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0) 20%,
+                rgba(255, 255, 255, 0.4) 50%, 
+                rgba(255, 255, 255, 0) 80%,
+                transparent
+            );
+            animation: installShine 2.5s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 2;
         }
 
         .install-btn i {
@@ -765,139 +759,155 @@
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
-            box-shadow: 0 0 20px rgba(237, 28, 36, 0.5);
+            box-shadow: 0 0 20px rgba(237, 28, 36, 0.6);
             color: #fff;
+            transition: transform 0.3s ease;
             flex-shrink: 0;
-            animation: iconPulse 2s ease-in-out infinite;
+            position: relative;
+            z-index: 3;
         }
 
         .install-btn:hover {
-            transform: scale(1.1) translateY(-10px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(237, 28, 36, 0.4);
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(237, 28, 36, 0.5);
+            border-color: var(--primary);
+            background: #1e293b;
+        }
+
+        .install-btn:hover i {
+            transform: scale(1.15) rotate(10deg);
         }
 
         .install-btn:active {
-            transform: scale(0.95);
+            transform: translateY(0) scale(0.95);
         }
 
-        @keyframes installRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* Keyframes para el efecto "Llamativo" */
+        @keyframes installPulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.08); /* El efecto "Sube y baja" (zoom) */
+            }
         }
 
-        @keyframes installFloating {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+        @keyframes installShadowGlow {
+            0%, 100% {
+                box-shadow: 0 15px 35px rgba(237, 28, 36, 0.25), 0 0 0 0 rgba(237, 28, 36, 0);
+            }
+            50% {
+                box-shadow: 0 20px 45px rgba(237, 28, 36, 0.4), 0 0 20px 10px rgba(237, 28, 36, 0.2);
+            }
         }
 
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.9; }
+        @keyframes installShine {
+            0% { left: -150%; }
+            30% { left: 150%; }
+            100% { left: 150%; }
         }
 
-        /* iOS Native Style Overlay */
+        /* iOS Overlay */
         .ios-install-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(2, 4, 8, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             z-index: 9999;
             display: none;
+            flex-direction: column;
             justify-content: center;
-            align-items: center; /* Centrado vertical */
-            padding: 20px;
+            align-items: center;
+            padding: 1.5rem;
+            color: white;
+            text-align: center;
             animation: fadeInOverlay 0.4s ease-out;
         }
 
         .ios-install-card {
-            background: #ffffff;
-            border-radius: 24px; /* Bordes redondeados parejos */
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
             padding: 2rem 1.5rem;
-            max-width: 360px;
+            max-width: 340px;
             width: 100%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             position: relative;
-            text-align: center;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            color: #0f172a;
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
         }
 
         .ios-install-card h3 {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: #0f172a;
-            font-weight: 800;
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            color: #fff;
         }
 
-        .ios-install-card > p {
-            font-size: 0.95rem;
-            color: #64748b;
+        .ios-install-card>p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
             line-height: 1.5;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .ios-steps {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            text-align: left;
+            margin-bottom: 1.5rem;
         }
 
         .ios-step {
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: #f8fafc;
-            padding: 14px 18px;
-            border-radius: 18px;
-            font-size: 0.9rem;
-            border: 1px solid #f1f5f9;
-            text-align: left;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.02);
         }
 
         .ios-step i {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             color: #007AFF;
-            background: rgba(0, 122, 255, 0.1);
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            width: 24px;
+            text-align: center;
         }
 
         .ios-step b {
-            color: #0f172a;
-            font-weight: 700;
+            color: #fff;
         }
 
         .ios-close-btn {
-            background: #f1f5f9;
-            border: none;
-            color: #0f172a;
-            padding: 14px 24px;
-            border-radius: 16px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 100px;
             font-family: 'Inter', sans-serif;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             width: 100%;
         }
 
         .ios-close-btn:hover {
-            background: #e2e8f0;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .ios-arrow-down {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            color: var(--primary);
+            animation: bounceArrow 1.5s infinite;
         }
 
         @keyframes fadeInOverlay {
@@ -1052,38 +1062,37 @@
 
     <!-- Floating Install Button -->
     <button id="installButton" class="install-btn">
-        <div class="install-btn-inner">
-            <i class="fas fa-download"></i>
-            Instalar Radio Xero
-        </div>
+        <i class="fas fa-download"></i>
+        Instalar Radio Xero
     </button>
 
-    <!-- iOS Native Hint Overlay -->
+    <!-- iOS Hint Overlay -->
     <div id="iosHint" class="ios-install-overlay">
         <div class="ios-install-card">
             <h3>Instala Radio Xero</h3>
-            <p>Escucha nuestra música con acceso directo desde tu celular.</p>
+            <p>Disfruta de nuestra radio sin interrupciones y con acceso directo desde tu inicio.</p>
             <div class="ios-steps">
                 <div class="ios-step">
-                    <div style="display: flex; gap: 8px;">
-                        <i class="fas fa-share-square" style="margin:0; width:35px;"></i>
-                        <i class="fas fa-ellipsis-h" style="margin:0; width:35px; background: rgba(0,0,0,0.05); color: #64748b;"></i>
-                    </div>
-                    <span>Toca el botón de <b>Menu</b> o <b>Compartir</b></span>
+                    <i class="fas fa-ellipsis-h" style="color: var(--primary);"></i>
+                    <span>Presiona los <b>3 puntitos</b></span>
                 </div>
                 <div class="ios-step">
-                    <i class="fas fa-plus-square"></i>
-                    <span>Busca la opción <b>Agregar a inicio</b></span>
+                    <i class="fas fa-share-square"></i>
+                    <span>Toca en <b>Compartir</b></span>
                 </div>
                 <div class="ios-step">
-                    <i class="fas fa-check-circle" style="color: #22c55e; background: rgba(34, 197, 94, 0.1);"></i>
-                    <span>Presiona <b>Agregar</b> y la app se instalará</span>
+                    <i class="fas fa-ellipsis-v" style="color: var(--text);"></i>
+                    <span>Ve a <b>Ver más</b></span>
+                </div>
+                <div class="ios-step">
+                    <i class="far fa-plus-square" style="color: var(--text);"></i>
+                    <span>Selecciona <b>Agregar a inicio</b> y luego <b>Agregar</b></span>
                 </div>
             </div>
-            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: -10px; margin-bottom: 20px;">* Recomendamos usar Safari para la mejor experiencia.</p>
             <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
-                Entendido
+                Quizás más tarde
             </button>
+            <i class="fas fa-arrow-down ios-arrow-down"></i>
         </div>
     </div>
 
@@ -1532,12 +1541,11 @@
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
 
-        // --- REFUERZO DE VISIBILIDAD PARA ANDROID / PC ---
+        // --- REFUERZO DE VISIBILIDAD PARA ANDROID / EDGE ---
         function forceInstallButton() {
             const isAndroidSystem = /Android/i.test(navigator.userAgent) || /EdgA/i.test(navigator.userAgent) || isEdgeAndroid || isAndroid;
-            const isPC = !/Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
             
-            if ((isAndroidSystem || isPC) && !isStandalone && !isIosDevice) {
+            if (isAndroidSystem && !isStandalone && !isIosDevice) {
                 installButton.style.display = 'flex';
                 // Aseguramos que sea visible incluso si algo intentó ocultarlo
                 installButton.setAttribute('style', 'display: flex !important;');
@@ -1570,13 +1578,6 @@
 
         if (isIosDevice || isStandalone) {
             installButton.style.display = 'none';
-            
-            // --- NUEVO: Mostrar instructivo de instalación solo en iOS si no está instalado ---
-            if (isIosDevice && !isStandalone) {
-                const iosHint = document.getElementById('iosHint');
-                if (iosHint) iosHint.style.display = 'flex';
-            }
-
             if (isIosDevice) {
                 const volContainer = document.querySelector('.rx-vol-container');
                 if (volContainer) volContainer.style.display = 'none';
