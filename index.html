@@ -24,7 +24,7 @@
             --primary: #ED1C24;
             --secondary: #1A3B70;
             --primary-glow: rgba(237, 28, 36, 0.3);
-            --bg-light: #f1f5f9 !important;
+            --bg-light: #f1f5f9 !important; /* Fondo claro profesional forzado */
             --glass: rgba(255, 255, 255, 0.8) !important;
             --glass-border: rgba(0, 0, 0, 0.05) !important;
             --text-dark: #0f172a !important;
@@ -39,17 +39,13 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html, body {
-            color-scheme: light !important;
-            background-color: #f1f5f9 !important;
-            /* El truco final: usar una imagen SVG como fondo para que Edge no la invierta */
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23f1f5f9"/></svg>') !important;
-            background-repeat: repeat !important;
-            color: #0f172a !important;
-        }
-
         body {
+            color-scheme: light !important;
             font-family: 'Inter', sans-serif;
+            /* Usamos un degradado lineal para evitar que Edge Android invierta el color sólido */
+            background: linear-gradient(0deg, #f1f5f9, #f1f5f9) !important;
+            background-color: #f1f5f9 !important;
+            color: var(--text-dark) !important;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -1536,12 +1532,12 @@
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
 
-        // --- REFUERZO DE VISIBILIDAD PARA ANDROID / PC / iOS ---
+        // --- REFUERZO DE VISIBILIDAD PARA ANDROID / PC ---
         function forceInstallButton() {
             const isAndroidSystem = /Android/i.test(navigator.userAgent) || /EdgA/i.test(navigator.userAgent) || isEdgeAndroid || isAndroid;
             const isPC = !/Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
             
-            if ((isAndroidSystem || isPC || isIosDevice) && !isStandalone) {
+            if ((isAndroidSystem || isPC) && !isStandalone && !isIosDevice) {
                 installButton.style.display = 'flex';
                 // Aseguramos que sea visible incluso si algo intentó ocultarlo
                 installButton.setAttribute('style', 'display: flex !important;');
@@ -1561,49 +1557,32 @@
         });
 
         installButton.addEventListener('click', async () => {
-            // Caso 1: Ya está instalada (Standalone) para CUALQUIER dispositivo
-            if (isStandalone) {
-                document.getElementById('installedModal').style.display = 'flex';
-                return;
-            }
-
-            // Caso 2: Es iOS en el navegador (mostramos instrucciones)
-            if (isIosDevice) {
-                const iosHint = document.getElementById('iosHint');
-                if (iosHint) iosHint.style.display = 'flex';
-                return;
-            } 
-
-            // Caso 3: Android/PC en el navegador (intentamos instalación)
+            if (isIosDevice) return; 
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 await deferredPrompt.userChoice;
                 deferredPrompt = null;
-            } else {
-                // Fallback: Si no hay prompt (ej. ya instalada pero en navegador), mostramos modal
+            } else if (!isStandalone) {
+                // Mostrar modal elegante si no hay prompt (ej. ya instalada)
                 document.getElementById('installedModal').style.display = 'flex';
             }
         });
 
-        // Forzamos visibilidad inicial si no es standalone
-        if (!isStandalone) {
-            forceInstallButton();
-        } else {
-            // Si quieres que el botón siga visible incluso instalada, descomenta la siguiente línea:
-            // forceInstallButton();
-        }
-
-        if (isIosDevice) {
-            // Mostrar instructivo de instalación automáticamente solo la primera vez
-            if (!isStandalone) {
+        if (isIosDevice || isStandalone) {
+            installButton.style.display = 'none';
+            
+            // --- NUEVO: Mostrar instructivo de instalación solo en iOS si no está instalado ---
+            if (isIosDevice && !isStandalone) {
                 const iosHint = document.getElementById('iosHint');
                 if (iosHint) iosHint.style.display = 'flex';
             }
-            // Ajustes de volumen específicos para iOS (donde no se permite control JS)
-            const volContainer = document.querySelector('.rx-vol-container');
-            if (volContainer) volContainer.style.display = 'none';
-            const volDiv = document.querySelector('.rx-vol');
-            if (volDiv) volDiv.style.justifyContent = 'flex-end';
+
+            if (isIosDevice) {
+                const volContainer = document.querySelector('.rx-vol-container');
+                if (volContainer) volContainer.style.display = 'none';
+                const volDiv = document.querySelector('.rx-vol');
+                if (volDiv) volDiv.style.justifyContent = 'flex-end';
+            }
         }
 
         if ('serviceWorker' in navigator) {
