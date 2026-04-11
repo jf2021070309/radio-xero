@@ -24,7 +24,7 @@
             --primary: #ED1C24;
             --secondary: #1A3B70;
             --primary-glow: rgba(237, 28, 36, 0.3);
-            --bg-light: #f1f5f9 !important; /* Fondo claro profesional forzado */
+            --bg-light: #f1f5f9 !important;
             --glass: rgba(255, 255, 255, 0.8) !important;
             --glass-border: rgba(0, 0, 0, 0.05) !important;
             --text-dark: #0f172a !important;
@@ -39,13 +39,17 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
+        html, body {
             color-scheme: light !important;
-            font-family: 'Inter', sans-serif;
-            /* Usamos un degradado lineal para evitar que Edge Android invierta el color sólido */
-            background: linear-gradient(0deg, #f1f5f9, #f1f5f9) !important;
             background-color: #f1f5f9 !important;
-            color: var(--text-dark) !important;
+            /* El truco final: usar una imagen SVG como fondo para que Edge no la invierta */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23f1f5f9"/></svg>') !important;
+            background-repeat: repeat !important;
+            color: #0f172a !important;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -1065,18 +1069,22 @@
             <p>Escucha nuestra música con acceso directo desde tu celular.</p>
             <div class="ios-steps">
                 <div class="ios-step">
-                    <i class="fas fa-share-square"></i>
-                    <span>Toca el botón <b>Compartir</b></span>
+                    <div style="display: flex; gap: 8px;">
+                        <i class="fas fa-share-square" style="margin:0; width:35px;"></i>
+                        <i class="fas fa-ellipsis-h" style="margin:0; width:35px; background: rgba(0,0,0,0.05); color: #64748b;"></i>
+                    </div>
+                    <span>Toca el botón de <b>Menu</b> o <b>Compartir</b></span>
                 </div>
                 <div class="ios-step">
                     <i class="fas fa-plus-square"></i>
-                    <span>Desliza y busca <b>Agregar a inicio</b></span>
+                    <span>Busca la opción <b>Agregar a inicio</b></span>
                 </div>
                 <div class="ios-step">
                     <i class="fas fa-check-circle" style="color: #22c55e; background: rgba(34, 197, 94, 0.1);"></i>
-                    <span>Presiona <b>Agregar</b> y ¡listo!</span>
+                    <span>Presiona <b>Agregar</b> y la app se instalará</span>
                 </div>
             </div>
+            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: -10px; margin-bottom: 20px;">* Recomendamos usar Safari para la mejor experiencia.</p>
             <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
                 Entendido
             </button>
