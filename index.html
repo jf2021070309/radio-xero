@@ -3,112 +3,114 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Radio Xero | Tu Estación Digital</title>
+
     <meta name="color-scheme" content="light">
     <meta name="supported-color-schemes" content="light">
-    <meta name="theme-color" content="#f8fafc">
-    
-    <!-- Metadatos para Redes Sociales (Corrige los Emojis y Previsualización) -->
-    <meta name="description" content="📻 Radio Xero 🔥 EN VIVO | Música sin parar 24/7. Dale play y súbele al volumen.">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jf2021070309.github.io/radio-xero/">
-    <meta property="og:title" content="📻 Radio Xero 🔥 EN VIVO">
-    <meta property="og:description" content="🎧 Música sin parar 24/7 | ⚡ Dale play y súbele al volumen.">
-    <meta property="og:image" content="https://jf2021070309.github.io/radio-xero/icon-512.png">
-
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://jf2021070309.github.io/radio-xero/">
-    <meta property="twitter:title" content="📻 Radio Xero 🔥 EN VIVO">
-    <meta property="twitter:description" content="🎧 Música sin parar 24/7 | ⚡ Dale play y súbele al volumen.">
-    <meta property="twitter:image" content="https://jf2021070309.github.io/radio-xero/icon-512.png">
-
+    <meta name="theme-color" content="#f1f5f9">
     <link rel="apple-touch-icon" href="icon-192.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --red: #ED1C24;
-            --red-soft: rgba(237, 28, 36, 0.08);
-            --red-glow: rgba(237, 28, 36, 0.25);
-            --navy: #0f172a;
-            --navy-mid: #1e293b;
-            --blue-brand: #1A3B70;
-            --bg: #f1f5f9;
-            --surface: #ffffff;
-            --border: rgba(0, 0, 0, 0.06);
-            --text: #0f172a;
-            --muted: #64748b;
-            --subtle: #94a3b8;
-            --radius-sm: 12px;
-            --radius-md: 18px;
-            --radius-lg: 24px;
             color-scheme: light !important;
+            --primary: #ED1C24;
+            --secondary: #1A3B70;
+            --primary-glow: rgba(237, 28, 36, 0.3);
+            --bg-light: #f1f5f9 !important;
+            --glass: rgba(255, 255, 255, 0.8) !important;
+            --glass-border: rgba(0, 0, 0, 0.05) !important;
+            --text-dark: #0f172a !important;
+            --text-dim: #64748b !important;
+            --card-radius: 24px;
         }
 
-        *,
-        *::before,
-        *::after {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
 
-        html,
-        body {
+        html, body {
             color-scheme: light !important;
-            background: var(--bg) !important;
-            color: var(--text) !important;
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
+            background-color: #f1f5f9 !important;
+            /* El truco final: usar una imagen SVG como fondo para que Edge no la invierta */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23f1f5f9"/></svg>') !important;
+            background-repeat: repeat !important;
+            color: #0f172a !important;
         }
 
         body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0 1rem 3rem;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
             position: relative;
         }
 
-        /* HERO */
-        .hero-bg {
+        .top-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 300px;
-            background: linear-gradient(120deg, #020617 0%, #0f172a 40%, #7f1d1d 80%, #991b1b 100%);
-            clip-path: ellipse(130% 100% at 50% 0%);
+            height: 380px;
+            /* Degradado ajustado: Predomina el Guinda del lado derecho */
+            background: linear-gradient(110deg, #020617 0%, #0f172a 35%, #991b1b 85%, #b3141a 100%);
             z-index: 0;
+            clip-path: ellipse(150% 100% at 50% 0%); /* Curva elegante en la transición */
         }
 
-        /* PAGE */
-        .page {
+        .main-wrapper {
             width: 100%;
-            max-width: 680px;
+            max-width: 600px;
             display: flex;
             flex-direction: column;
-            gap: 1.25rem; /* El espacio maestro */
+            gap: 2.2rem;
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             z-index: 1;
             position: relative;
-            padding-top: 2.5rem;
-            flex: 1;
         }
 
+        @media (max-width: 600px) {
+            .main-wrapper {
+                max-width: 100%;
+                gap: 2.2rem;
+            }
 
-        @keyframes fadeUp {
+            .info-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 2.2rem;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .main-wrapper {
+                max-width: 1000px;
+            }
+
+            .info-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
 
             to {
@@ -117,118 +119,21 @@
             }
         }
 
-        .page>* {
-            animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-        }
-
-        .page>*:nth-child(1) {
-            animation-delay: 0s;
-        }
-
-        .page>*:nth-child(2) {
-            animation-delay: .08s;
-        }
-
-        .page>*:nth-child(3) {
-            animation-delay: .15s;
-        }
-
-        .page>*:nth-child(4) {
-            animation-delay: .21s;
-        }
-
-        .page>*:nth-child(5) {
-            animation-delay: .27s;
-        }
-
-        /* CARD */
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: box-shadow .3s;
-        }
-
-        .card:hover {
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.09);
-        }
-
-        /* ── HEADER ── */
+        /* Header */
         header {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1.1rem;
-            padding-bottom: 0.25rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            width: 100%;
         }
 
         .main-logo {
-            height: 88px;
+            max-height: 100px;
             width: auto;
-            filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.12));
-        }
-
-        .live-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 7px 16px;
-            border-radius: 100px;
-            background: rgba(237, 28, 36, 0.1);
-            border: 1px solid rgba(237, 28, 36, 0.28);
-            color: var(--red);
-            font-size: 0.68rem;
-            font-weight: 700;
-            letter-spacing: 1.4px;
-            text-transform: uppercase;
-            backdrop-filter: blur(6px);
-        }
-
-        .wave-bars {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            height: 14px;
-        }
-
-        .wave-bars span {
-            width: 2px;
-            background: var(--red);
-            border-radius: 2px;
-            animation: wavebar 1s ease-in-out infinite;
-        }
-
-        .wave-bars span:nth-child(1) {
-            height: 5px;
-            animation-delay: 0s;
-        }
-
-        .wave-bars span:nth-child(2) {
-            height: 9px;
-            animation-delay: .15s;
-        }
-
-        .wave-bars span:nth-child(3) {
-            height: 7px;
-            animation-delay: .3s;
-        }
-
-        .wave-bars span:nth-child(4) {
-            height: 11px;
-            animation-delay: .1s;
-        }
-
-        @keyframes wavebar {
-
-            0%,
-            100% {
-                transform: scaleY(0.4);
-            }
-
-            50% {
-                transform: scaleY(1);
-            }
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
         }
 
         .visually-hidden {
@@ -243,131 +148,215 @@
             border: 0;
         }
 
-        /* ── PLAYER CARD ── */
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(237, 28, 36, 0.08);
+            padding: 8px 18px;
+            border-radius: 100px;
+            color: var(--primary);
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid rgba(237, 28, 36, 0.3);
+            box-shadow: 0 0 20px rgba(237, 28, 36, 0.15);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .audio-wave {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            height: 12px;
+        }
+
+        .audio-wave span {
+            width: 2px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+            animation: audio-wave-anim 1s infinite ease-in-out;
+        }
+
+        .audio-wave span:nth-child(2) {
+            animation-delay: 0.2s;
+            height: 8px;
+        }
+
+        .audio-wave span:nth-child(3) {
+            animation-delay: 0.4s;
+            height: 6px;
+        }
+
+        .audio-wave span:nth-child(4) {
+            animation-delay: 0.1s;
+            height: 10px;
+        }
+
+        @keyframes audio-wave-anim {
+
+            0%,
+            100% {
+                height: 4px;
+            }
+
+            50% {
+                height: 12px;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: var(--card-radius);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            color: var(--text-dark);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6); 
+        }
+
+        /* ─── CUSTOM PLAYER ─── */
         .player-card {
-            padding: 2.4rem 3rem;
+            padding: 2.2rem;
+            background: #ffffff;
+            color: var(--text-dark);
+            background-image: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
             display: flex;
             flex-direction: row;
-            gap: 3rem;
+            gap: 1.5rem;
             align-items: center;
+            border-radius: var(--card-radius);
             position: relative;
             overflow: hidden;
         }
 
-        .player-card::after {
+        .player-card::before {
             content: '';
             position: absolute;
-            top: -30px;
-            right: -30px;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(237, 28, 36, 0.06) 0%, transparent 70%);
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: radial-gradient(ellipse at top right, rgba(237, 28, 36, 0.05), transparent 60%);
             pointer-events: none;
         }
 
-        /* Artwork */
-        .art-wrap {
-            width: 220px;
-            height: 220px;
-            border-radius: var(--radius-md);
+        .rx-art-sidebar {
+            width: 160px;
+            height: 160px;
+            border-radius: 20px;
             flex-shrink: 0;
             position: relative;
-            overflow: hidden;
-            background: #e2e8f0;
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.05);
-            /* Fix para iOS: Fuerza el redondeado en Safari durante animaciones */
-            -webkit-mask-image: -webkit-radial-gradient(white, black);
-            transform: translateZ(0);
+            z-index: 1;
+            background: #e2e8f0; 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12), 0 0 25px rgba(237, 28, 36, 0.2);
+            overflow: hidden; 
         }
 
-        .art-wrap::before {
+        .rx-art-sidebar::before {
             content: '';
             position: absolute;
-            inset: -50%;
+            top: -50%;
+            left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(from 0deg, transparent 55%, var(--red) 75%, var(--blue-brand) 100%);
-            animation: spinArt 3s linear infinite;
+            background: conic-gradient(
+                from 0deg,
+                transparent 60%,
+                rgba(237, 28, 36, 1) 80%,
+                rgba(26, 59, 112, 1) 100%
+            );
+            animation: spinFrame 3s linear infinite;
             z-index: 0;
         }
 
-        .art-wrap img,
-        .art-fallback {
+        .rx-art-sidebar img,
+        .rx-art-fallback {
             position: absolute !important;
-            inset: 3px;
+            top: 3px;
+            left: 3px;
             width: calc(100% - 6px) !important;
             height: calc(100% - 6px) !important;
             object-fit: cover;
-            border-radius: calc(var(--radius-md) - 3px);
-            background: #fff;
+            border-radius: 17px;
+            background: #ffffff;
             z-index: 1;
         }
 
-        .art-pulse {
+        .rx-pulse {
             position: absolute;
             inset: 0;
-            border-radius: var(--radius-md);
-            border: 2px solid rgba(237, 28, 36, 0.65);
-            animation: artPulse 2.2s ease-in-out infinite;
+            border-radius: 20px;
+            border: 2px solid rgba(237, 28, 36, 0.8);
+            animation: pulseBorder 2s ease-in-out infinite;
             opacity: 0;
             pointer-events: none;
             z-index: 2;
         }
 
-        @keyframes spinArt {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes artPulse {
-
-            0%,
-            100% {
+        @keyframes pulseBorder {
+            0%, 100% {
                 opacity: 0;
                 transform: scale(1);
             }
-
             50% {
-                opacity: 0.55;
-                transform: scale(1.04);
+                opacity: 0.7;
+                transform: scale(1.05);
             }
         }
 
-        /* Player body */
-        .player-body {
+        @keyframes spinFrame {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .rx-player-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             min-width: 0;
+            justify-content: center;
+            z-index: 1;
         }
 
-        .live-tag {
+        .rx-meta {
+            margin-bottom: 15px;
+        }
+
+        .rx-live-label {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: var(--red);
-            text-transform: uppercase;
-            margin-bottom: 5px;
         }
 
-        .live-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--red);
+        .rx-dot {
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            animation: dotBlink 1.3s ease-in-out infinite;
+            background: var(--primary);
+            display: inline-block;
+            animation: blink 1.2s ease-in-out infinite;
         }
 
-        @keyframes dotBlink {
+        @keyframes blink {
 
             0%,
             100% {
@@ -375,87 +364,66 @@
             }
 
             50% {
-                opacity: 0.15;
+                opacity: 0.2;
             }
         }
 
-        .station-name {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.15rem;
+        .rx-station-name {
+            font-size: 17px;
             font-weight: 700;
-            color: var(--text);
-            margin-bottom: 4px;
+            color: #0f172a;
+            margin-bottom: 6px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .track-row {
+        .rx-track {
+            font-size: 14px;
+            color: #64748b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 25px;
-            overflow: hidden;
-            width: 100%;
-            position: relative;
+            gap: 8px;
+            margin-top: 0px;
         }
 
-        .track-row::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 30px;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.8));
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .track-row i {
-            color: var(--red);
-            font-size: 12px;
+        .rx-track-icon {
+            width: 18px;
+            height: 18px;
             flex-shrink: 0;
-            background: #fff;
-            z-index: 3;
-            padding-right: 5px;
+            color: #ED1C24;
+            animation: float 2s ease-in-out infinite;
         }
 
-        #trackText {
-            display: inline-block;
-            white-space: nowrap;
-            padding-left: 5px;
-            animation: radioMarquee 15s linear infinite;
-            will-change: transform;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-1px); }
         }
 
-        @keyframes radioMarquee {
-            0% { transform: translateX(0); }
-            10% { transform: translateX(0); }
-            85% { transform: translateX(-40%); }
-            100% { transform: translateX(0); }
-        }
-
-        /* VU */
-        .vu-wrap {
-            background: rgba(241, 245, 249, 0.8);
-            border-radius: 14px;
-            padding: 1.4rem 1.8rem;
-            margin: 1.5rem 0;
+        /* ─── SEAMLESS INTEGRATED VU METER ─── */
+        .rx-viz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 10px 0 20px 0;
+            padding: 15px;
+            /* Efecto de superficie rehundida en la tarjeta blanca */
+            background: rgba(241, 245, 249, 0.6); 
+            border-radius: 16px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(0, 0, 0, 0.03);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        .vu-row {
+        .rx-vu-row {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 9px;
         }
 
-        .vu-ch {
+        .rx-vu-label {
             font-size: 10px;
             font-weight: 800;
             color: #94a3b8;
@@ -463,89 +431,108 @@
             text-align: center;
         }
 
-        .vu-bar {
-            flex: 1;
+        .rx-vu-meter {
             display: flex;
-            gap: 3px;
-            height: 18px;
-        }
-
-        .vu-seg {
+            gap: 2px; /* Un poco más juntos */
             flex: 1;
-            height: 18px;
-            background: rgba(0, 0, 0, 0.06);
-            border-radius: 3px;
-            transition: background 0.1s;
         }
 
-        .vu-seg.active.low {
-            background: #22c55e;
-            box-shadow: 0 0 5px rgba(34, 197, 94, .4);
+        .rx-vu-segment {
+            flex: 1;
+            height: 12px; /* Más gordito y visible */
+            border-radius: 2.5px;
+            background: #e2e8f0; /* Gris muy suave e inactivo */
+            transition: all 0.08s ease;
         }
 
-        .vu-seg.active.mid {
-            background: #f97316;
-            box-shadow: 0 0 5px rgba(249, 115, 22, .4);
+        /* Ambient color (Inactive) - Now subtle light gray */
+        .rx-vu-segment.low, .rx-vu-segment.mid, .rx-vu-segment.high { 
+            background: #e2e8f0; 
         }
 
-        .vu-seg.active.high {
-            background: #ef4444;
-            box-shadow: 0 0 5px rgba(239, 68, 68, .4);
+        /* Glowing LEDs (Active) - More vibrant on light background */
+        .rx-vu-segment.active.low { 
+            background: #22c55e; /* Verde */
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+        }
+        .rx-vu-segment.active.mid { 
+            background: #f97316; /* Naranja fuerte */
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
+        }
+        .rx-vu-segment.active.high { 
+            background: #ef4444; /* Rojo */
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
         }
 
-        .vu-scale {
+        /* Scale Labels - More minimalist */
+        .rx-vu-scale {
             display: flex;
             justify-content: space-between;
-            padding-left: 20px;
+            padding-left: 24px;
+            margin-top: 2px;
         }
 
-        .vu-scale span {
-            font-size: 7.5px;
-            color: #cbd5e1;
+        .rx-vu-scale span {
+            font-size: 8px;
             font-weight: 600;
+            color: #cbd5e1;
         }
 
         /* Controls */
-        .controls {
+        .rx-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .btn-play {
-            width: 44px;
-            height: 44px;
+        .rx-play-btn {
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
-            background: var(--navy);
+            background: #0f172a;
             border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: transform .15s, background .2s, box-shadow .2s;
-            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2);
+            transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
         }
 
-        .btn-play svg path,
-        .btn-play svg polygon,
-        .btn-play svg rect {
-            fill: #fff !important;
+        .rx-play-btn svg path, .rx-play-btn svg polygon, .rx-play-btn svg rect {
+            fill: #ffffff !important;
         }
 
-        .btn-play:hover {
-            background: var(--navy-mid);
-            transform: scale(1.07);
-            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.28);
+        .rx-play-btn:hover {
+            transform: scale(1.06);
+            box-shadow: 0 12px 25px rgba(15, 23, 42, 0.25);
+            background: #1e293b;
         }
 
-        .btn-play:active {
+        .rx-play-btn:active {
             transform: scale(0.94);
         }
 
-        .btn-mute {
-            width: 44px;
-            height: 44px;
+        .rx-vol {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .rx-vol-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .rx-mute-btn {
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             background: #1a1f2e;
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -554,78 +541,80 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: all .2s;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.15);
         }
 
-        .btn-mute svg {
-            width: 20px;
-            height: 20px;
-            stroke: #fff;
+        .rx-mute-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
+            background: #232d3e;
+        }
+
+        .rx-mute-btn:active {
+            transform: scale(0.96);
+        }
+
+        .rx-mute-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke: #ffffff;
             stroke-width: 1.5;
             fill: none;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
 
-        .btn-mute:hover {
-            transform: scale(1.07);
-            background: #252e41;
-        }
-
-        .btn-mute:active {
-            transform: scale(0.95);
-        }
-
-        .vol-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .vol-slider {
+        .rx-vol-slider {
             flex: 1;
             -webkit-appearance: none;
             appearance: none;
             height: 4px;
-            border-radius: 4px;
+            border-radius: 3px;
             outline: none;
             cursor: pointer;
-            background: linear-gradient(to right, var(--red) 50%, rgba(237, 28, 36, .18) 50%);
+            background: linear-gradient(to right, #ED1C24 70%, rgba(237, 28, 36, 0.2) 70%);
             min-width: 0;
         }
 
-        .vol-slider::-webkit-slider-thumb {
+        .rx-vol-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background: var(--red);
+            background: #ED1C24;
             cursor: pointer;
-            border: 2px solid #fff;
-            box-shadow: 0 2px 8px rgba(237, 28, 36, .5);
-            transition: transform .15s;
+            box-shadow: 0 2px 6px rgba(237, 28, 36, 0.5);
+            transition: all 0.15s;
+            border: 2px solid #ffffff;
         }
 
-        .vol-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.25);
+        .rx-vol-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(237, 28, 36, 0.6);
         }
 
-        .vol-slider::-moz-range-thumb {
-            width: 14px;
-            height: 14px;
+        .rx-vol-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background: var(--red);
-            border: 2px solid #fff;
+            background: #ED1C24;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(237, 28, 36, 0.5);
+            transition: all 0.15s;
         }
 
-        .vol-value {
-            font-size: 12px;
-            color: var(--subtle);
+        .rx-vol-slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(237, 28, 36, 0.6);
+        }
+
+        .rx-vol-value {
+            color: #94a3b8;
+            font-size: 13px;
             font-weight: 500;
-            min-width: 30px;
+            min-width: 32px;
             text-align: right;
             flex-shrink: 0;
         }
@@ -634,1049 +623,1003 @@
             display: none;
         }
 
-        .rx-status.playing {
-            color: var(--muted);
-            font-size: 12px;
-            display: block;
-            margin-top: 8px;
-        }
-
         .rx-status.error {
             color: #ef4444;
-            font-size: 12px;
-            display: block;
-            margin-top: 8px;
         }
 
+        .rx-status.playing {
+            color: #64748b;
+        }
+
+        /* Loading Spinner */
         .rx-loader {
-            width: 20px;
-            height: 20px;
-            border: 2.5px solid rgba(255, 255, 255, .2);
-            border-top-color: #fff;
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #ffffff;
             border-radius: 50%;
-            animation: spin .75s linear infinite;
+            animation: rx-spin 0.8s linear infinite;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        @keyframes rx-spin {
+            to { transform: rotate(360deg); }
         }
 
-        .btn-play.loading {
-            background: var(--navy-mid);
+        .rx-play-btn.loading {
+            background: #1e293b;
             cursor: wait;
-        }
-
-        @media (min-width: 900px) {
-            .page {
-                max-width: 1050px;
-                min-height: calc(100vh - 5rem); /* Asegura que el footer pueda ir al final */
-            }
-        }
-
-        @media (max-width:520px) {
-            .player-card {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                padding: 1.5rem;
-                gap: 1.25rem;
-            }
-
-            .art-wrap {
-                width: 120px;
-                height: 120px;
-            }
-
-            .player-body {
-                width: 100%;
-            }
-
-            .live-tag,
-            .track-row {
-                justify-content: center;
-            }
-        }
-
-        /* ── SHARE CARD ── */
-        .share-card {
-            padding: 1.75rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.2rem;
-        }
-
-        .share-heading {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .share-heading h4 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 900;
-            letter-spacing: 3.5px;
-            text-transform: uppercase;
-            color: var(--blue-brand);
-            margin: 0;
-        }
-
-        .share-dot {
-            width: 7px;
-            height: 7px;
-            background: var(--red);
-            border-radius: 50%;
-            animation: sharePulse 1.6s ease-in-out infinite;
-        }
-
-        @keyframes sharePulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-
-            50% {
-                transform: scale(1.5);
-                opacity: 0.5;
-            }
-        }
-
-        .share-desc {
-            font-size: 0.82rem;
-            color: var(--muted);
-            margin-top: -0.4rem;
-        }
-
-        .share-btns {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            width: 100%;
-        }
-
-        .share-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 9px;
-            padding: 14px 18px;
-            border-radius: 50px;
-            background: #000; /* Botones Negros Elegantes */
-            color: #fff;
-            text-decoration: none;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 0.88rem;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .share-btn i {
-            font-size: 1.1rem;
-            color: #fff;
-        }
-
-        .share-btn:hover {
-            transform: translateY(-3px);
-            color: #fff;
-        }
-
-        .share-btn.wa:hover {
-            background: #25D366; /* Verde WhatsApp */
-            box-shadow: 0 12px 25px rgba(37, 211, 102, 0.35);
-        }
-
-        .share-btn.fb:hover {
-            background: #0044cc; /* Azul Facebook Profundo */
-            box-shadow: 0 12px 25px rgba(0, 68, 204, 0.35);
-        }
-
-        .share-btn.tw:hover {
-            background: #1d9bf0; /* Azul Twitter Original */
-            box-shadow: 0 12px 25px rgba(29, 155, 240, 0.4);
-        }
-
-        .share-btn:active {
-            transform: scale(0.96);
-        }
-
-        .share-divider {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .share-divider hr {
-            flex: 1;
-            border: none;
-            border-top: 1px solid #eaeff6;
-        }
-
-        .share-divider span {
-            font-size: 10px;
-            color: #c0c8d6;
-            letter-spacing: 1px;
-            white-space: nowrap;
-        }
-
-        .copy-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-            background: #f5f7fac5;
-            border: 1px solid #e4e9f2;
-            border-radius: 50px;
-            padding: 7px 7px 7px 18px;
-        }
-
-        .copy-row span {
-            flex: 1;
-            font-size: 11.5px;
-            color: var(--subtle);
-            font-family: monospace;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .copy-btn {
-            background: var(--red);
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            padding: 7px 18px;
-            font-size: 11px;
-            font-weight: 700;
-            font-family: 'Poppins', sans-serif;
-            letter-spacing: .5px;
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: background .15s;
-        }
-
-        .copy-btn:hover {
-            background: #c91920;
-        }
-
-        .copy-btn.copied {
-            background: #22c55e;
-        }
-
-        @media (max-width:520px) {
-            .share-btns {
-                grid-template-columns: 1fr;
-            }
-
-            .share-card {
-                padding: 1.5rem 1.25rem;
-            }
-        }
-
-        /* ── INFO GRID & BOTTOM CARDS ── */
-        .bottom-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.25rem; /* Mismo espacio que el resto */
-            width: 100%;
-        }
-
-        @media (min-width: 900px) {
-            .bottom-grid {
-                grid-template-columns: 1fr 1fr;
-                align-items: stretch;
-                gap: 1.5rem; /* Un poco más de aire en PC para expansión lateral */
-            }
-        }
-
-        .info-card {
-            padding: 1.75rem 2rem;
-            display: flex;
-            flex-direction: column;
+            transform: scale(0.95);
         }
 
         .info-card h2 {
             font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--red);
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 1.2rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 1.1rem;
+            gap: 12px;
         }
 
-        .prog-list {
+        .content-list {
             list-style: none;
+            text-align: left;
         }
 
-        .prog-item {
+        .content-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: .8rem 0;
-            border-bottom: 1px solid rgba(0, 0, 0, .04);
+            padding: 0.85rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
         }
 
-        .prog-item:last-child {
+        .content-item:last-child {
             border: none;
-            padding-bottom: 0;
         }
 
-        .prog-name {
-            font-size: .92rem;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .prog-time {
-            font-size: .78rem;
+        .item-time {
+            color: var(--primary);
             font-weight: 700;
-            color: var(--red);
-            background: var(--red-soft);
+            font-size: 0.82rem;
+            background: rgba(237, 28, 36, 0.06);
             padding: 4px 12px;
             border-radius: 8px;
         }
 
-        .about-text {
-            font-size: .88rem;
-            color: var(--muted);
-            line-height: 1.7;
+        .item-name {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .info-card p {
+            color: var(--text-dim) !important;
+            font-size: 0.9rem !important;
+            line-height: 1.6;
         }
 
-        /* ── FOOTER ── */
         footer {
-            margin-top: auto; /* Empuja el footer al final de la página */
+            margin-top: 2rem;
             text-align: center;
-            font-size: .8rem;
-            color: var(--subtle);
-            padding: 2.5rem 0 1.5rem;
+            color: var(--text-dim);
+            font-size: 0.75rem;
         }
-
-        /* ── INSTALL FAB ── */
-        .install-fab {
+        /* Hyper-Premium Install Button - Cyber Glass Style */
+        .install-btn {
             display: none;
             position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 3px;
+            bottom: 24px;
+            right: 24px;
+            background: #0f172a;
+            color: #ffffff;
+            padding: 4px; /* Espacio para el borde animado */
             border-radius: 100px;
             border: none;
             cursor: pointer;
             z-index: 1000;
-            overflow: hidden;
-            background: var(--navy);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, .35), 0 0 16px rgba(237, 28, 36, .2);
-            transition: transform .35s cubic-bezier(0.175, .885, .32, 1.275), box-shadow .35s;
-            animation: fabFloat 3s ease-in-out infinite;
             font-family: 'Poppins', sans-serif;
-            font-size: .92rem;
             font-weight: 700;
-            color: #fff;
+            font-size: 1rem;
             text-decoration: none;
-            width: max-content;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(237, 28, 36, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: installFloating 3s ease-in-out infinite;
         }
 
-        .install-fab::before {
+        /* El borde de luz rotativo */
+        .install-btn::before {
             content: '';
             position: absolute;
-            inset: -50%;
+            top: -50%;
+            left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(transparent, transparent, transparent, var(--red));
-            animation: fabSpin 2s linear infinite;
+            background: conic-gradient(
+                transparent, 
+                transparent, 
+                transparent, 
+                var(--primary)
+            );
+            animation: installRotate 2s linear infinite;
             z-index: 1;
         }
 
-        .install-inner {
+        /* El cuerpo del botón (Capa interna) */
+        .install-btn-inner {
             position: relative;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            padding: 9px 24px 9px 10px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 10px 28px 10px 12px;
             border-radius: 100px;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
             z-index: 2;
+            width: 100%;
+            height: 100%;
         }
 
-        .install-icon {
-            background: linear-gradient(135deg, var(--red), #ff4444);
-            width: 40px;
-            height: 40px;
+        .install-btn i {
+            background: linear-gradient(135deg, var(--primary), #ff4d4d);
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            box-shadow: 0 0 20px rgba(237, 28, 36, 0.5);
             color: #fff;
             flex-shrink: 0;
-            box-shadow: 0 0 16px rgba(237, 28, 36, .5);
-            animation: iconPop 2.2s ease-in-out infinite;
+            animation: iconPulse 2s ease-in-out infinite;
         }
 
-        .install-fab:hover {
-            transform: translateX(-50%) scale(1.08) translateY(-6px);
-            box-shadow: 0 24px 50px rgba(0, 0, 0, .5), 0 0 24px rgba(237, 28, 36, .35);
+        .install-btn:hover {
+            transform: scale(1.1) translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(237, 28, 36, 0.4);
         }
 
-        .install-fab:active {
-            transform: translateX(-50%) scale(0.96);
+        .install-btn:active {
+            transform: scale(0.95);
         }
 
-        @keyframes fabFloat {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-8px); }
+        @keyframes installRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        @keyframes fabSpin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
+        @keyframes installFloating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
         }
 
-        @keyframes iconPop {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.15);
-            }
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.9; }
         }
 
-        /* ── OVERLAYS / MODALS ── */
-        .overlay {
+        /* iOS Native Style Overlay */
+        .ios-install-overlay {
             position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, .45);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             z-index: 9999;
             display: none;
             justify-content: center;
-            align-items: center;
+            align-items: center; /* Centrado vertical */
             padding: 20px;
-            animation: fadeOv .35s ease;
+            animation: fadeInOverlay 0.4s ease-out;
         }
 
-        @keyframes fadeOv {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .modal {
-            background: #fff;
-            border-radius: var(--radius-lg);
-            padding: 2rem 1.75rem;
+        .ios-install-card {
+            background: #ffffff;
+            border-radius: 24px; /* Bordes redondeados parejos */
+            padding: 2rem 1.5rem;
             max-width: 360px;
             width: 100%;
-            box-shadow: 0 24px 64px rgba(0, 0, 0, .25);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
             text-align: center;
-            animation: popM .4s cubic-bezier(0.175, .885, .32, 1.275);
-            color: var(--text);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #0f172a;
         }
 
-        @keyframes popM {
-            from {
-                transform: scale(.82);
-                opacity: 0;
-            }
-
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
-        .modal h3 {
+        .ios-install-card h3 {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 900;
-            margin-bottom: .5rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+            font-weight: 800;
         }
 
-        .modal>p {
-            font-size: .9rem;
-            color: var(--muted);
-            line-height: 1.55;
-            margin-bottom: 1.5rem;
+        .ios-install-card > p {
+            font-size: 0.95rem;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 2rem;
         }
 
-        .step-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 1.5rem;
+        .ios-steps {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 2rem;
         }
 
-        .step-item {
+        .ios-step {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 15px;
             background: #f8fafc;
-            padding: 13px 16px;
-            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            border-radius: 18px;
+            font-size: 0.9rem;
             border: 1px solid #f1f5f9;
             text-align: left;
-            font-size: .88rem;
         }
 
-        .step-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            background: rgba(0, 122, 255, .1);
+        .ios-step i {
+            font-size: 1.2rem;
             color: #007AFF;
+            background: rgba(0, 122, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
             flex-shrink: 0;
         }
 
-        .step-item b {
-            color: var(--text);
+        .ios-step b {
+            color: #0f172a;
             font-weight: 700;
         }
 
-        .modal-close {
-            width: 100%;
-            padding: 13px;
-            border-radius: var(--radius-md);
-            border: none;
+        .ios-close-btn {
             background: #f1f5f9;
-            color: var(--text);
+            border: none;
+            color: #0f172a;
+            padding: 14px 24px;
+            border-radius: 16px;
             font-family: 'Inter', sans-serif;
             font-weight: 700;
-            font-size: .9rem;
             cursor: pointer;
-            transition: background .2s;
+            transition: all 0.3s;
+            width: 100%;
         }
 
-        .modal-close:hover {
+        .ios-close-btn:hover {
             background: #e2e8f0;
         }
 
-        .modal-close.dark {
-            background: var(--navy);
-            color: #fff;
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
-        .modal-close.dark:hover {
-            background: var(--navy-mid);
+        @keyframes bounceArrow {
+
+            0%,
+            100% {
+                transform: translate(-50%, 0);
+            }
+
+            50% {
+                transform: translate(-50%, 15px);
+            }
         }
 
-        .success-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--red), #b91c1c);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.25rem;
-            box-shadow: 0 12px 28px rgba(237, 28, 36, .35);
-            animation: popM .45s cubic-bezier(0.175, .885, .32, 1.275);
-        }
+        @media (max-width: 480px) {
+            body {
+                padding: 1.5rem 1rem;
+            }
 
-        .success-icon i {
-            font-size: 1.8rem;
-            color: #fff;
-        }
-        /* Versión Móvil: Botones en fila y circulares */
-        @media (max-width: 600px) {
-            .share-btns {
+            .main-wrapper {
+                gap: 2.2rem;
+            }
+
+            .info-grid {
                 display: flex;
+                flex-direction: column;
+                gap: 2.2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+                border-radius: 14px;
+            }
+
+            .player-card {
+                padding: 1.5rem; /* Padding uniforme para que nada toque los bordes */
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+                align-items: center;
+            }
+
+            .rx-player-content {
+                width: 100%;
+                gap: 1rem;
+            }
+
+            .rx-station-name, .rx-track {
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                display: block; /* Asegura que el truncado funcione */
+                padding: 0 5px;
+            }
+
+            .info-card {
+                padding: 1.5rem;
+            }
+
+            .info-card h2 {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .content-list {
+                display: flex;
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+
+            .content-item {
+                padding: 0.75rem 0;
+                border: none;
+            }
+
+            .item-time {
+                font-size: 0.8rem;
+            }
+
+            .item-name {
+                font-size: 0.9rem;
+            }
+
+            .info-card p {
+                font-size: 0.9rem !important;
+                line-height: 1.6;
+                letter-spacing: 0.3px;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-btn {
+                flex-direction: row;
+                justify-content: flex-start;
+                padding: 1rem 1.5rem;
+                gap: 15px;
+            }
+
+            .install-btn {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                padding: 10px 24px 10px 10px;
                 justify-content: center;
-                gap: 20px;
-                padding: 10px 0;
             }
 
-            .share-btn {
-                width: 54px;
-                height: 54px;
-                padding: 0;
-                border-radius: 50%;
+            .rx-art-sidebar {
+                width: 120px;
+                height: 120px;
+            }
+            .player-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            .rx-live-label {
                 justify-content: center;
             }
 
-            .share-btn i {
-                font-size: 22px;
-                margin: 0;
+            .rx-mute-btn, .rx-play-btn {
+                width: 42px;
+                height: 42px;
             }
 
-            .share-btn span {
-                display: none; /* Oculta el texto en movil */
+            .rx-vol-value {
+                font-size: 12px;
+                min-width: 28px;
+            }
+
+            .rx-vol {
+                gap: 12px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="hero-bg"></div>
+    <div class="top-bg"></div>
 
-    <!-- INSTALL FAB -->
-    <button id="installFab" class="install-fab">
-        <div class="install-inner">
-            <div class="install-icon"><i class="fas fa-download"></i></div>
+    <!-- Floating Install Button -->
+    <button id="installButton" class="install-btn">
+        <div class="install-btn-inner">
+            <i class="fas fa-download"></i>
             Instalar Radio Xero
         </div>
     </button>
 
-    <!-- iOS MODAL -->
-    <div id="iosModal" class="overlay">
-        <div class="modal">
+    <!-- iOS Native Hint Overlay -->
+    <div id="iosHint" class="ios-install-overlay">
+        <div class="ios-install-card">
             <h3>Instala Radio Xero</h3>
-            <p>Accede a nuestra señal en vivo directo desde tu pantalla de inicio.</p>
-            <div class="step-list">
-                <div class="step-item">
-                    <div class="step-icon"><i class="fas fa-share-square"></i></div>
-                    <span>Toca el botón <b>Compartir</b> de Safari</span>
-                </div>
-                <div class="step-item">
-                    <div class="step-icon"><i class="fas fa-plus-square"></i></div>
-                    <span>Selecciona <b>Agregar a pantalla de inicio</b></span>
-                </div>
-                <div class="step-item">
-                    <div class="step-icon" style="background:rgba(34,197,94,.1);color:#16a34a;"><i
-                            class="fas fa-check-circle"></i></div>
-                    <span>Toca <b>Agregar</b> y listo</span>
-                </div>
-            </div>
-            <p style="font-size:.72rem;color:var(--subtle);margin-bottom:1.25rem;">* Recomendamos usar Safari para la
-                mejor experiencia.</p>
-            <button class="modal-close"
-                onclick="document.getElementById('iosModal').style.display='none'">Entendido</button>
-        </div>
-    </div>
-
-    <!-- INSTALLED MODAL -->
-    <div id="installedModal" class="overlay">
-        <div class="modal">
-            <div class="success-icon"><i class="fas fa-check"></i></div>
-            <h3>¡Ya la tienes!</h3>
-            <p>Radio Xero ya está instalada. Búscala en tu pantalla de inicio para escuchar sin límites.</p>
-            <button class="modal-close dark"
-                onclick="document.getElementById('installedModal').style.display='none'">Continuar escuchando</button>
-        </div>
-    </div>
-
-    <!-- SHARE MODAL FALLBACK -->
-    <div id="shareModal" class="overlay">
-        <div class="modal">
-            <h3>¡Comparte la señal!</h3>
-            <p>Invita a tus amigos a sintonizar Radio Xero en vivo.</p>
-            <div class="step-list">
-                <div class="step-item" onclick="rxCopyLink()" style="cursor:pointer;">
-                    <div class="step-icon" style="background:#f1f5f9;color:var(--navy);"><i class="fas fa-link"></i>
+            <p>Escucha nuestra música con acceso directo desde tu celular.</p>
+            <div class="ios-steps">
+                <div class="ios-step">
+                    <div style="display: flex; gap: 8px;">
+                        <i class="fas fa-share-square" style="margin:0; width:35px;"></i>
+                        <i class="fas fa-ellipsis-h" style="margin:0; width:35px; background: rgba(0,0,0,0.05); color: #64748b;"></i>
                     </div>
-                    <b>Copiar enlace directo</b>
+                    <span>Toca el botón de <b>Menu</b> o <b>Compartir</b></span>
+                </div>
+                <div class="ios-step">
+                    <i class="fas fa-plus-square"></i>
+                    <span>Busca la opción <b>Agregar a inicio</b></span>
+                </div>
+                <div class="ios-step">
+                    <i class="fas fa-check-circle" style="color: #22c55e; background: rgba(34, 197, 94, 0.1);"></i>
+                    <span>Presiona <b>Agregar</b> y la app se instalará</span>
                 </div>
             </div>
-            <button class="modal-close"
-                onclick="document.getElementById('shareModal').style.display='none'">Cerrar</button>
+            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: -10px; margin-bottom: 20px;">* Recomendamos usar Safari para la mejor experiencia.</p>
+            <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
+                Entendido
+            </button>
         </div>
     </div>
 
-    <!-- ═══════════ PAGE ═══════════ -->
-    <main class="page">
 
-        <!-- HEADER -->
+
+    <!-- Already Installed Modal (Premium) -->
+    <div id="installedModal" class="ios-install-overlay">
+        <div class="ios-install-card" style="text-align: center;">
+            <div style="background: linear-gradient(135deg, var(--primary), #b3141a); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 15px 30px rgba(237, 28, 36, 0.4); animation: iconPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                <i class="fas fa-check" style="color: white; font-size: 2rem;"></i>
+            </div>
+            <h3 style="color: #0f172a; margin-bottom: 1rem;">¡Radio Xero ya es tuya!</h3>
+            <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">La aplicación ya está instalada en tu dispositivo. Búscala en tu pantalla de inicio o menú de apps para disfrutar de nuestra señal sin límites.</p>
+            <button class="ios-close-btn" style="background: #0f172a; border: none; color: white; transition: all 0.3s;" onclick="document.getElementById('installedModal').style.display='none'">
+                Continuar Escuchando
+            </button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes iconPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+
+    <div class="main-wrapper">
+
         <header>
             <h1 class="visually-hidden">Radio Xero</h1>
-            <img src="logo%20xero.png" alt="Radio Xero" class="main-logo">
-            <div class="live-pill">
-                <div class="wave-bars"><span></span><span></span><span></span><span></span></div>
-                Sintonizando en vivo
+            <img src="logo%20xero.png" alt="Radio Xero Logo" class="main-logo">
+            <div class="live-badge">
+                <div class="audio-wave">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+                SINTONIZANDO EN VIVO
             </div>
         </header>
 
-        <!-- PLAYER -->
+        <!-- ─── CUSTOM PLAYER CARD ─── -->
         <section class="card player-card">
-            <div class="art-wrap">
-                <div class="art-pulse" id="artPulse"></div>
+
+            <!-- Left: Artwork -->
+            <div class="rx-art-sidebar">
+                <div class="rx-pulse" id="artPulse"></div>
+                <!-- Usa tu logo como artwork -->
                 <img src="icon-512.png" alt="Radio Xero"
                     onerror="this.style.display='none';document.getElementById('artFallback').style.display='flex'">
-                <div class="art-fallback" id="artFallback"
-                    style="display:none;align-items:center;justify-content:center;">
-                    <svg viewBox="0 0 80 80" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+                <div class="rx-art-fallback" id="artFallback" style="display:none;">
+                    <svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="80" height="80" fill="white" />
                         <circle cx="40" cy="40" r="30" fill="#ED1C24" />
                         <circle cx="40" cy="40" r="22" fill="white" />
                         <circle cx="40" cy="40" r="4" fill="#ED1C24" />
-                        <text x="40" y="36" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
-                            font-size="8" fill="#ED1C24">RADIO</text>
-                        <text x="40" y="48" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
-                            font-size="12" fill="#1A3B70">XERO</text>
+                        <text x="40" y="36" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="8" fill="#ED1C24">RADIO</text>
+                        <text x="40" y="48" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="12" fill="#1A3B70">XERO</text>
                     </svg>
                 </div>
             </div>
 
-            <div class="player-body">
-                <div class="live-tag"><span class="live-dot" id="liveDot"></span> En Vivo</div>
-                <div class="station-name">Radio Xero</div>
-                <div class="track-row"><i class="fas fa-music"></i><span id="trackText">Radio Xero | Al Aire</span>
+            <!-- Right: Metadata & Controls -->
+            <div class="rx-player-content">
+                <div class="rx-meta">
+                    <div class="rx-live-label">
+                        <span class="rx-dot" id="liveDot"></span>
+                        En Vivo
+                    </div>
+                    <div class="rx-station-name">Radio Xero</div>
+                    <div class="rx-track" id="trackInfo"><i class="fas fa-music rx-track-icon"></i><span id="trackText">Radio Xero | Al Aire</span></div>
                 </div>
 
-                <div class="vu-wrap">
-                    <div class="vu-row"><span class="vu-ch">L</span>
-                        <div class="vu-bar" id="vuL"></div>
+                <!-- Visualizer bars -->
+                <!-- VU Meter Container -->
+                <div class="rx-viz-container" id="rxVizContainer">
+                    <div class="rx-vu-row">
+                        <span class="rx-vu-label">L</span>
+                        <div class="rx-vu-meter" id="vuL"></div>
                     </div>
-                    <div class="vu-row"><span class="vu-ch">R</span>
-                        <div class="vu-bar" id="vuR"></div>
+                    <div class="rx-vu-row">
+                        <span class="rx-vu-label">R</span>
+                        <div class="rx-vu-meter" id="vuR"></div>
                     </div>
-                    <div class="vu-scale">
-                        <span>-∞</span><span>-18</span><span>-12</span><span>-6</span><span>-3</span><span>0</span><span>+3</span><span>+6</span>
+                    <!-- Decibel Scale -->
+                    <div class="rx-vu-scale">
+                        <span>-∞</span>
+                        <span>-18</span>
+                        <span>-12</span>
+                        <span>-6</span>
+                        <span>-3</span>
+                        <span>0</span>
+                        <span>+3</span>
+                        <span>+6</span>
                     </div>
                 </div>
 
-                <div class="controls">
-                    <button class="btn-play" id="playBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
-                        <svg id="playIcon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <polygon points="6,4 20,12 6,20" fill="#fff" />
+                <!-- Controls -->
+                <div class="rx-controls">
+                    <button class="rx-play-btn" id="playBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
+                        <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
+                            <polygon points="6,4 20,12 6,20" fill="#111" />
                         </svg>
                     </button>
-                    <button class="btn-mute" id="muteBtn" onclick="rxToggleMute()" aria-label="Silenciar">
-                        <svg id="muteIcon" viewBox="0 0 24 24">
-                            <path
-                                d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
-                        </svg>
-                    </button>
-                    <div class="vol-wrap">
-                        <input type="range" min="0" max="100" value="50" id="volSlider" class="vol-slider"
-                            oninput="rxSetVol(this.value)" aria-label="Volumen">
-                        <span class="vol-value" id="volValue">50%</span>
+
+                    <div class="rx-vol">
+                        <button class="rx-mute-btn" id="muteBtn" onclick="rxToggleMute()" aria-label="Silenciar">
+                            <svg id="muteIcon" viewBox="0 0 24 24">
+                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                            </svg>
+                        </button>
+                        <div class="rx-vol-container">
+                            <input type="range" min="0" max="100" value="50" id="volSlider" class="rx-vol-slider" oninput="rxSetVol(this.value)" aria-label="Volumen">
+                            <span class="rx-vol-value" id="volValue">50%</span>
+                        </div>
                     </div>
                 </div>
 
+                <div class="rx-status" id="rxStatus">Presiona play para sintonizar</div>
             </div>
         </section>
 
-        <!-- SHARE -->
-        <div class="card share-card">
-            <div class="share-heading">
-                <span class="share-dot"></span>
-                <h4>Comparte la señal</h4>
-                <span class="share-dot"></span>
-            </div>
-            <p class="share-desc">Invita a tus amigos a sintonizar Radio Xero</p>
 
-            <div class="share-btns">
-                <a href="#" target="_blank" class="share-btn wa" id="rx-wa-btn" title="WhatsApp">
-                    <i class="fab fa-whatsapp"></i> <span>WhatsApp</span>
-                </a>
-                <a href="#" target="_blank" class="share-btn fb" id="rx-fb-btn" title="Facebook">
-                    <i class="fab fa-facebook-f"></i> <span>Facebook</span>
-                </a>
-                <a href="#" target="_blank" class="share-btn tw" id="rx-tw-btn" title="X (Twitter)">
-                    <i class="fab fa-x-twitter"></i> <span>X (Twitter)</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- INFO GRID -->
-        <div class="bottom-grid">
+        <!-- Info grid -->
+        <div class="info-grid">
             <section class="card info-card">
                 <h2><i class="far fa-calendar-alt"></i> Programación Diaria</h2>
-                <ul class="prog-list">
-                    <li class="prog-item">
-                        <span class="prog-name">Mañanas con Xero</span>
-                        <span class="prog-time">08:00 AM</span>
-                    </li>
-                    <li class="prog-item">
-                        <span class="prog-name">Éxitos del Momento</span>
-                        <span class="prog-time">02:00 PM</span>
-                    </li>
-                    <li class="prog-item">
-                        <span class="prog-name">Noche Retro</span>
-                        <span class="prog-time">09:00 PM</span>
-                    </li>
-                </ul>
+                <div class="content-list">
+                    <div class="content-item">
+                        <span class="item-name">Mañanas con Xero</span>
+                        <span class="item-time">08:00 AM</span>
+                    </div>
+                    <div class="content-item">
+                        <span class="item-name">Éxitos del Momento</span>
+                        <span class="item-time">02:00 PM</span>
+                    </div>
+                    <div class="content-item">
+                        <span class="item-name">Noche Retro</span>
+                        <span class="item-time">09:00 PM</span>
+                    </div>
+                </div>
             </section>
 
             <section class="card info-card">
                 <h2><i class="fas fa-info-circle"></i> Nuestra Estación</h2>
-                <div style="display: flex; align-items: center;">
-                    <p class="about-text" style="line-height: 1.8;">Radio Xero es tu conexión directa con la mejor música y noticias. Trasmitiendo 24/7 con calidad digital para acompañarte donde quiera que estés.</p>
-                </div>
+                <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; text-align: left;">
+                    Radio Xero es tu conexión directa con la mejor música y noticias. Transmitiendo 24/7 con calidad
+                    digital para acompañarte donde quiera que estés.
+                </p>
             </section>
         </div>
 
         <footer>
-            <p>&copy; 2025 Radio Xero — Todos los derechos reservados</p>
+            <p>&copy; 2025 Radio Xero - Todos los derechos reservados</p>
         </footer>
+    </div>
 
-    </main>
-
+    <!-- Audio element oculto -->
     <audio id="rxAudio" preload="none"></audio>
 
     <script>
+        // ─── RADIO XERO PLAYER ───────────────────────────────────────────────────
         const STREAM_URL = 'https://stream.zeno.fm/n7fm3s6537zuv';
-        const SITE_URL = 'https://jf2021070309.github.io/radio-xero/';
 
         const audio = document.getElementById('rxAudio');
         const statusEl = document.getElementById('rxStatus');
-        const vuLEl = document.getElementById('vuL');
-        const vuREl = document.getElementById('vuR');
-        const barsL = [], barsR = [];
-        const SEG = 24;
+        const playIcon = document.getElementById('playIcon');
+        const vuL = document.getElementById('vuL');
+        const vuR = document.getElementById('vuR');
+        const barsL = [];
+        const barsR = [];
+        const SEGMENT_COUNT = 24;
 
-        const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-        const isEdgeA = /EdgA/i.test(navigator.userAgent);
-        const isStand = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        // Detección de Dispositivos y Navegadores
+        const isIosDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) || 
+                           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isEdgeAndroid = /EdgA/i.test(navigator.userAgent);
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-        function buildSegs(el, arr) {
-            for (let i = 0; i < SEG; i++) {
-                const s = document.createElement('div');
-                s.className = 'vu-seg';
-                const p = (i / SEG) * 100;
-                s.classList.add(p < 50 ? 'low' : p < 80 ? 'mid' : 'high');
-                el.appendChild(s); arr.push(s);
+        function createSegments(container, array) {
+            for (let i = 0; i < SEGMENT_COUNT; i++) {
+                const seg = document.createElement('div');
+                seg.className = 'rx-vu-segment';
+                
+                // Assign color class based on position
+                const percent = (i / SEGMENT_COUNT) * 100;
+                if (percent < 50) seg.classList.add('low');
+                else if (percent < 80) seg.classList.add('mid');
+                else seg.classList.add('high');
+                
+                container.appendChild(seg);
+                array.push(seg);
             }
         }
-        buildSegs(vuLEl, barsL);
-        buildSegs(vuREl, barsR);
 
-        let isPlaying = false, animId = null, audioCtx = null, srcNode = null, dataArr = null, analyser = null, simL = 0;
+        createSegments(vuL, barsL);
+        createSegments(vuR, barsR);
 
+        let isPlaying = false;
+        let animId = null;
+        let audioCtx = null;
+        let srcNode = null;
+        let dataArr = null;
+        let simL = 0; 
+        let analyser = null; 
+
+        // Volumen
         function rxSetVol(v) {
             audio.volume = v / 100;
-            const sl = document.getElementById('volSlider');
-            sl.style.background = `linear-gradient(to right,#ED1C24 ${v}%,rgba(237,28,36,.18) ${v}%)`;
-            document.getElementById('volValue').textContent = v + '%';
-            if (v > 0 && audio.muted) rxToggleMute();
+            const slider = document.getElementById('volSlider');
+            const volValue = document.getElementById('volValue');
+            slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
+            volValue.textContent = v + '%';
+            
+            if (v > 0 && audio.muted) {
+                rxToggleMute();
+            }
         }
         rxSetVol(80);
 
+        // Mute / Unmute
         let isMuted = false;
+        let volumeBeforeMute = 80;
+
         function rxToggleMute() {
+            const muteBtn = document.getElementById('muteBtn');
+            const muteIcon = document.getElementById('muteIcon');
+            
             isMuted = !isMuted;
             audio.muted = isMuted;
-            const ic = document.getElementById('muteIcon');
-            const mb = document.getElementById('muteBtn');
+            
             if (isMuted) {
-                ic.innerHTML = '<g><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/><line x1="2.5" y1="21.5" x2="21.5" y2="2.5" stroke="#fff" stroke-width="2"/></g>';
-                mb.style.opacity = '0.55';
+                volumeBeforeMute = parseInt(document.getElementById('volSlider').value);
+                muteIcon.innerHTML = '<g><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/><line x1="2.5" y1="21.5" x2="21.5" y2="2.5"/></g>';
+                muteBtn.style.opacity = '0.65';
             } else {
-                ic.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>';
-                mb.style.opacity = '1';
+                muteIcon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>';
+                muteBtn.style.opacity = '1';
             }
         }
 
         function setIcon(state) {
             const btn = document.getElementById('playBtn');
-            if (state === 'loading') { btn.innerHTML = '<div class="rx-loader"></div>'; btn.classList.add('loading'); btn.disabled = true; return; }
-            btn.disabled = false; btn.classList.remove('loading');
-            btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            ${state === 'playing'
+            if (state === 'loading') {
+                btn.innerHTML = '<div class="rx-loader"></div>';
+                btn.classList.add('loading');
+                btn.disabled = true;
+                return;
+            }
+            
+            btn.disabled = false;
+            btn.classList.remove('loading');
+            btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                ${state === 'playing' 
                     ? '<rect x="6" y="4" width="3.5" height="16" rx="1" fill="#fff"/><rect x="14.5" y="4" width="3.5" height="16" rx="1" fill="#fff"/>'
                     : '<polygon points="6,4 20,12 6,20" fill="#fff"/>'}
-        </svg>`;
+            </svg>`;
         }
 
+        function setStatus(msg, type) {
+            statusEl.innerHTML = msg;
+            statusEl.className = 'rx-status' + (type ? ' ' + type : '');
+        }
 
         function idleAnim() {
             let t = 0;
             function frame() {
                 if (isPlaying) return;
-                animId = requestAnimationFrame(frame); t += 0.05;
-                const aL = Math.round(Math.abs(Math.sin(t)) * 0.35 * SEG);
-                const aR = Math.round(Math.abs(Math.cos(t)) * 0.35 * SEG);
-                barsL.forEach((s, i) => s.classList.toggle('active', i < aL));
-                barsR.forEach((s, i) => s.classList.toggle('active', i < aR));
+                animId = requestAnimationFrame(frame);
+                t += 0.05;
+                
+                const valL = Math.abs(Math.sin(t)) * 0.35; 
+                const valR = Math.abs(Math.cos(t)) * 0.35;
+                
+                const activeL = Math.round(valL * SEGMENT_COUNT);
+                const activeR = Math.round(valR * SEGMENT_COUNT);
+
+                barsL.forEach((seg, i) => {
+                    if (i < activeL) seg.classList.add('active');
+                    else seg.classList.remove('active');
+                });
+                barsR.forEach((seg, i) => {
+                    if (i < activeR) seg.classList.add('active');
+                    else seg.classList.remove('active');
+                });
             }
             frame();
         }
         idleAnim();
 
         function startAnalyser() {
-            if (!isIOS && !isEdgeA) {
+            // En iOS y Edge Android, el análisis real puede bloquear el audio por CORS.
+            // Usamos simulación para estos casos problemáticos.
+            if (!isIosDevice && !isEdgeAndroid) {
                 try {
                     if (!audioCtx) {
                         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                         analyser = audioCtx.createAnalyser();
-                        analyser.fftSize = 128; analyser.smoothingTimeConstant = 0.8;
+                        analyser.fftSize = 128;
+                        analyser.smoothingTimeConstant = 0.8;
                         srcNode = audioCtx.createMediaElementSource(audio);
-                        srcNode.connect(analyser); analyser.connect(audioCtx.destination);
+                        srcNode.connect(analyser);
+                        analyser.connect(audioCtx.destination);
                         dataArr = new Uint8Array(analyser.frequencyBinCount);
                     }
                     if (audioCtx.state === 'suspended') audioCtx.resume();
-                } catch (e) { console.error('AudioCtx', e); }
+                } catch (e) {
+                    console.error("AudioContext error, switching to simulation", e);
+                }
             }
+
             function draw() {
                 if (!isPlaying) return;
                 animId = requestAnimationFrame(draw);
-                let v = 0;
-                if (isIOS || isEdgeA || !analyser) {
-                    const base = 0.5 + Math.random() * 0.2;
-                    const peak = Math.random() > 0.88 ? 0.45 : 0;
-                    simL += (Math.min(1.2, base + peak + Math.random() * 0.1) - simL) * 0.25;
-                    v = Math.min(SEG, Math.round(Math.pow(simL, 1.5) * SEG * 1.3));
+                
+                let activeVal = 0;
+
+                if (isIosDevice || isEdgeAndroid || !analyser) {
+                    // --- SIMULACIÓN REALISTA PARA IOS O EDGE ANDROID O FALLBACK ---
+                    // Aumentamos base y picos para que llegue al rojo
+                    const base = 0.5 + Math.random() * 0.2; 
+                    const peak = Math.random() > 0.88 ? 0.45 : 0; 
+                    simL += (Math.min(1.2, base + peak + (Math.random()*0.1)) - simL) * 0.25;
+                    // Ajustamos la curva (pow 1.5) y multiplicador (1.3) para más energía
+                    activeVal = Math.round(Math.pow(simL, 1.5) * SEGMENT_COUNT * 1.3);
+                    if (activeVal > SEGMENT_COUNT) activeVal = SEGMENT_COUNT;
                 } else {
+                    // --- ANÁLISIS REAL (Android / PC) ---
                     analyser.getByteFrequencyData(dataArr);
-                    let mx = 0; for (let i = 0; i < dataArr.length; i++) if (dataArr[i] > mx) mx = dataArr[i];
-                    v = Math.round(Math.pow(mx / 255, 2.2) * SEG * 1.1);
+                    let maxVal = 0;
+                    for(let i=0; i < dataArr.length; i++) { 
+                        if(dataArr[i] > maxVal) maxVal = dataArr[i]; 
+                    }
+                    const val = Math.pow(maxVal / 255, 2.2);
+                    activeVal = Math.round(val * SEGMENT_COUNT * 1.1); 
                 }
-                barsL.forEach((s, i) => s.classList.toggle('active', i < v));
-                barsR.forEach((s, i) => s.classList.toggle('active', i < v));
+
+                barsL.forEach((seg, i) => {
+                    if (i < activeVal) seg.classList.add('active');
+                    else seg.classList.remove('active');
+                });
+                barsR.forEach((seg, i) => {
+                    if (i < activeVal) seg.classList.add('active');
+                    else seg.classList.remove('active');
+                });
             }
             draw();
         }
 
         function rxToggle() {
             if (!isPlaying) {
-                if (!isIOS && !isEdgeA) audio.crossOrigin = 'anonymous'; else audio.removeAttribute('crossorigin');
-                audio.src = STREAM_URL + '?_=' + Date.now();
+                setStatus('Conectando con Radio Xero...');
+                setIcon('loading');
+                
+                // Si NO es iPhone o Edge móvil, activamos CORS para el visualizador real
+                if (!isIosDevice && !isEdgeAndroid) {
+                    audio.crossOrigin = "anonymous";
+                } else {
+                    audio.removeAttribute('crossorigin');
+                }
+
+                const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
+                audio.src = STREAM_URL + cacheBuster;
+                
                 audio.load();
                 
-                audio.play()
-                    .then(() => {
-                        isPlaying = true; setIcon('playing');
+                const playPromise = audio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        isPlaying = true;
+                        setIcon('playing');
                         document.getElementById('artPulse').style.animationPlayState = 'running';
-                        if (animId) cancelAnimationFrame(animId); startAnalyser();
-                    })
-                    .catch(err => { console.error(err); isPlaying = false; setIcon('paused'); });
+                        setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
+                        if (animId) cancelAnimationFrame(animId);
+                        startAnalyser();
+                    }).catch(error => {
+                        console.error("Error de reproducción:", error);
+                        setStatus('Presiona PLAY para escuchar.', 'playing');
+                        isPlaying = false;
+                        setIcon('paused');
+                    });
+                }
             } else {
-                audio.pause(); audio.src = '';
-                isPlaying = false; setIcon('paused');
+                audio.pause();
+                audio.src = '';
+                isPlaying = false;
+                setIcon('paused');
                 document.getElementById('artPulse').style.animationPlayState = 'paused';
-                if (animId) cancelAnimationFrame(animId); idleAnim();
+                setStatus('Pausado');
+                if (animId) cancelAnimationFrame(animId);
+                idleAnim();
             }
         }
 
-        audio.addEventListener('error', () => { isPlaying = false; setIcon(false); if (animId) cancelAnimationFrame(animId); idleAnim(); });
-        audio.addEventListener('waiting', () => { });
-        audio.addEventListener('pause', () => { if (isPlaying) { isPlaying = false; setIcon('paused'); document.getElementById('artPulse').style.animationPlayState = 'paused'; if (animId) cancelAnimationFrame(animId); idleAnim(); } });
-        audio.addEventListener('play', () => { if (!isPlaying) { isPlaying = true; setIcon('playing'); document.getElementById('artPulse').style.animationPlayState = 'running'; if (animId) cancelAnimationFrame(animId); startAnalyser(); } });
-        audio.addEventListener('playing', () => { });
-
-        const sse = new EventSource('https://api.zeno.fm/mounts/metadata/subscribe/n7fm3s6537zuv');
-        sse.onmessage = e => { try { document.getElementById('trackText').textContent = JSON.parse(e.data).streamTitle || 'Radio Xero | Al Aire'; } catch (_) { } };
-
-        function updateShareLinks() {
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            let msgBody;
-
-            if (isMobile) {
-                // Versión con EMOJIS para celulares (donde funcionan bien)
-                msgBody = 
-                    "\u{1F4FB} *Radio Xero* \u{1F525}\n" + 
-                    "\u{1F534} *EN VIVO*\n\n" +
-                    "\u{1F3A7} Música sin parar 24/7\n" +
-                    "\u26A1 Dale play y súbele al volumen\n\n" +
-                    "\u{1F449} ";
-            } else {
-                // Versión LIMPIA para PC (sin emojis para evitar errores visuales)
-                msgBody = 
-                    "*Radio Xero*\n" + 
-                    "*EN VIVO*\n\n" +
-                    "Musica sin parar 24/7\n" +
-                    "Dale play y subele al volumen\n\n" +
-                    "Escuchanos aqui: ";
-            }
-            
-            const shareUrl = "https://jf2021070309.github.io/radio-xero/";
-            const fullMsg = encodeURIComponent(msgBody + shareUrl);
-            
-            // Botón de WhatsApp
-            document.getElementById('rx-wa-btn').href = `https://api.whatsapp.com/send?text=${fullMsg}`;
-            
-            // Botón de Facebook
-            document.getElementById('rx-fb-btn').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
-            
-            // Botón de Twitter/X
-            const twText = encodeURIComponent(msgBody);
-            document.getElementById('rx-tw-btn').href = `https://twitter.com/intent/tweet?text=${twText}&url=${encodeURIComponent(shareUrl)}`;
-        }
-        
-        // Ejecutar inmediatamente para blindar los links
-        updateShareLinks();
-
-
-        function rxCopyDirect() {
-            const btn = document.getElementById('copyBtn');
-            navigator.clipboard.writeText(SITE_URL).catch(() => { });
-            btn.textContent = '¡Copiado!'; btn.classList.add('copied');
-            setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2200);
-        }
-
-        function rxCopyLink() {
-            navigator.clipboard.writeText(SITE_URL).then(() => { alert('¡Enlace copiado!'); document.getElementById('shareModal').style.display = 'none'; });
-        }
-
-        /* Install FAB */
-        let deferredPrompt;
-        const fab = document.getElementById('installFab');
-
-        function showFab() { 
-            // En iOS lo mostramos siempre porque no hay evento automático
-            // En Android/PC esperamos al evento 'beforeinstallprompt' para no fallar
-            if (isIOS && !isStand) {
-                fab.setAttribute('style', 'display:flex !important;'); 
-            }
-        }
-        showFab(); 
-        window.addEventListener('load', showFab); 
-        setTimeout(showFab, 1500);
-
-        window.addEventListener('beforeinstallprompt', e => {
-            if (isIOS || isStand) return;
-            e.preventDefault(); 
-            deferredPrompt = e; 
-            // Ahora sí, Android nos dio luz verde, mostramos el botón
-            fab.setAttribute('style', 'display:flex !important;');
+        audio.addEventListener('error', () => {
+            isPlaying = false;
+            setIcon(false);
+            setStatus('Error de conexión. Reintenta.', 'error');
+            if (animId) cancelAnimationFrame(animId);
+            idleAnim();
         });
 
-        fab.addEventListener('click', async () => {
-            if (isStand) {
+        audio.addEventListener('waiting', () => {
+            if (isPlaying) setStatus('Buffering...', 'playing');
+        });
+
+        // Sincronización con controles nativos del OS y llamadas telefónicas
+        audio.addEventListener('pause', () => {
+            if (isPlaying) {
+                isPlaying = false;
+                setIcon('paused');
+                document.getElementById('artPulse').style.animationPlayState = 'paused';
+                setStatus('Pausado por sistema');
+                if (animId) cancelAnimationFrame(animId);
+                idleAnim();
+            }
+        });
+
+        audio.addEventListener('play', () => {
+            if (!isPlaying) {
+                isPlaying = true;
+                setIcon('playing');
+                document.getElementById('artPulse').style.animationPlayState = 'running';
+                setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
+                if (animId) cancelAnimationFrame(animId);
+                startAnalyser();
+            }
+        });
+
+        audio.addEventListener('playing', () => {
+            if (isPlaying) setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
+        });
+
+        const sse = new EventSource('https://api.zeno.fm/mounts/metadata/subscribe/n7fm3s6537zuv');
+        const trackTextEl = document.getElementById('trackText');
+        
+        sse.onmessage = function(e) {
+            try {
+                const data = JSON.parse(e.data);
+                trackTextEl.textContent = data.streamTitle || 'Radio Xero | Al Aire';
+            } catch (err) {
+                console.error('Error parsing metadata', err);
+            }
+        };
+
+        let deferredPrompt;
+        const installButton = document.getElementById('installButton');
+
+        // --- REFUERZO DE VISIBILIDAD PARA ANDROID / PC / iOS ---
+        function forceInstallButton() {
+            const isAndroidSystem = /Android/i.test(navigator.userAgent) || /EdgA/i.test(navigator.userAgent) || isEdgeAndroid || isAndroid;
+            const isPC = !/Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+            
+            if ((isAndroidSystem || isPC || isIosDevice) && !isStandalone) {
+                installButton.style.display = 'flex';
+                // Aseguramos que sea visible incluso si algo intentó ocultarlo
+                installButton.setAttribute('style', 'display: flex !important;');
+            }
+        }
+
+        // Ejecutamos el refuerzo en varios puntos de carga
+        forceInstallButton();
+        window.addEventListener('load', forceInstallButton);
+        setTimeout(forceInstallButton, 1500); // Refuerzo final tras 1.5s
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            if (isIosDevice || isStandalone) return; 
+            e.preventDefault();
+            deferredPrompt = e;
+            installButton.style.display = 'flex';
+        });
+
+        installButton.addEventListener('click', async () => {
+            // Caso 1: Ya está instalada (Standalone) para CUALQUIER dispositivo
+            if (isStandalone) {
                 document.getElementById('installedModal').style.display = 'flex';
                 return;
             }
-            if (isIOS) {
-                document.getElementById('iosModal').style.display = 'flex';
+
+            // Caso 2: Es iOS en el navegador (mostramos instrucciones)
+            if (isIosDevice) {
+                const iosHint = document.getElementById('iosHint');
+                if (iosHint) iosHint.style.display = 'flex';
                 return;
-            }
-            
+            } 
+
+            // Caso 3: Android/PC en el navegador (intentamos instalación)
             if (deferredPrompt) {
-                try {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    if (outcome === 'accepted') fab.style.display = 'none';
-                    deferredPrompt = null;
-                } catch (err) {
-                    console.error('Install Error', err);
-                }
+                deferredPrompt.prompt();
+                await deferredPrompt.userChoice;
+                deferredPrompt = null;
             } else {
-                // Si llegamos aquí y es Android, es que hubo un retraso.
-                // Intentamos avisar al usuario de forma honesta.
-                alert('El sistema de instalaci\u00F3n se est\u00E1 preparando. Por favor, intenta de nuevo en un par de segundos.');
+                // Fallback: Si no hay prompt (ej. ya instalada pero en navegador), mostramos modal
+                document.getElementById('installedModal').style.display = 'flex';
             }
         });
 
-        if (isIOS && !isStand) document.getElementById('iosModal').style.display = 'flex';
-        if (isIOS) { const vc = document.querySelector('.vol-wrap'); if (vc) vc.style.display = 'none'; }
+        // Forzamos visibilidad inicial si no es standalone
+        if (!isStandalone) {
+            forceInstallButton();
+        } else {
+            // Si quieres que el botón siga visible incluso instalada, descomenta la siguiente línea:
+            // forceInstallButton();
+        }
 
-        if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => { }));
+        if (isIosDevice) {
+            // Mostrar instructivo de instalación automáticamente solo la primera vez
+            if (!isStandalone) {
+                const iosHint = document.getElementById('iosHint');
+                if (iosHint) iosHint.style.display = 'flex';
+            }
+            // Ajustes de volumen específicos para iOS (donde no se permite control JS)
+            const volContainer = document.querySelector('.rx-vol-container');
+            if (volContainer) volContainer.style.display = 'none';
+            const volDiv = document.querySelector('.rx-vol');
+            if (volDiv) volDiv.style.justifyContent = 'flex-end';
+        }
 
-        window.addEventListener('load', () => { rxSetVol(50); if (!isIOS) setTimeout(rxToggle, 500); });
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(() => console.log('SW OK'))
+                    .catch(e => console.log('SW Error', e));
+            });
+        }
+
+        window.addEventListener('load', () => {
+            rxSetVol(50);
+            if (!isIosDevice) {
+                setTimeout(() => { rxToggle(); }, 500);
+            }
+        });
     </script>
 </body>
 
