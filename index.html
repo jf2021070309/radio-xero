@@ -1359,13 +1359,13 @@
             <p class="share-desc">Invita a tus amigos a sintonizar Radio Xero</p>
 
             <div class="share-btns">
-                <a href="https://api.whatsapp.com/send?text=%F0%9F%93%BB%20%2ARadio%20Xero%2A%20%F0%9F%94%A5%0A%F0%9F%94%B4%20%2AEN%20VIVO%2A%0A%0A%F0%9F%8E%A7%20M%C3%BAsica%20sin%20parar%2024%2F7%0A%E2%9A%A1%20Dale%20play%20y%20s%C3%BAbele%20al%20volumen%0A%0A%F0%9F%91%89%20https%3A%2F%2Fjf2021070309.github.io%2Fradio-xero%2F" target="_blank" class="share-btn wa" id="rx-wa-btn">
+                <a href="#" target="_blank" class="share-btn wa" id="rx-wa-btn">
                     <i class="fab fa-whatsapp"></i> WhatsApp
                 </a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=https://jf2021070309.github.io/radio-xero/" target="_blank" class="share-btn fb" id="rx-fb-btn">
+                <a href="#" target="_blank" class="share-btn fb" id="rx-fb-btn">
                     <i class="fab fa-facebook-f"></i> Facebook
                 </a>
-                <a href="https://twitter.com/intent/tweet?text=%F0%9F%93%BB%20%2ARadio%20Xero%2A%20%F0%9F%94%A5%0A%F0%9F%94%B4%20%2AEN%20VIVO%2A%0A%0A%F0%9F%8E%A7%20M%C3%BAsica%20sin%20parar%2024%2F7%0A%E2%9A%A1%20Dale%20play%20y%20s%C3%BAbele%20al%20volumen%0A%0A&url=https://jf2021070309.github.io/radio-xero/" target="_blank" class="share-btn tw" id="rx-tw-btn">
+                <a href="#" target="_blank" class="share-btn tw" id="rx-tw-btn">
                     <i class="fab fa-x-twitter"></i> X (Twitter)
                 </a>
             </div>
@@ -1551,13 +1551,44 @@
         sse.onmessage = e => { try { document.getElementById('trackText').textContent = JSON.parse(e.data).streamTitle || 'Radio Xero | Al Aire'; } catch (_) { } };
 
         function updateShareLinks() {
-            const url = encodeURIComponent(SITE_URL);
-            const msg = encodeURIComponent('Radio Xero - Sintonizando en Vivo 📻\nEscucha nuestra señal 24/7 🔊\n\n👉 ');
-            document.getElementById('rx-wa-btn').href = `https://wa.me/?text=${msg}${url}`;
-            document.getElementById('rx-fb-btn').href = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-            document.getElementById('rx-tw-btn').href = `https://twitter.com/intent/tweet?text=${msg}&url=${url}`;
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            let msgBody;
+
+            if (isMobile) {
+                // Versión con EMOJIS para celulares (donde funcionan bien)
+                msgBody = 
+                    "\u{1F4FB} *Radio Xero* \u{1F525}\n" + 
+                    "\u{1F534} *EN VIVO*\n\n" +
+                    "\u{1F3A7} Música sin parar 24/7\n" +
+                    "\u26A1 Dale play y súbele al volumen\n\n" +
+                    "\u{1F449} ";
+            } else {
+                // Versión LIMPIA para PC (sin emojis para evitar errores visuales)
+                msgBody = 
+                    "*Radio Xero*\n" + 
+                    "*EN VIVO*\n\n" +
+                    "Musica sin parar 24/7\n" +
+                    "Dale play y subele al volumen\n\n" +
+                    "Escuchanos aqui: ";
+            }
+            
+            const shareUrl = "https://jf2021070309.github.io/radio-xero/";
+            const fullMsg = encodeURIComponent(msgBody + shareUrl);
+            
+            // Botón de WhatsApp
+            document.getElementById('rx-wa-btn').href = `https://api.whatsapp.com/send?text=${fullMsg}`;
+            
+            // Botón de Facebook
+            document.getElementById('rx-fb-btn').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+            
+            // Botón de Twitter/X
+            const twText = encodeURIComponent(msgBody);
+            document.getElementById('rx-tw-btn').href = `https://twitter.com/intent/tweet?text=${twText}&url=${encodeURIComponent(shareUrl)}`;
         }
+        
+        // Ejecutar inmediatamente para blindar los links
         updateShareLinks();
+
 
         function rxCopyDirect() {
             const btn = document.getElementById('copyBtn');
