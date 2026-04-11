@@ -808,27 +808,27 @@
             z-index: 9999;
             display: none;
             justify-content: center;
-            align-items: flex-end; /* Lo pone al fondo como un bottom sheet */
-            padding-bottom: 20px;
+            align-items: center; /* Centrado vertical */
+            padding: 20px;
             animation: fadeInOverlay 0.4s ease-out;
         }
 
         .ios-install-card {
             background: #ffffff;
-            border-radius: 30px 30px 24px 24px;
-            padding: 2.5rem 1.5rem 1.5rem;
-            max-width: 400px;
-            width: 95%;
-            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+            border-radius: 24px; /* Bordes redondeados parejos */
+            padding: 2rem 1.5rem;
+            max-width: 360px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             position: relative;
             text-align: center;
-            animation: slideUpSheet 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             color: #0f172a;
         }
 
-        @keyframes slideUpSheet {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .ios-install-card h3 {
