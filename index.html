@@ -1085,7 +1085,7 @@
                 </div>
             </div>
             <p style="font-size: 0.75rem; color: #94a3b8; margin-top: -10px; margin-bottom: 20px;">* Recomendamos usar Safari para la mejor experiencia.</p>
-            <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
+            <button class="ios-close-btn" onclick="rxCloseIosHint()">
                 Entendido
             </button>
         </div>
@@ -1235,6 +1235,11 @@
                     Radio Xero es tu conexión directa con la mejor música y noticias. Transmitiendo 24/7 con calidad
                     digital para acompañarte donde quiera que estés.
                 </p>
+                <div id="iosInstallLink" style="display:none; margin-top:15px; border-top:1px solid rgba(0,0,0,0.05); padding-top:10px;">
+                    <a href="javascript:void(0)" onclick="showIosHint()" style="color:var(--primary); font-size:0.85rem; text-decoration:none; font-weight:700; display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-mobile-alt"></i> ¿Cómo instalar la App en mi iPhone?
+                    </a>
+                </div>
             </section>
         </div>
 
@@ -1575,10 +1580,17 @@
         if (isIosDevice || isStandalone) {
             installButton.style.display = 'none';
             
-            // --- NUEVO: Mostrar instructivo de instalación solo en iOS si no está instalado ---
+            // --- MEJORADO: Mostrar solo si no está instalado Y no se ha cerrado antes ---
+            const hasSeenHint = localStorage.getItem('iosHintSeen');
             if (isIosDevice && !isStandalone) {
-                const iosHint = document.getElementById('iosHint');
-                if (iosHint) iosHint.style.display = 'flex';
+                // Mostramos el link de reserva en el card si es iOS
+                const link = document.getElementById('iosInstallLink');
+                if (link) link.style.display = 'block';
+
+                if (!hasSeenHint) {
+                    const iosHint = document.getElementById('iosHint');
+                    if (iosHint) iosHint.style.display = 'flex';
+                }
             }
 
             if (isIosDevice) {
@@ -1587,6 +1599,16 @@
                 const volDiv = document.querySelector('.rx-vol');
                 if (volDiv) volDiv.style.justifyContent = 'flex-end';
             }
+        }
+
+        // Función para cerrar y recordar el instructivo
+        function rxCloseIosHint() {
+            localStorage.setItem('iosHintSeen', 'true');
+            document.getElementById('iosHint').style.display = 'none';
+        }
+
+        function showIosHint() {
+            document.getElementById('iosHint').style.display = 'flex';
         }
 
         if ('serviceWorker' in navigator) {
