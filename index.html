@@ -1635,10 +1635,26 @@
         });
 
         fab.addEventListener('click', async () => {
-            if (isStand) { document.getElementById('installedModal').style.display = 'flex'; return; }
-            if (isIOS) { document.getElementById('iosModal').style.display = 'flex'; return; }
-            if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; }
-            else { document.getElementById('installedModal').style.display = 'flex'; }
+            if (isStand) {
+                document.getElementById('installedModal').style.display = 'flex';
+                return;
+            }
+            if (isIOS) {
+                document.getElementById('iosModal').style.display = 'flex';
+                return;
+            }
+            if (!deferredPrompt) {
+                alert('Para instalar Radio Xero:\n\n1. Toca los tres puntos (\u22EE) de tu navegador.\n2. Selecciona "Instalar aplicaci\u00F3n" o "Agregar a pantalla de inicio".');
+                return;
+            }
+            try {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') fab.style.display = 'none';
+                deferredPrompt = null;
+            } catch (err) {
+                console.error('Install Error', err);
+            }
         });
 
         if (isIOS && !isStand) document.getElementById('iosModal').style.display = 'flex';
