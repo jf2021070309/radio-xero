@@ -3,8 +3,8 @@
   "short_name": "Radio Xero",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#f1f5f9",
+  "theme_color": "#f1f5f9",
   "icons": [
     {
       "src": "icon-192.png",
