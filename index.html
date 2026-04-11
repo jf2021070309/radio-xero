@@ -81,26 +81,13 @@
             max-width: 680px;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.25rem; /* El espacio maestro */
             z-index: 1;
             position: relative;
             padding-top: 2.5rem;
+            flex: 1;
         }
 
-        /* INFO GRID */
-        .bottom-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            width: 100%;
-        }
-
-        @media (min-width: 900px) {
-            .bottom-grid {
-                grid-template-columns: 1fr 1fr;
-                align-items: start;
-            }
-        }
 
         @keyframes fadeUp {
             from {
@@ -881,16 +868,15 @@
         .bottom-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1rem;
+            gap: 1.25rem; /* Mismo espacio que el resto */
             width: 100%;
-            margin-top: 0.5rem;
         }
 
         @media (min-width: 900px) {
             .bottom-grid {
                 grid-template-columns: 1fr 1fr;
                 align-items: stretch;
-                gap: 1.5rem;
+                gap: 1.5rem; /* Un poco más de aire en PC para expansión lateral */
             }
         }
 
@@ -1357,13 +1343,13 @@
             <p class="share-desc">Invita a tus amigos a sintonizar Radio Xero</p>
 
             <div class="share-btns">
-                <a href="#" target="_blank" class="share-btn wa" id="rx-wa-btn">
+                <a href="https://api.whatsapp.com/send?text=%F0%9F%93%BB%20%2ARadio%20Xero%2A%20%F0%9F%94%A5%0A%F0%9F%94%B4%20%2AEN%20VIVO%2A%0A%0A%F0%9F%8E%A7%20M%C3%BAsica%20sin%20parar%2024%2F7%0A%E2%9A%A1%20Dale%20play%20y%20s%C3%BAbele%20al%20volumen%0A%0A%F0%9F%91%89%20https%3A%2F%2Fjf2021070309.github.io%2Fradio-xero%2F" target="_blank" class="share-btn wa" id="rx-wa-btn">
                     <i class="fab fa-whatsapp"></i> WhatsApp
                 </a>
-                <a href="#" target="_blank" class="share-btn fb" id="rx-fb-btn">
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https://jf2021070309.github.io/radio-xero/" target="_blank" class="share-btn fb" id="rx-fb-btn">
                     <i class="fab fa-facebook-f"></i> Facebook
                 </a>
-                <a href="#" target="_blank" class="share-btn tw" id="rx-tw-btn">
+                <a href="https://twitter.com/intent/tweet?text=%F0%9F%93%BB%20%2ARadio%20Xero%2A%20%F0%9F%94%A5%0A%F0%9F%94%B4%20%2AEN%20VIVO%2A%0A%0A%F0%9F%8E%A7%20M%C3%BAsica%20sin%20parar%2024%2F7%0A%E2%9A%A1%20Dale%20play%20y%20s%C3%BAbele%20al%20volumen%0A%0A&url=https://jf2021070309.github.io/radio-xero/" target="_blank" class="share-btn tw" id="rx-tw-btn">
                     <i class="fab fa-x-twitter"></i> X (Twitter)
                 </a>
             </div>
