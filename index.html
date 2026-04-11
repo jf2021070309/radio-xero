@@ -698,56 +698,59 @@
             color: var(--text-dim);
             font-size: 0.75rem;
         }
-        /* Premium Install Button - Ultra Eye-Catching */
+        /* Hyper-Premium Install Button - Cyber Glass Style */
         .install-btn {
-            display: none; /* Oculto por defecto, se muestra por JS en Android/PC */
+            display: none;
             position: fixed;
             bottom: 24px;
             right: 24px;
-            background: #0f172a; /* Fondo sólido oscuro para mejor contraste */
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: #0f172a;
             color: #ffffff;
-            border: 2px solid rgba(237, 28, 36, 0.4);
-            padding: 10px 28px 10px 10px;
+            padding: 4px; /* Espacio para el borde animado */
             border-radius: 100px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            align-items: center;
-            gap: 16px;
-            box-shadow: 0 15px 35px rgba(237, 28, 36, 0.25), 
-                        0 0 0 0 rgba(237, 28, 36, 0.4);
+            border: none;
             cursor: pointer;
             z-index: 1000;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
             text-decoration: none;
-            
-            /* Animación constante de pulso y brillo */
-            animation: installPulse 2s ease-in-out infinite, 
-                       installShadowGlow 2s ease-in-out infinite;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(237, 28, 36, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: installFloating 3s ease-in-out infinite;
         }
 
+        /* El borde de luz rotativo */
         .install-btn::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -150%;
-            width: 150%;
-            height: 100%;
-            /* Brillo blanco intenso tipo ráfaga */
-            background: linear-gradient(
-                90deg, 
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
                 transparent, 
-                rgba(255, 255, 255, 0) 20%,
-                rgba(255, 255, 255, 0.4) 50%, 
-                rgba(255, 255, 255, 0) 80%,
-                transparent
+                transparent, 
+                transparent, 
+                var(--primary)
             );
-            animation: installShine 2.5s infinite ease-in-out;
-            pointer-events: none;
+            animation: installRotate 2s linear infinite;
+            z-index: 1;
+        }
+
+        /* El cuerpo del botón (Capa interna) */
+        .install-btn-inner {
+            position: relative;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 10px 28px 10px 12px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
             z-index: 2;
+            width: 100%;
+            height: 100%;
         }
 
         .install-btn i {
@@ -759,52 +762,34 @@
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
-            box-shadow: 0 0 20px rgba(237, 28, 36, 0.6);
+            box-shadow: 0 0 20px rgba(237, 28, 36, 0.5);
             color: #fff;
-            transition: transform 0.3s ease;
             flex-shrink: 0;
-            position: relative;
-            z-index: 3;
+            animation: iconPulse 2s ease-in-out infinite;
         }
 
         .install-btn:hover {
-            transform: translateY(-6px) scale(1.05);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(237, 28, 36, 0.5);
-            border-color: var(--primary);
-            background: #1e293b;
-        }
-
-        .install-btn:hover i {
-            transform: scale(1.15) rotate(10deg);
+            transform: scale(1.1) translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(237, 28, 36, 0.4);
         }
 
         .install-btn:active {
-            transform: translateY(0) scale(0.95);
+            transform: scale(0.95);
         }
 
-        /* Keyframes para el efecto "Llamativo" */
-        @keyframes installPulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.08); /* El efecto "Sube y baja" (zoom) */
-            }
+        @keyframes installRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        @keyframes installShadowGlow {
-            0%, 100% {
-                box-shadow: 0 15px 35px rgba(237, 28, 36, 0.25), 0 0 0 0 rgba(237, 28, 36, 0);
-            }
-            50% {
-                box-shadow: 0 20px 45px rgba(237, 28, 36, 0.4), 0 0 20px 10px rgba(237, 28, 36, 0.2);
-            }
+        @keyframes installFloating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
         }
 
-        @keyframes installShine {
-            0% { left: -150%; }
-            30% { left: 150%; }
-            100% { left: 150%; }
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.9; }
         }
 
         /* iOS Overlay */
@@ -1062,8 +1047,10 @@
 
     <!-- Floating Install Button -->
     <button id="installButton" class="install-btn">
-        <i class="fas fa-download"></i>
-        Instalar Radio Xero
+        <div class="install-btn-inner">
+            <i class="fas fa-download"></i>
+            Instalar Radio Xero
+        </div>
     </button>
 
     <!-- iOS Hint Overlay -->
@@ -1541,11 +1528,12 @@
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
 
-        // --- REFUERZO DE VISIBILIDAD PARA ANDROID / EDGE ---
+        // --- REFUERZO DE VISIBILIDAD PARA ANDROID / PC ---
         function forceInstallButton() {
             const isAndroidSystem = /Android/i.test(navigator.userAgent) || /EdgA/i.test(navigator.userAgent) || isEdgeAndroid || isAndroid;
+            const isPC = !/Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
             
-            if (isAndroidSystem && !isStandalone && !isIosDevice) {
+            if ((isAndroidSystem || isPC) && !isStandalone && !isIosDevice) {
                 installButton.style.display = 'flex';
                 // Aseguramos que sea visible incluso si algo intentó ocultarlo
                 installButton.setAttribute('style', 'display: flex !important;');
