@@ -504,9 +504,8 @@
 
         .rx-play-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 20px 45px rgba(237, 28, 36, 0.4);
-            background: #000000;
-            border-color: rgba(237, 28, 36, 0.5);
+            box-shadow: 0 20px 45px rgba(237, 28, 36, 0.3);
+            background: #ED1C24; /* Cambia a rojo al hover para ser más interactivo */
         }
 
         .rx-play-btn:active {
@@ -658,6 +657,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            font-weight: 600; /* Menos negrita para un look más limpio */
         }
 
         .content-list {
@@ -698,6 +698,82 @@
             line-height: 1.6;
         }
 
+        /* Share Section */
+        .rx-share-section {
+            margin-top: 1.8rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            text-align: left; /* Alineado a la izquierda para consistencia */
+        }
+
+        .rx-share-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600; /* Consonancia con el título principal */
+        }
+
+        .rx-share-title i {
+            width: 18px;
+            text-align: center;
+        }
+
+        .rx-share-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 1.2rem;
+            text-align: left;
+        }
+
+        .rx-share-links {
+            display: flex;
+            justify-content: flex-start; /* Alineado a la izquierda */
+            gap: 15px;
+        }
+
+        .rx-share-link {
+            width: 48px;
+            height: 48px;
+            background: #000;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+        }
+
+        .rx-share-link.rx-whatsapp:hover {
+            background: #25D366;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        .rx-share-link.rx-facebook:hover {
+            background: #1877F2;
+            box-shadow: 0 8px 25px rgba(24, 119, 242, 0.4);
+        }
+
+        .rx-share-link.rx-twitter:hover {
+            background: #1DA1F2;
+            box-shadow: 0 8px 25px rgba(29, 161, 242, 0.4);
+        }
+
+        .rx-share-link.rx-link:hover {
+            background: var(--primary);
+            box-shadow: 0 8px 25px rgba(237, 28, 36, 0.3);
+        }
+
+        .rx-share-link:active {
+            transform: scale(0.95);
+        }
+
         footer {
             margin-top: 2rem;
             text-align: center;
@@ -710,9 +786,9 @@
             position: fixed;
             bottom: 24px;
             right: 24px;
-            background: linear-gradient(135deg, #0f172a 0%, #000000 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             color: #ffffff;
-            border: 2px solid rgba(237, 28, 36, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             padding: 10px 28px 10px 10px;
             border-radius: 100px;
             font-family: 'Poppins', sans-serif;
@@ -720,12 +796,12 @@
             font-size: 1rem;
             align-items: center;
             gap: 16px;
-            box-shadow: 0 20px 40px rgba(237, 28, 36, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
             cursor: pointer;
             z-index: 1000;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
-            animation: installWakeUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), installPulse 2s infinite;
+            animation: installWakeUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), installPulse 2.5s infinite;
         }
 
         @keyframes installWakeUp {
@@ -734,9 +810,9 @@
         }
 
         @keyframes installPulse {
-            0% { box-shadow: 0 10px 30px rgba(237, 28, 36, 0.5), 0 0 0 0 rgba(237, 28, 36, 0.6); }
-            70% { box-shadow: 0 15px 45px rgba(237, 28, 36, 0.3), 0 0 0 20px rgba(237, 28, 36, 0); }
-            100% { box-shadow: 0 10px 30px rgba(237, 28, 36, 0.5), 0 0 0 0 rgba(237, 28, 36, 0); }
+            0% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 0 rgba(237, 28, 36, 0.4); }
+            70% { box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3), 0 0 0 15px rgba(237, 28, 36, 0); }
+            100% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 0 rgba(237, 28, 36, 0); }
         }
 
         .install-btn::before {
@@ -769,8 +845,7 @@
         .install-btn:hover {
             transform: translateY(-5px) scale(1.05);
             background: #000000;
-            box-shadow: 0 25px 50px rgba(237, 28, 36, 0.7);
-            border-color: rgba(237, 28, 36, 0.8);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(237, 28, 36, 0.3);
         }
 
         .install-btn:hover i {
@@ -1031,13 +1106,14 @@
                 left: 20px;
                 padding: 10px 24px 10px 10px;
                 justify-content: center;
+                background: #0f172a;
                 animation: installPulseMobile 2s infinite;
             }
 
             @keyframes installPulseMobile {
-                0% { box-shadow: 0 5px 15px rgba(237, 28, 36, 0.4); transform: scale(1); }
-                50% { box-shadow: 0 10px 25px rgba(237, 28, 36, 0.6); transform: scale(1.02); }
-                100% { box-shadow: 0 5px 15px rgba(237, 28, 36, 0.4); transform: scale(1); }
+                0% { box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); transform: scale(1); }
+                50% { box-shadow: 0 10px 25px rgba(237, 28, 36, 0.3); transform: scale(1.02); }
+                100% { box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); transform: scale(1); }
             }
         }
     </style>
@@ -1222,10 +1298,30 @@
 
             <section class="card info-card">
                 <h2><i class="fas fa-info-circle"></i> Nuestra Estación</h2>
-                <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; text-align: left;">
+                <p>
                     Radio Xero es tu conexión directa con la mejor música y noticias. Transmitiendo 24/7 con calidad
                     digital para acompañarte donde quiera que estés.
                 </p>
+
+                <!-- ─── SHARE SECTION ─── -->
+                <div class="rx-share-section">
+                    <h2 class="rx-share-title"><i class="fas fa-share-alt"></i> Comparte la Señal</h2>
+                    <p class="rx-share-subtitle">Invita a tus amigos a sintonizar Radio Xero</p>
+                    <div class="rx-share-links">
+                        <a href="https://api.whatsapp.com/send?text=%2ARadio%20Xero%2A%0A%2AEN%20VIVO%2A%0A%0AM%C3%BAsica%20sin%20parar%2024/7%0ADale%20play%20y%20s%C3%BAbele%20al%20volumen%0A%0Ahttps://jf2021070309.github.io/radio-xero/" target="_blank" class="rx-share-link rx-whatsapp" aria-label="Compartir en WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=https://jf2021070309.github.io/radio-xero/" target="_blank" class="rx-share-link rx-facebook" aria-label="Compartir en Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?text=Radio%20Xero%20%0AEN%20VIVO%0A%0AM%C3%BAsica%20sin%20parar%2024/7%0A&url=https://jf2021070309.github.io/radio-xero/" target="_blank" class="rx-share-link rx-twitter" aria-label="Compartir en Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" onclick="copyLink(); return false;" class="rx-share-link rx-link" aria-label="Copiar Enlace">
+                            <i class="fas fa-link"></i>
+                        </a>
+                    </div>
+                </div>
             </section>
         </div>
 
@@ -1561,6 +1657,15 @@
                 document.getElementById('installedModal').style.display = 'flex';
             }
         });
+
+        function copyLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('¡Enlace copiado al portapapeles!');
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        }
 
         if (isIosDevice || isStandalone) {
             installButton.style.display = 'none';
