@@ -792,107 +792,109 @@
             50% { transform: scale(1.2); opacity: 0.9; }
         }
 
-        /* iOS Overlay */
+        /* iOS Native Style Overlay */
         .ios-install-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(2, 4, 8, 0.92);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 9999;
             display: none;
-            flex-direction: column;
             justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
-            color: white;
-            text-align: center;
+            align-items: flex-end; /* Lo pone al fondo como un bottom sheet */
+            padding-bottom: 20px;
             animation: fadeInOverlay 0.4s ease-out;
         }
 
         .ios-install-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 2rem 1.5rem;
-            max-width: 340px;
-            width: 100%;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            background: #ffffff;
+            border-radius: 30px 30px 24px 24px;
+            padding: 2.5rem 1.5rem 1.5rem;
+            max-width: 400px;
+            width: 95%;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
             position: relative;
+            text-align: center;
+            animation: slideUpSheet 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            color: #0f172a;
+        }
+
+        @keyframes slideUpSheet {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
 
         .ios-install-card h3 {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.4rem;
-            margin-bottom: 0.75rem;
-            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+            font-weight: 800;
         }
 
-        .ios-install-card>p {
-            font-size: 0.9rem;
-            color: var(--text-dim);
+        .ios-install-card > p {
+            font-size: 0.95rem;
+            color: #64748b;
             line-height: 1.5;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .ios-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            text-align: left;
-            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 2rem;
         }
 
         .ios-step {
             display: flex;
             align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(255, 255, 255, 0.02);
+            gap: 15px;
+            background: #f8fafc;
+            padding: 14px 18px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            border: 1px solid #f1f5f9;
+            text-align: left;
         }
 
         .ios-step i {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             color: #007AFF;
-            width: 24px;
-            text-align: center;
+            background: rgba(0, 122, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         .ios-step b {
-            color: #fff;
+            color: #0f172a;
+            font-weight: 700;
         }
 
         .ios-close-btn {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 100px;
+            background: #f1f5f9;
+            border: none;
+            color: #0f172a;
+            padding: 14px 24px;
+            border-radius: 16px;
             font-family: 'Inter', sans-serif;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             width: 100%;
         }
 
         .ios-close-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .ios-arrow-down {
-            position: absolute;
-            bottom: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2.5rem;
-            color: var(--primary);
-            animation: bounceArrow 1.5s infinite;
+            background: #e2e8f0;
         }
 
         @keyframes fadeInOverlay {
@@ -1053,33 +1055,28 @@
         </div>
     </button>
 
-    <!-- iOS Hint Overlay -->
+    <!-- iOS Native Hint Overlay -->
     <div id="iosHint" class="ios-install-overlay">
         <div class="ios-install-card">
             <h3>Instala Radio Xero</h3>
-            <p>Disfruta de nuestra radio sin interrupciones y con acceso directo desde tu inicio.</p>
+            <p>Escucha nuestra música con acceso directo desde tu celular.</p>
             <div class="ios-steps">
                 <div class="ios-step">
-                    <i class="fas fa-ellipsis-h" style="color: var(--primary);"></i>
-                    <span>Presiona los <b>3 puntitos</b></span>
-                </div>
-                <div class="ios-step">
                     <i class="fas fa-share-square"></i>
-                    <span>Toca en <b>Compartir</b></span>
+                    <span>Toca el botón <b>Compartir</b></span>
                 </div>
                 <div class="ios-step">
-                    <i class="fas fa-ellipsis-v" style="color: var(--text);"></i>
-                    <span>Ve a <b>Ver más</b></span>
+                    <i class="fas fa-plus-square"></i>
+                    <span>Desliza y busca <b>Agregar a inicio</b></span>
                 </div>
                 <div class="ios-step">
-                    <i class="far fa-plus-square" style="color: var(--text);"></i>
-                    <span>Selecciona <b>Agregar a inicio</b> y luego <b>Agregar</b></span>
+                    <i class="fas fa-check-circle" style="color: #22c55e; background: rgba(34, 197, 94, 0.1);"></i>
+                    <span>Presiona <b>Agregar</b> y ¡listo!</span>
                 </div>
             </div>
             <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
-                Quizás más tarde
+                Entendido
             </button>
-            <i class="fas fa-arrow-down ios-arrow-down"></i>
         </div>
     </div>
 
