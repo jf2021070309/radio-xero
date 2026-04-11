@@ -835,56 +835,6 @@
             to { transform: scale(1); opacity: 1; }
         }
 
-        /* iOS Smart Top Bar */
-        .ios-top-bar {
-            position: fixed;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 92%;
-            max-width: 450px;
-            background: linear-gradient(135deg, #b3141a 0%, #7e1014 100%);
-            z-index: 2000;
-            border-radius: 20px;
-            padding: 10px 15px;
-            box-shadow: 0 10px 30px rgba(179, 20, 26, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
-            animation: slideDownBanner 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        @keyframes slideDownBanner {
-            from { transform: translate(-50%, -100px); opacity: 0; }
-            to { transform: translate(-50%, 0); opacity: 1; }
-        }
-
-        .ios-bar-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #ffffff;
-            font-size: 0.82rem;
-        }
-
-        .ios-bar-content i {
-            font-size: 1.1rem;
-            margin-right: 10px;
-        }
-
-        .ios-bar-content b {
-            color: #ffffff;
-        }
-
-        .ios-bar-content button {
-            background: #ffffff;
-            color: #b3141a;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 12px;
-            font-weight: 800;
-            font-size: 0.75rem;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
         .ios-install-card h3 {
             font-family: 'Poppins', sans-serif;
             font-size: 1.5rem;
@@ -1103,15 +1053,6 @@
 
 <body>
     <div class="top-bg"></div>
-    
-    <!-- iOS Smart Banner (Top Floating) -->
-    <div id="iosTopBar" class="ios-top-bar" style="display: none;">
-        <div class="ios-bar-content">
-            <i class="fas fa-mobile-alt"></i>
-            <span>Instala <b>Radio Xero</b> en tu iPhone</span>
-            <button onclick="showIosHint()">INSTALAR</button>
-        </div>
-    </div>
 
     <!-- Floating Install Button -->
     <button id="installButton" class="install-btn">
@@ -1144,7 +1085,7 @@
                 </div>
             </div>
             <p style="font-size: 0.75rem; color: #94a3b8; margin-top: -10px; margin-bottom: 20px;">* Recomendamos usar Safari para la mejor experiencia.</p>
-            <button class="ios-close-btn" onclick="rxCloseIosHint()">
+            <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
                 Entendido
             </button>
         </div>
@@ -1634,16 +1575,10 @@
         if (isIosDevice || isStandalone) {
             installButton.style.display = 'none';
             
-            // --- MEJORADO: Mostrar barra superior solo si es iOS y no está instalado ---
+            // --- NUEVO: Mostrar instructivo de instalación solo en iOS si no está instalado ---
             if (isIosDevice && !isStandalone) {
-                const topBar = document.getElementById('iosTopBar');
-                if (topBar) topBar.style.display = 'block';
-
-                const hasSeenHint = localStorage.getItem('iosHintSeen');
-                if (!hasSeenHint) {
-                    const iosHint = document.getElementById('iosHint');
-                    if (iosHint) iosHint.style.display = 'flex';
-                }
+                const iosHint = document.getElementById('iosHint');
+                if (iosHint) iosHint.style.display = 'flex';
             }
 
             if (isIosDevice) {
@@ -1652,16 +1587,6 @@
                 const volDiv = document.querySelector('.rx-vol');
                 if (volDiv) volDiv.style.justifyContent = 'flex-end';
             }
-        }
-
-        // Función para cerrar y recordar el instructivo
-        function rxCloseIosHint() {
-            localStorage.setItem('iosHintSeen', 'true');
-            document.getElementById('iosHint').style.display = 'none';
-        }
-
-        function showIosHint() {
-            document.getElementById('iosHint').style.display = 'flex';
         }
 
         if ('serviceWorker' in navigator) {
