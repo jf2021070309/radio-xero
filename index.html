@@ -1626,12 +1626,23 @@
         let deferredPrompt;
         const fab = document.getElementById('installFab');
 
-        function showFab() { if (!isStand) fab.setAttribute('style', 'display:flex !important;'); }
-        showFab(); window.addEventListener('load', showFab); setTimeout(showFab, 1500);
+        function showFab() { 
+            // En iOS lo mostramos siempre porque no hay evento automático
+            // En Android/PC esperamos al evento 'beforeinstallprompt' para no fallar
+            if (isIOS && !isStand) {
+                fab.setAttribute('style', 'display:flex !important;'); 
+            }
+        }
+        showFab(); 
+        window.addEventListener('load', showFab); 
+        setTimeout(showFab, 1500);
 
         window.addEventListener('beforeinstallprompt', e => {
             if (isIOS || isStand) return;
-            e.preventDefault(); deferredPrompt = e; fab.style.display = 'flex';
+            e.preventDefault(); 
+            deferredPrompt = e; 
+            // Ahora sí, Android nos dio luz verde, mostramos el botón
+            fab.setAttribute('style', 'display:flex !important;');
         });
 
         fab.addEventListener('click', async () => {
@@ -1643,6 +1654,7 @@
                 document.getElementById('iosModal').style.display = 'flex';
                 return;
             }
+            
             if (deferredPrompt) {
                 try {
                     deferredPrompt.prompt();
@@ -1653,7 +1665,9 @@
                     console.error('Install Error', err);
                 }
             } else {
-                document.getElementById('installedModal').style.display = 'flex';
+                // Si llegamos aquí y es Android, es que hubo un retraso.
+                // Intentamos avisar al usuario de forma honesta.
+                alert('El sistema de instalaci\u00F3n se est\u00E1 preparando. Por favor, intenta de nuevo en un par de segundos.');
             }
         });
 
