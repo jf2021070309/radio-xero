@@ -273,6 +273,9 @@
             overflow: hidden;
             background: #e2e8f0;
             box-shadow: 0 15px 45px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            /* Fix para iOS: Fuerza el redondeado en Safari durante animaciones */
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
+            transform: translateZ(0);
         }
 
         .art-wrap::before {
@@ -665,6 +668,7 @@
         @media (min-width: 900px) {
             .page {
                 max-width: 1050px;
+                min-height: calc(100vh - 5rem); /* Asegura que el footer pueda ir al final */
             }
         }
 
@@ -877,15 +881,16 @@
         .bottom-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1.5rem;
+            gap: 1rem;
             width: 100%;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
         }
 
         @media (min-width: 900px) {
             .bottom-grid {
                 grid-template-columns: 1fr 1fr;
                 align-items: stretch;
+                gap: 1.5rem;
             }
         }
 
@@ -947,10 +952,11 @@
 
         /* ── FOOTER ── */
         footer {
+            margin-top: auto; /* Empuja el footer al final de la página */
             text-align: center;
-            font-size: .72rem;
+            font-size: .8rem;
             color: var(--subtle);
-            padding-top: .5rem;
+            padding: 2.5rem 0 1.5rem;
         }
 
         /* ── INSTALL FAB ── */
