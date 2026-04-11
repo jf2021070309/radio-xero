@@ -821,12 +821,18 @@
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
+            left: -150%;
+            width: 150%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: installShine 3s infinite linear;
+            background: linear-gradient(
+                120deg, 
+                transparent 30%, 
+                rgba(255, 255, 255, 0.7) 50%, 
+                transparent 70%
+            );
+            animation: installShine 4s infinite;
             pointer-events: none;
+            z-index: 1;
         }
 
         .install-btn i {
@@ -859,9 +865,9 @@
         }
 
         @keyframes installShine {
-            0% { left: -100%; }
-            50% { left: 100%; }
-            100% { left: 100%; }
+            0% { left: -150%; }
+            20% { left: 150%; }
+            100% { left: 150%; }
         }
 
         /* iOS Overlay */
