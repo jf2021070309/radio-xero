@@ -1118,6 +1118,7 @@
             z-index: 1000;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
+            overflow: hidden; /* Evita que el reflejo se salga del botón */
             animation: installWakeUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), installPulse 2s infinite;
         }
 
@@ -1151,11 +1152,12 @@
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
+            left: -150%;
+            width: 80%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            animation: installShine 3s infinite linear;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            transform: skewX(-25deg); /* Inclinación elegante para el reflejo */
+            animation: installShine 4s infinite ease-in-out;
             pointer-events: none;
         }
 
@@ -1181,7 +1183,7 @@
         }
 
         .install-btn:hover i {
-            transform: scale(1.1) rotate(10deg);
+            transform: scale(1.1); /* Ya no se pone chueco, solo crece sutilmente */
         }
 
         .install-btn:active {
