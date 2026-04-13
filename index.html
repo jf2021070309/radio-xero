@@ -40,7 +40,7 @@
             --text-main: #0f172a;
             --text-dim: #64748b;
             --card-bg: #ffffff;
-            --card-border: rgba(237, 28, 36, 0.25); /* Borde rojo fino unificado */
+            --card-border: rgba(237, 28, 36, 0.15); /* Borde rojo aún más leve */
             --glass: rgba(255, 255, 255, 0.8);
             --glass-border: rgba(0, 0, 0, 0.05);
             --shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
@@ -53,9 +53,9 @@
             --text-main: #ffffff;
             --text-dim: #999999;
             --card-bg: #1a1a1a;
-            --card-border: rgba(237, 28, 36, 0.4); /* Más visible en modo oscuro */
+            --card-border: rgba(237, 28, 36, 0.2); /* Sutil en modo oscuro */
             --glass: rgba(26, 26, 26, 0.9);
-            --glass-border: rgba(237, 28, 36, 0.2);
+            --glass-border: rgba(237, 28, 36, 0.15);
             --shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
             --inner-bg: #222222;
         }
@@ -452,7 +452,7 @@
         /* Cards */
         .card {
             background: var(--card-bg);
-            border: 1.5px solid var(--card-border); /* Borde unificado e intensificado */
+            border: 1px solid var(--card-border); /* Más fino y leve */
             border-radius: var(--card-radius);
             padding: 1.2rem;
             transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
@@ -471,7 +471,7 @@
             padding: 2.22rem;
             background: var(--card-bg);
             color: var(--text-main);
-            border: 1.5px solid var(--card-border); /* Igual que las demás tarjetas */
+            border: 1px solid var(--card-border); /* Grosor unificado sutil */
             box-shadow: var(--shadow);
             display: flex;
             flex-direction: row;
