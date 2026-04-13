@@ -159,10 +159,26 @@
             }
 
             .rx-vol {
-                padding: 6px 12px !important;
+                padding: 8px 12px !important;
                 gap: 8px !important;
                 height: 44px !important; /* Contenedor más delgado */
                 min-width: 0 !important;
+            }
+
+            /* Logo y Cabecera Móvil */
+            .main-logo {
+                max-height: 90px !important; /* Logo más pequeño */
+            }
+
+            header {
+                padding-top: 1.5rem !important; /* Menos espacio arriba */
+                padding-bottom: 1rem !important;
+            }
+
+            .theme-switch {
+                top: 15px !important;
+                right: 15px !important;
+                transform: scale(0.85); /* Un poco más pequeño para celular */
             }
 
             .rx-mute-btn {
@@ -645,7 +661,8 @@
 
         .rx-track-content {
             white-space: nowrap;
-            display: inline-block;
+            display: flex; /* Cambiado a flex para soportar las dos copias del texto */
+            align-items: center;
             transition: transform 0.5s ease;
             transform: translateX(0);
         }
@@ -653,8 +670,7 @@
         /* Solo se activa si JavaScript detecta desbordamiento */
         .rx-track-scroller.is-scrolling .rx-track-content {
             animation: rx-marquee 15s linear infinite;
-            padding-right: 80px;
-            /* Espacio para que no choque al reiniciar */
+            /* La rueda infinita no necesita padding-right fijo aquí, se maneja en el clon */
         }
 
         @keyframes rx-marquee {
@@ -662,17 +678,8 @@
                 transform: translateX(0);
             }
 
-            10% {
-                transform: translateX(0);
-            }
-
-            /* Pausa al inicio */
-            90% {
-                transform: translateX(-100%);
-            }
-
             100% {
-                transform: translateX(-100%);
+                transform: translateX(-50%);
             }
         }
 
@@ -2125,14 +2132,19 @@
         function checkTrackOverflow() {
             const scroller = document.querySelector('.rx-track-scroller');
             const content = document.querySelector('.rx-track-content');
+            const fullText = trackTextEl.textContent;
             if (!scroller || !content) return;
 
-            // Reset clase para medir el ancho base
+            // Reset inicial para medir correctamente
             scroller.classList.remove('is-scrolling');
+            content.innerHTML = `<span>${fullText}</span>`;
 
-            // Un pequeño delay para que el DOM se actualice con el nuevo texto
             setTimeout(() => {
+                // Si el texto es más ancho que el contenedor
                 if (content.offsetWidth > scroller.offsetWidth) {
+                    // Creamos el efecto rueda clonando el texto
+                    const separator = "&nbsp;".repeat(12); // Espacio entre copias
+                    content.innerHTML = `<span>${fullText}${separator}</span><span>${fullText}${separator}</span>`;
                     scroller.classList.add('is-scrolling');
                 }
             }, 50);
