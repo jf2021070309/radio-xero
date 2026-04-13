@@ -119,13 +119,19 @@
 
             /* Optimización Reproductor Móvil */
             .rx-track {
-                font-size: 1.2rem !important;
+                display: flex !important;
+                flex-direction: row !important; /* Forzado absoluto */
                 flex-wrap: nowrap !important;
+                align-items: center !important;
                 justify-content: center !important;
+                font-size: 1.15rem !important; /* Un poco más pequeño para que quepa todo */
+                gap: 10px !important;
             }
 
             .rx-track-scroller {
                 flex: 0 1 auto !important;
+                display: flex !important;
+                align-items: center !important;
             }
 
             .rx-track-scroller.is-scrolling {
