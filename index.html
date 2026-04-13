@@ -121,30 +121,40 @@
             .rx-track {
                 font-size: 1.2rem !important;
                 flex-wrap: nowrap !important;
+                justify-content: center !important;
+            }
+
+            .rx-track-scroller {
+                flex: 0 1 auto !important;
+            }
+
+            .rx-track-scroller.is-scrolling {
+                flex: 1 !important;
             }
 
             .rx-track-icon {
-                font-size: 0.9rem !important;
-                margin-right: 8px !important;
+                font-size: 0.95rem !important;
+                margin-right: 0px !important; /* El gap de rx-track ya hace el trabajo */
             }
 
             .rx-controls {
-                gap: 0.8rem !important;
+                gap: 0.6rem !important; /* Más compacto */
             }
 
             .rx-play-btn {
-                width: 64px !important;
-                height: 64px !important;
+                width: 54px !important;
+                height: 54px !important;
             }
 
             .rx-play-btn svg {
-                width: 20px !important;
-                height: 20px !important;
+                width: 18px !important;
+                height: 18px !important;
             }
 
             .rx-vol {
-                padding: 10px 15px !important;
-                gap: 10px !important;
+                padding: 8px 12px !important;
+                gap: 8px !important;
+                min-width: 0 !important;
             }
         }
 
@@ -588,15 +598,21 @@
             overflow: hidden;
             display: flex;
             align-items: center;
-            gap: 12px; /* Espacio extra de separación */
+            justify-content: center; /* Centra todo el bloque */
+            gap: 12px;
         }
 
         /* Marquee Container - Máscara SOLO cuando hay scrolling */
         .rx-track-scroller {
-            width: 100%;
+            flex: 0 1 auto; /* Permite que el bloque se encoja y se centre si el texto es corto */
+            min-width: 0;
             overflow: hidden;
             display: flex;
             align-items: center;
+        }
+
+        .rx-track-scroller.is-scrolling {
+            flex: 1; /* Si hay scroll, ocupa todo el espacio disponible */
         }
 
         .rx-track-scroller.is-scrolling {
