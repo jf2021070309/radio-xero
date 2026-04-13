@@ -36,12 +36,28 @@
             --primary: #ED1C24;
             --secondary: #1A3B70;
             --primary-glow: rgba(237, 28, 36, 0.3);
-            --bg-light: #f1f5f9; /* Fondo claro profesional */
+            --bg-main: #f1f5f9;
+            --text-main: #0f172a;
+            --text-dim: #64748b;
+            --card-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.05);
             --glass: rgba(255, 255, 255, 0.8);
             --glass-border: rgba(0, 0, 0, 0.05);
-            --text-dark: #0f172a;
-            --text-dim: #64748b;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+            --inner-bg: rgba(241, 245, 249, 0.6);
             --card-radius: 24px;
+        }
+
+        .dark-theme {
+            --bg-main: #0f0f0f;
+            --text-main: #ffffff;
+            --text-dim: #999999;
+            --card-bg: #1a1a1a;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --glass: rgba(26, 26, 26, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            --inner-bg: #222222;
         }
 
         * {
@@ -53,8 +69,8 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
+            background-color: var(--bg-main);
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -73,7 +89,8 @@
             /* Degradado ajustado: Predomina el Guinda del lado derecho */
             background: linear-gradient(110deg, #020617 0%, #0f172a 35%, #991b1b 85%, #b3141a 100%);
             z-index: 0;
-            clip-path: ellipse(150% 100% at 50% 0%); /* Curva elegante en la transición */
+            clip-path: ellipse(150% 100% at 50% 0%);
+            /* Curva elegante en la transición */
         }
 
         .main-wrapper {
@@ -82,6 +99,7 @@
             display: flex;
             flex-direction: column;
             gap: 2.2rem;
+            margin-top: 0; /* Sin margen negativo para respetar la simetría del logo */
             animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             z-index: 1;
             position: relative;
@@ -107,9 +125,70 @@
 
             .info-grid {
                 display: grid;
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(3, 1fr);
                 gap: 1.5rem;
             }
+        }
+
+        @keyframes rx-pulse-soft {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes rx-tilt {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-10deg);
+            }
+
+            75% {
+                transform: rotate(10deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        @keyframes rx-float {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .rx-anim-pulse {
+            animation: rx-pulse-soft 2s infinite ease-in-out;
+        }
+
+        .rx-anim-tilt {
+            animation: rx-tilt 3s infinite ease-in-out;
+        }
+
+        .rx-anim-float {
+            animation: rx-float 2.5s infinite ease-in-out;
         }
 
         @keyframes slideUp {
@@ -130,14 +209,17 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0; 
+            padding: 2.5rem 0; /* Simetría perfecta arriba y abajo del logo */
             width: 100%;
+            position: relative;
+            z-index: 2;
         }
 
         .main-logo {
-            max-height: 100px;
+            max-height: 140px;
             width: auto;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
         }
 
@@ -153,121 +235,205 @@
             border: 0;
         }
 
-        .live-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(237, 28, 36, 0.08);
-            padding: 8px 18px;
-            border-radius: 100px;
-            color: var(--primary);
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 1px solid rgba(237, 28, 36, 0.3);
-            box-shadow: 0 0 20px rgba(237, 28, 36, 0.15);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+        /* Icono de música sincronizado con el tema */
+        .rx-track-icon {
+            color: var(--text-main);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            animation: rx-pulse-soft 2s infinite ease-in-out;
+            margin-right: 12px; /* Más espacio de separación */
         }
 
-        .audio-wave {
+
+        /* Unique Animated Icons */
+        .rx-icon-wrap {
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
-            gap: 2px;
-            height: 12px;
+            justify-content: center;
+            position: relative;
         }
 
-        .audio-wave span {
-            width: 2px;
-            height: 4px;
-            background-color: var(--primary);
-            border-radius: 2px;
-            animation: audio-wave-anim 1s infinite ease-in-out;
+        /* 1. Schedule Icon (Programación) */
+        .rx-icon-schedule span {
+            width: 14px;
+            height: 2px;
+            background: var(--primary);
+            position: absolute;
+            left: 3px;
+            border-radius: 1px;
+            animation: scheduleAnim 2s infinite ease-in-out;
         }
 
-        .audio-wave span:nth-child(2) {
+        .rx-icon-schedule span:nth-child(2) {
+            top: 9px;
             animation-delay: 0.2s;
-            height: 8px;
+            width: 10px;
         }
 
-        .audio-wave span:nth-child(3) {
+        .rx-icon-schedule span:nth-child(3) {
+            top: 14px;
             animation-delay: 0.4s;
-            height: 6px;
+            width: 12px;
         }
 
-        .audio-wave span:nth-child(4) {
-            animation-delay: 0.1s;
-            height: 10px;
+        .rx-icon-schedule span:nth-child(1) {
+            top: 4px;
         }
 
-        @keyframes audio-wave-anim {
+        @keyframes scheduleAnim {
 
             0%,
             100% {
-                height: 4px;
+                transform: translateX(0);
+                opacity: 0.5;
             }
 
             50% {
-                height: 12px;
+                transform: translateX(3px);
+                opacity: 1;
+            }
+        }
+
+        /* 2. Signal Icon (Estación) */
+        .rx-icon-signal div {
+            position: absolute;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: signalAnim 1.5s infinite;
+        }
+
+        .rx-icon-signal div:nth-child(1) {
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border: none;
+        }
+
+        .rx-icon-signal div:nth-child(2) {
+            width: 12px;
+            height: 12px;
+            animation-delay: 0.3s;
+        }
+
+        .rx-icon-signal div:nth-child(3) {
+            width: 20px;
+            height: 20px;
+            animation-delay: 0.6s;
+        }
+
+        @keyframes signalAnim {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* 3. Share Icon (Sintonízanos) */
+        .rx-icon-share {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+        }
+
+        .rx-icon-share div {
+            width: 5px;
+            height: 5px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: shareAnim 1s infinite alternate;
+        }
+
+        .rx-icon-share div:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .rx-icon-share div:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes shareAnim {
+            from {
+                transform: scale(1);
+                box-shadow: 0 0 0 var(--primary);
+            }
+
+            to {
+                transform: scale(1.3);
+                box-shadow: 0 0 8px var(--primary);
             }
         }
 
         /* Cards */
         .card {
-            background: #ffffff;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: var(--card-radius);
-            padding: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            height: 100%;
-            color: var(--text-dark);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+            padding: 1.2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            height: auto;
+            color: var(--text-main);
+            box-shadow: var(--shadow);
         }
 
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6); 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
         }
 
         /* ─── CUSTOM PLAYER ─── */
         .player-card {
-            padding: 2.2rem;
-            background: #ffffff;
-            color: var(--text-dark);
-            background-image: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1);
+            padding: 2.22rem;
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
             display: flex;
             flex-direction: row;
-            gap: 1.5rem;
+            gap: 2.5rem;
             align-items: center;
-            border-radius: var(--card-radius);
+            border-radius: 40px;
             position: relative;
             overflow: hidden;
+            text-align: left;
         }
 
-        .player-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 50%;
-            height: 100%;
-            background: radial-gradient(ellipse at top right, rgba(237, 28, 36, 0.05), transparent 60%);
-            pointer-events: none;
-        }
-
-        .rx-art-sidebar {
-            width: 160px;
-            height: 160px;
-            border-radius: 20px;
+        .rx-art-container {
+            width: 200px;
+            height: 200px;
+            border-radius: 32px;
             flex-shrink: 0;
             position: relative;
             z-index: 1;
-            background: #e2e8f0; 
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12), 0 0 25px rgba(237, 28, 36, 0.2);
-            overflow: hidden; 
+            background: var(--inner-bg);
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .rx-art-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg,
+                    transparent 60%,
+                    var(--primary) 80%,
+                    var(--secondary) 100%);
+            animation: spinFrame 3s linear infinite;
+            z-index: 0;
+        }
+
+        .rx-art-container:hover {
+            transform: scale(1.03);
         }
 
         .rx-art-sidebar::before {
@@ -277,25 +443,23 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(
-                from 0deg,
-                transparent 60%,
-                rgba(237, 28, 36, 1) 80%,
-                rgba(26, 59, 112, 1) 100%
-            );
+            background: conic-gradient(from 0deg,
+                    transparent 60%,
+                    rgba(237, 28, 36, 1) 80%,
+                    rgba(26, 59, 112, 1) 100%);
             animation: spinFrame 3s linear infinite;
             z-index: 0;
         }
 
-        .rx-art-sidebar img,
+        .rx-art-container img,
         .rx-art-fallback {
             position: absolute !important;
-            top: 3px;
-            left: 3px;
-            width: calc(100% - 6px) !important;
-            height: calc(100% - 6px) !important;
+            top: 6px;
+            left: 6px;
+            width: calc(100% - 12px) !important;
+            height: calc(100% - 12px) !important;
             object-fit: cover;
-            border-radius: 17px;
+            border-radius: 26px;
             background: #ffffff;
             z-index: 1;
         }
@@ -303,8 +467,8 @@
         .rx-pulse {
             position: absolute;
             inset: 0;
-            border-radius: 20px;
-            border: 2px solid rgba(237, 28, 36, 0.8);
+            border-radius: 32px;
+            border: 3px solid var(--primary);
             animation: pulseBorder 2s ease-in-out infinite;
             opacity: 0;
             pointer-events: none;
@@ -312,10 +476,13 @@
         }
 
         @keyframes pulseBorder {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 0;
                 transform: scale(1);
             }
+
             50% {
                 opacity: 0.7;
                 transform: scale(1.05);
@@ -323,8 +490,13 @@
         }
 
         @keyframes spinFrame {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .rx-player-content {
@@ -342,14 +514,15 @@
 
         .rx-live-label {
             font-size: 11px;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: 1.5px;
-            color: var(--primary);
+            color: var(--text-dim);
             text-transform: uppercase;
             margin-bottom: 4px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: flex-start;
+            gap: 8px;
         }
 
         .rx-dot {
@@ -373,40 +546,68 @@
             }
         }
 
-        .rx-station-name {
-            font-size: 17px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+        /* Eliminado rx-station-name para simplificar */
 
         .rx-track {
-            font-size: 14px;
-            color: #64748b;
-            white-space: nowrap;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-top: 8px;
+            font-weight: 800;
+            line-height: 1.2;
+            width: 100%;
             overflow: hidden;
-            text-overflow: ellipsis;
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 0px;
+            gap: 12px; /* Espacio extra de separación */
         }
 
-        .rx-track-icon {
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-            color: #ED1C24;
-            animation: float 2s ease-in-out infinite;
+        /* Marquee Container - Máscara SOLO cuando hay scrolling */
+        .rx-track-scroller {
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-1px); }
+        .rx-track-scroller.is-scrolling {
+            -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
         }
+
+        .rx-track-content {
+            white-space: nowrap;
+            display: inline-block;
+            transition: transform 0.5s ease;
+            transform: translateX(0);
+        }
+
+        /* Solo se activa si JavaScript detecta desbordamiento */
+        .rx-track-scroller.is-scrolling .rx-track-content {
+            animation: rx-marquee 15s linear infinite;
+            padding-right: 80px;
+            /* Espacio para que no choque al reiniciar */
+        }
+
+        @keyframes rx-marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            10% {
+                transform: translateX(0);
+            }
+
+            /* Pausa al inicio */
+            90% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Eliminado rx-track-icon para diseño minimalista */
 
         /* ─── SEAMLESS INTEGRATED VU METER ─── */
         .rx-viz-container {
@@ -415,11 +616,10 @@
             gap: 10px;
             margin: 10px 0 20px 0;
             padding: 15px;
-            /* Efecto de superficie rehundida en la tarjeta blanca */
-            background: rgba(241, 245, 249, 0.6); 
+            background: var(--inner-bg);
             border-radius: 16px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.03);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--card-border);
         }
 
         .rx-vu-row {
@@ -429,43 +629,52 @@
         }
 
         .rx-vu-label {
-            font-size: 10px;
-            font-weight: 800;
-            color: #94a3b8;
-            width: 12px;
+            font-size: 11px;
+            font-weight: 900;
+            color: var(--text-dim);
+            width: 15px;
             text-align: center;
+            opacity: 0.6;
         }
 
         .rx-vu-meter {
             display: flex;
-            gap: 2px; /* Un poco más juntos */
+            gap: 2px;
+            /* Un poco más juntos */
             flex: 1;
         }
 
         .rx-vu-segment {
             flex: 1;
-            height: 12px; /* Más gordito y visible */
+            height: 12px;
             border-radius: 2.5px;
-            background: #e2e8f0; /* Gris muy suave e inactivo */
+            background: var(--inner-bg);
             transition: all 0.08s ease;
         }
 
         /* Ambient color (Inactive) - Now subtle light gray */
-        .rx-vu-segment.low, .rx-vu-segment.mid, .rx-vu-segment.high { 
-            background: #e2e8f0; 
+        .rx-vu-segment.low,
+        .rx-vu-segment.mid,
+        .rx-vu-segment.high {
+            background: #e2e8f0;
         }
 
         /* Glowing LEDs (Active) - More vibrant on light background */
-        .rx-vu-segment.active.low { 
-            background: #22c55e; /* Verde */
+        .rx-vu-segment.active.low {
+            background: #22c55e;
+            /* Verde */
             box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
         }
-        .rx-vu-segment.active.mid { 
-            background: #f97316; /* Naranja fuerte */
+
+        .rx-vu-segment.active.mid {
+            background: #f97316;
+            /* Naranja fuerte */
             box-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
         }
-        .rx-vu-segment.active.high { 
-            background: #ef4444; /* Rojo */
+
+        .rx-vu-segment.active.high {
+            background: #ef4444;
+            /* Rojo */
             box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
         }
 
@@ -486,40 +695,53 @@
         /* Controls */
         .rx-controls {
             display: flex;
+            flex-direction: row;
             align-items: center;
-            gap: 12px;
+            gap: 1.5rem;
+            width: 100%;
+            margin-top: 1.5rem;
         }
 
         .rx-play-btn {
-            width: 60px;
-            height: 60px;
+            width: 84px;
+            height: 84px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: #0f172a;
+            color: #ffffff;
+            border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
             position: relative;
+        }
+
+        .dark-theme .rx-play-btn {
+            background: #000000;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
         .rx-play-btn svg {
             width: 28px;
             height: 28px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
 
-        .rx-play-btn svg path, .rx-play-btn svg polygon, .rx-play-btn svg rect {
+        .rx-play-btn svg path,
+        .rx-play-btn svg polygon,
+        .rx-play-btn svg rect {
             fill: #ffffff !important;
         }
 
         .rx-play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 20px 45px rgba(237, 28, 36, 0.3);
-            background: #ED1C24; /* Cambia a rojo al hover para ser más interactivo */
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 25px 50px var(--primary-glow);
+            background: var(--primary);
         }
 
         .rx-play-btn:active {
@@ -529,9 +751,13 @@
         .rx-vol {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 15px;
             flex: 1;
-            min-width: 0;
+            background: var(--inner-bg);
+            padding: 12px 24px;
+            border-radius: 100px;
+            border: 1px solid var(--card-border);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .rx-vol-container {
@@ -546,15 +772,16 @@
             width: 46px;
             height: 46px;
             border-radius: 50%;
-            background: #1a1f2e;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #000000;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             transition: all 0.2s ease;
-            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.15);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
 
         .rx-mute-btn:hover {
@@ -654,7 +881,9 @@
         }
 
         @keyframes rx-spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .rx-play-btn.loading {
@@ -664,52 +893,89 @@
         }
 
         .info-card h2 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.1rem;
-            color: var(--primary);
+            font-size: 1.45rem;
+            letter-spacing: -0.4px;
             margin-bottom: 1.2rem;
+            font-weight: 800;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 12px;
-            font-weight: 800;
+        }
+
+        .dark-theme .info-card h2 {
+            color: #ffffff;
+        }
+
+        .light-theme .info-card h2 {
+            color: var(--text-color);
+        }
+
+        .info-card {
+            border: 1px solid rgba(237, 28, 36, 0.15);
+            text-align: center;
+        }
+
+        .dark-theme .info-card h2 i {
+            color: var(--primary);
+            font-size: 1.1rem;
         }
 
         .content-list {
             list-style: none;
             text-align: left;
+            width: 100%;
         }
 
         .content-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
+            padding: 0.85rem 0;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .dark-theme .content-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .content-item:last-child {
             border: none;
         }
 
+        .item-name {
+            color: var(--text-main);
+            font-size: 1.22rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .item-time {
             color: var(--primary);
             font-weight: 800;
-            font-size: 0.85rem;
-            background: #fff1f2;
-            padding: 6px 16px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(237, 28, 36, 0.05);
+            font-size: 1.25rem;
+            text-align: right;
+        }
+
+        .dark-theme .item-time {
+            color: var(--primary);
+            background: transparent;
+            padding: 0;
+            box-shadow: none;
         }
 
         .item-name {
-            color: #0f172a;
+            color: var(--text-main);
             font-size: 1rem;
             font-weight: 800;
             letter-spacing: -0.3px;
         }
-        
+
         .info-card p {
-            color: #64748b !important;
+            color: var(--text-dim) !important;
             font-size: 0.95rem !important;
             line-height: 1.6;
             margin-bottom: 1.5rem;
@@ -717,15 +983,20 @@
 
         .card-divider {
             height: 1px;
-            background: rgba(0, 0, 0, 0.05);
+            background: var(--card-border);
             margin: 1.5rem 0;
             width: 100%;
         }
 
+        .dark-theme .card-divider {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
         .social-grid {
             display: flex;
-            gap: 14px;
-            margin-top: 1.2rem;
+            gap: 16px;
+            margin-top: 1.5rem;
+            justify-content: center;
         }
 
         .social-btn {
@@ -748,10 +1019,76 @@
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
         }
 
-        .social-btn.whatsapp:hover { background: #25D366; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3); }
-        .social-btn.facebook:hover { background: #1877F2; box-shadow: 0 10px 20px rgba(24, 119, 242, 0.3); }
-        .social-btn.twitter:hover { background: #1DA1F2; box-shadow: 0 10px 20px rgba(29, 161, 242, 0.3); }
-        .social-btn.copy-link:hover { background: #475569; box-shadow: 0 10px 20px rgba(71, 85, 105, 0.3); }
+        .social-btn.whatsapp:hover {
+            background: #25D366;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .social-btn.facebook:hover {
+            background: #1877F2;
+            box-shadow: 0 10px 20px rgba(24, 119, 242, 0.3);
+        }
+
+        .social-btn.twitter:hover {
+            background: #1DA1F2;
+            box-shadow: 0 10px 20px rgba(29, 161, 242, 0.3);
+        }
+
+        .social-btn.copy-link:hover {
+            background: #475569;
+            box-shadow: 0 10px 20px rgba(71, 85, 105, 0.3);
+        }
+
+        .social-btn.copy-link.success {
+            background: #ffffff !important;
+            color: #000000 !important;
+            transform: scale(1.1);
+        }
+
+        .copy-toast {
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            pointer-events: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            animation: toastElegant 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            z-index: 100;
+        }
+
+        @keyframes toastElegant {
+            0% {
+                transform: translateX(-50%) translateY(15px) scale(0.8);
+                opacity: 0;
+            }
+
+            20% {
+                transform: translateX(-50%) translateY(0) scale(1);
+                opacity: 1;
+            }
+
+            80% {
+                transform: translateX(-50%) translateY(-2px) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-50%) translateY(-10px) scale(0.9);
+                opacity: 0;
+            }
+        }
 
         footer {
             margin-top: 2rem;
@@ -759,9 +1096,10 @@
             color: var(--text-dim);
             font-size: 0.75rem;
         }
+
         /* Premium Install Button - MUCHO MÁS LLAMATIVO */
         .install-btn {
-            display: none; 
+            display: none;
             position: fixed;
             bottom: 24px;
             right: 24px;
@@ -784,14 +1122,29 @@
         }
 
         @keyframes installWakeUp {
-            from { transform: translateY(100px) scale(0.5); opacity: 0; }
-            to { transform: translateY(0) scale(1); opacity: 1; }
+            from {
+                transform: translateY(100px) scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
         }
 
         @keyframes installPulse {
-            0% { box-shadow: 0 10px 30px rgba(237, 28, 36, 0.5), 0 0 0 0 rgba(237, 28, 36, 0.6); }
-            70% { box-shadow: 0 15px 45px rgba(237, 28, 36, 0.3), 0 0 0 20px rgba(237, 28, 36, 0); }
-            100% { box-shadow: 0 10px 30px rgba(237, 28, 36, 0.5), 0 0 0 0 rgba(237, 28, 36, 0); }
+            0% {
+                box-shadow: 0 10px 30px rgba(237, 28, 36, 0.5), 0 0 0 0 rgba(237, 28, 36, 0.6);
+            }
+
+            70% {
+                box-shadow: 0 15px 45px rgba(237, 28, 36, 0.3), 0 0 0 20px rgba(237, 28, 36, 0);
+            }
+
+            100% {
+                box-shadow: 0 10px 30px rgba(237, 28, 36, 0.5), 0 0 0 0 rgba(237, 28, 36, 0);
+            }
         }
 
         .install-btn::before {
@@ -836,9 +1189,17 @@
         }
 
         @keyframes installShine {
-            0% { left: -100%; }
-            50% { left: 100%; }
-            100% { left: 100%; }
+            0% {
+                left: -100%;
+            }
+
+            50% {
+                left: 100%;
+            }
+
+            100% {
+                left: 100%;
+            }
         }
 
         /* iOS Overlay */
@@ -987,7 +1348,8 @@
             }
 
             .player-card {
-                padding: 1.5rem; /* Padding uniforme para que nada toque los bordes */
+                padding: 1.5rem;
+                /* Padding uniforme para que nada toque los bordes */
                 flex-direction: column;
                 text-align: center;
                 gap: 1.5rem;
@@ -999,12 +1361,14 @@
                 gap: 1rem;
             }
 
-            .rx-station-name, .rx-track {
+            .rx-station-name,
+            .rx-track {
                 max-width: 100%;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                display: block; /* Asegura que el truncado funcione */
+                display: block;
+                /* Asegura que el truncado funcione */
                 padding: 0 5px;
             }
 
@@ -1053,22 +1417,31 @@
                 gap: 15px;
             }
 
-            .rx-art-sidebar {
-                width: 120px;
-                height: 120px;
+            .rx-art-container {
+                width: 180px;
+                height: 180px;
             }
+
             .player-card {
                 flex-direction: column;
                 text-align: center;
                 gap: 1rem;
             }
-            .rx-live-label {
+
+            .rx-live-label,
+            .rx-track,
+            .rx-controls {
                 justify-content: center;
             }
 
-            .rx-mute-btn, .rx-play-btn {
-                width: 58px;
-                height: 58px;
+            .rx-station-name {
+                text-align: center;
+            }
+
+            .rx-mute-btn,
+            .rx-play-btn {
+                width: 72px;
+                height: 72px;
             }
 
             .install-btn {
@@ -1079,6 +1452,74 @@
                 padding: 12px;
                 justify-content: center;
                 animation: installWakeUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), installPulse 2s infinite;
+            }
+        }
+
+        .theme-switch {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            width: 64px;
+            height: 34px;
+            border-radius: 50px;
+            background: var(--inner-bg);
+            border: 1px solid var(--card-border);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            padding: 4px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .theme-switch:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .switch-knob {
+            width: 26px;
+            height: 26px;
+            background: linear-gradient(135deg, var(--primary) 0%, #b3141a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 8px rgba(237, 28, 36, 0.3);
+            position: relative;
+        }
+
+        .switch-knob i {
+            font-size: 0.85rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .switch-knob {
+            transform: translateX(30px);
+            background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .dark-theme .switch-knob i {
+            color: #020617;
+            transform: rotate(360deg);
+        }
+
+        .dark-theme .theme-switch {
+            background: rgba(255, 255, 255, 0.12); /* Más visible */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05), 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 600px) {
+            .theme-switch {
+                top: -20px;
+                right: 10px;
             }
         }
     </style>
@@ -1101,19 +1542,20 @@
             <div class="ios-steps">
                 <div class="ios-step">
                     <i class="fas fa-ellipsis-h" style="color: var(--primary);"></i>
-                    <span>Presiona los <b>3 puntitos</b></span>
+                    <span>Presiona los <b style="color: var(--text-main);">3 puntitos</b></span>
                 </div>
                 <div class="ios-step">
                     <i class="fas fa-share-square"></i>
-                    <span>Toca en <b>Compartir</b></span>
+                    <span>Toca en <b style="color: var(--text-main);">Compartir</b></span>
                 </div>
                 <div class="ios-step">
-                    <i class="fas fa-ellipsis-v" style="color: var(--text);"></i>
-                    <span>Ve a <b>Ver más</b></span>
+                    <i class="fas fa-ellipsis-v" style="color: var(--text-main);"></i>
+                    <span>Ve a <b style="color: var(--text-main);">Ver más</b></span>
                 </div>
                 <div class="ios-step">
-                    <i class="far fa-plus-square" style="color: var(--text);"></i>
-                    <span>Selecciona <b>Agregar a inicio</b> y luego <b>Agregar</b></span>
+                    <i class="far fa-plus-square" style="color: var(--text-main);"></i>
+                    <span>Selecciona <b style="color: var(--text-main);">Agregar a inicio</b> y luego <b
+                            style="color: var(--text-main);">Agregar</b></span>
                 </div>
             </div>
             <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
@@ -1128,12 +1570,17 @@
     <!-- Already Installed Modal (Premium) -->
     <div id="installedModal" class="ios-install-overlay">
         <div class="ios-install-card" style="text-align: center;">
-            <div style="background: linear-gradient(135deg, var(--primary), #b3141a); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 15px 30px rgba(237, 28, 36, 0.4); animation: iconPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+            <div
+                style="background: linear-gradient(135deg, var(--primary), #b3141a); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 15px 30px rgba(237, 28, 36, 0.4); animation: iconPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
                 <i class="fas fa-check" style="color: white; font-size: 2rem;"></i>
             </div>
-            <h3 style="color: #0f172a; margin-bottom: 1rem;">¡Radio Xero ya es tuya!</h3>
-            <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">La aplicación ya está instalada en tu dispositivo. Búscala en tu pantalla de inicio o menú de apps para disfrutar de nuestra señal sin límites.</p>
-            <button class="ios-close-btn" style="background: #0f172a; border: none; color: white; transition: all 0.3s;" onclick="document.getElementById('installedModal').style.display='none'">
+            <h3 style="color: var(--text-main); margin-bottom: 1rem;">¡Radio Xero ya es tuya!</h3>
+            <p style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">La aplicación
+                ya está instalada en tu dispositivo. Búscala en tu pantalla de inicio o menú de apps para disfrutar de
+                nuestra señal sin límites.</p>
+            <button class="ios-close-btn"
+                style="background: var(--text-main); border: none; color: var(--card-bg); transition: all 0.3s;"
+                onclick="document.getElementById('installedModal').style.display='none'">
                 Continuar Escuchando
             </button>
         </div>
@@ -1141,31 +1588,36 @@
 
     <style>
         @keyframes iconPop {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
     </style>
 
+    <header>
+        <h1 class="visually-hidden">Radio Xero</h1>
+        <div class="theme-switch" id="themeToggle" onclick="rxToggleTheme()" aria-label="Cambiar tema">
+            <div class="switch-knob">
+                <i class="fas fa-sun"></i>
+            </div>
+        </div>
+        <img src="logo%20xero.png" alt="Radio Xero Logo" class="main-logo">
+    </header>
+
     <div class="main-wrapper">
 
-        <header>
-            <h1 class="visually-hidden">Radio Xero</h1>
-            <img src="logo%20xero.png" alt="Radio Xero Logo" class="main-logo">
-            <div class="live-badge">
-                <div class="audio-wave">
-                    <span></span><span></span><span></span><span></span>
-                </div>
-                SINTONIZANDO EN VIVO
-            </div>
-        </header>
-
-        <!-- ─── CUSTOM PLAYER CARD ─── -->
+        <!-- ─── CUSTOM PLAYER CARD (REDESIGNED) ─── -->
         <section class="card player-card">
 
-            <!-- Left: Artwork -->
-            <div class="rx-art-sidebar">
+            <!-- Top: Artwork -->
+            <div class="rx-art-container">
                 <div class="rx-pulse" id="artPulse"></div>
-                <!-- Usa tu logo como artwork -->
                 <img src="icon-512.png" alt="Radio Xero"
                     onerror="this.style.display='none';document.getElementById('artFallback').style.display='flex'">
                 <div class="rx-art-fallback" id="artFallback" style="display:none;">
@@ -1174,25 +1626,33 @@
                         <circle cx="40" cy="40" r="30" fill="#ED1C24" />
                         <circle cx="40" cy="40" r="22" fill="white" />
                         <circle cx="40" cy="40" r="4" fill="#ED1C24" />
-                        <text x="40" y="36" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="8" fill="#ED1C24">RADIO</text>
-                        <text x="40" y="48" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900" font-size="12" fill="#1A3B70">XERO</text>
+                        <text x="40" y="36" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
+                            font-size="8" fill="#ED1C24">RADIO</text>
+                        <text x="40" y="48" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
+                            font-size="12" fill="#1A3B70">XERO</text>
                     </svg>
                 </div>
             </div>
 
-            <!-- Right: Metadata & Controls -->
+            <!-- Middle: Metadata & Visualizer -->
             <div class="rx-player-content">
                 <div class="rx-meta">
                     <div class="rx-live-label">
                         <span class="rx-dot" id="liveDot"></span>
-                        En Vivo
+                        Estás Escuchando
                     </div>
-                    <div class="rx-station-name">Radio Xero</div>
-                    <div class="rx-track" id="trackInfo"><i class="fas fa-music rx-track-icon"></i><span id="trackText">Radio Xero | Al Aire</span></div>
+
+                    <div class="rx-track" id="trackInfo">
+                        <i class="fas fa-music rx-track-icon"></i>
+                        <div class="rx-track-scroller">
+                            <div class="rx-track-content">
+                                <span id="trackText">Sintonizando señal...</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Visualizer bars -->
-                <!-- VU Meter Container -->
                 <div class="rx-viz-container" id="rxVizContainer">
                     <div class="rx-vu-row">
                         <span class="rx-vu-label">L</span>
@@ -1202,88 +1662,103 @@
                         <span class="rx-vu-label">R</span>
                         <div class="rx-vu-meter" id="vuR"></div>
                     </div>
-                    <!-- Decibel Scale -->
-                    <div class="rx-vu-scale">
-                        <span>-∞</span>
-                        <span>-18</span>
-                        <span>-12</span>
-                        <span>-6</span>
-                        <span>-3</span>
-                        <span>0</span>
-                        <span>+3</span>
-                        <span>+6</span>
-                    </div>
                 </div>
 
-                <!-- Controls -->
+                <!-- Bottom: Controls -->
                 <div class="rx-controls">
                     <button class="rx-play-btn" id="playBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
-                        <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24" fill="none">
-                            <polygon points="6,4 20,12 6,20" fill="#111" />
+                        <svg id="playIcon" width="32" height="32" viewBox="0 0 24 24" fill="none">
+                            <polygon points="6,4 20,12 6,20" fill="currentColor" />
                         </svg>
                     </button>
 
                     <div class="rx-vol">
                         <button class="rx-mute-btn" id="muteBtn" onclick="rxToggleMute()" aria-label="Silenciar">
                             <svg id="muteIcon" viewBox="0 0 24 24">
-                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                                <path
+                                    d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
                             </svg>
                         </button>
                         <div class="rx-vol-container">
-                            <input type="range" min="0" max="100" value="50" id="volSlider" class="rx-vol-slider" oninput="rxSetVol(this.value)" aria-label="Volumen">
+                            <input type="range" min="0" max="100" value="50" id="volSlider" class="rx-vol-slider"
+                                oninput="rxSetVol(this.value)" aria-label="Volumen">
                             <span class="rx-vol-value" id="volValue">50%</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="rx-status" id="rxStatus">Presiona play para sintonizar</div>
+                <div class="rx-status" id="rxStatus" style="margin-top: 15px; font-weight: 500;">Listo para escuchar
+                </div>
             </div>
         </section>
 
 
         <!-- Info grid -->
         <div class="info-grid">
-            <section class="card info-card">
-                <h2><i class="fas fa-calendar-day"></i> Programación Diaria</h2>
+            <section id="programacion" class="card info-card">
+                <h2>
+                    <div class="rx-icon-wrap rx-icon-schedule">
+                        <span></span><span></span><span></span>
+                    </div>
+                    Programación
+                </h2>
                 <div class="content-list">
                     <div class="content-item">
                         <span class="item-name">Mañanas con Xero</span>
-                        <span class="item-time">08:00 AM</span>
+                        <span class="item-time">08:00</span>
                     </div>
                     <div class="content-item">
                         <span class="item-name">Éxitos del Momento</span>
-                        <span class="item-time">02:00 PM</span>
+                        <span class="item-time">14:00</span>
                     </div>
                     <div class="content-item">
                         <span class="item-name">Noche Retro</span>
-                        <span class="item-time">09:00 PM</span>
+                        <span class="item-time">21:00</span>
                     </div>
                 </div>
             </section>
 
             <section class="card info-card">
-                <h2><i class="fas fa-info-circle"></i> Nuestra Estación</h2>
+                <h2>
+                    <div class="rx-icon-wrap rx-icon-signal">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    Nuestra Estación
+                </h2>
                 <p>
-                    Radio Xero es tu conexión directa con la mejor música y noticias. Transmitiendo 24/7 con calidad
-                    digital para acompañarte donde quiera que estés.
+                    Radio Xero es tu conexión directa con la mejor música.
+                    Transmitiendo 24/7 con calidad digital para acompañarte donde quiera que estés.
                 </p>
-                
-                <div class="card-divider"></div>
+            </section>
 
-                <h2><i class="fas fa-share-alt"></i> Comparte la Señal</h2>
+            <section class="card info-card">
+                <h2>
+                    <div class="rx-icon-wrap rx-icon-share">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    Sintonízanos
+                </h2>
                 <p style="margin-bottom: 0.5rem !important;">Invita a tus amigos a sintonizar Radio Xero</p>
-                
+
                 <div class="social-grid">
-                    <a id="rx-wa-btn" href="#" target="_blank" class="social-btn whatsapp" aria-label="Compartir en WhatsApp">
+                    <a id="rx-wa-btn" href="#" target="_blank" class="social-btn whatsapp"
+                        aria-label="Compartir en WhatsApp">
                         <i class="fab fa-whatsapp"></i>
                     </a>
-                    <a id="rx-fb-btn" href="#" target="_blank" class="social-btn facebook" aria-label="Compartir en Facebook">
+                    <a id="rx-fb-btn" href="#" target="_blank" class="social-btn facebook"
+                        aria-label="Compartir en Facebook">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a id="rx-tw-btn" href="#" target="_blank" class="social-btn twitter" aria-label="Compartir en Twitter">
+                    <a id="rx-tw-btn" href="#" target="_blank" class="social-btn twitter"
+                        aria-label="Compartir en Twitter">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="#" onclick="navigator.clipboard.writeText('https://jf2021070309.github.io/radio-xero/'); alert('¡Enlace copiado!'); return false;" class="social-btn copy-link" aria-label="Copiar Enlace">
+                    <a href="#" onclick="rxCopyLink(event, this)" class="social-btn copy-link"
+                        style="position: relative;" aria-label="Copiar Enlace">
                         <i class="fas fa-link"></i>
                     </a>
                 </div>
@@ -1312,8 +1787,8 @@
         const SEGMENT_COUNT = 24;
 
         // Detección de Dispositivos y Navegadores
-        const isIosDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) || 
-                           (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isIosDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         const isEdgeAndroid = /EdgA/i.test(navigator.userAgent);
         const isAndroid = /Android/i.test(navigator.userAgent);
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
@@ -1322,13 +1797,13 @@
             for (let i = 0; i < SEGMENT_COUNT; i++) {
                 const seg = document.createElement('div');
                 seg.className = 'rx-vu-segment';
-                
+
                 // Assign color class based on position
                 const percent = (i / SEGMENT_COUNT) * 100;
                 if (percent < 50) seg.classList.add('low');
                 else if (percent < 80) seg.classList.add('mid');
                 else seg.classList.add('high');
-                
+
                 container.appendChild(seg);
                 array.push(seg);
             }
@@ -1342,8 +1817,8 @@
         let audioCtx = null;
         let srcNode = null;
         let dataArr = null;
-        let simL = 0; 
-        let analyser = null; 
+        let simL = 0;
+        let analyser = null;
 
         // Volumen
         function rxSetVol(v) {
@@ -1352,7 +1827,7 @@
             const volValue = document.getElementById('volValue');
             slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
             volValue.textContent = v + '%';
-            
+
             if (v > 0 && audio.muted) {
                 rxToggleMute();
             }
@@ -1366,10 +1841,10 @@
         function rxToggleMute() {
             const muteBtn = document.getElementById('muteBtn');
             const muteIcon = document.getElementById('muteIcon');
-            
+
             isMuted = !isMuted;
             audio.muted = isMuted;
-            
+
             if (isMuted) {
                 volumeBeforeMute = parseInt(document.getElementById('volSlider').value);
                 muteIcon.innerHTML = '<g><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/><line x1="2.5" y1="21.5" x2="21.5" y2="2.5"/></g>';
@@ -1388,11 +1863,11 @@
                 btn.disabled = true;
                 return;
             }
-            
+
             btn.disabled = false;
             btn.classList.remove('loading');
             btn.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                ${state === 'playing' 
+                ${state === 'playing'
                     ? '<rect x="6" y="4" width="4" height="16" rx="1.5" fill="#fff"/><rect x="14" y="4" width="4" height="16" rx="1.5" fill="#fff"/>'
                     : '<polygon points="6,4 20,12 6,20" fill="#fff"/>'}
             </svg>`;
@@ -1409,10 +1884,10 @@
                 if (isPlaying) return;
                 animId = requestAnimationFrame(frame);
                 t += 0.05;
-                
-                const valL = Math.abs(Math.sin(t)) * 0.35; 
+
+                const valL = Math.abs(Math.sin(t)) * 0.35;
                 const valR = Math.abs(Math.cos(t)) * 0.35;
-                
+
                 const activeL = Math.round(valL * SEGMENT_COUNT);
                 const activeR = Math.round(valR * SEGMENT_COUNT);
 
@@ -1453,15 +1928,15 @@
             function draw() {
                 if (!isPlaying) return;
                 animId = requestAnimationFrame(draw);
-                
+
                 let activeVal = 0;
 
                 if (isIosDevice || isEdgeAndroid || !analyser) {
                     // --- SIMULACIÓN REALISTA PARA IOS O EDGE ANDROID O FALLBACK ---
                     // Aumentamos base y picos para que llegue al rojo
-                    const base = 0.5 + Math.random() * 0.2; 
-                    const peak = Math.random() > 0.88 ? 0.45 : 0; 
-                    simL += (Math.min(1.2, base + peak + (Math.random()*0.1)) - simL) * 0.25;
+                    const base = 0.5 + Math.random() * 0.2;
+                    const peak = Math.random() > 0.88 ? 0.45 : 0;
+                    simL += (Math.min(1.2, base + peak + (Math.random() * 0.1)) - simL) * 0.25;
                     // Ajustamos la curva (pow 1.5) y multiplicador (1.3) para más energía
                     activeVal = Math.round(Math.pow(simL, 1.5) * SEGMENT_COUNT * 1.3);
                     if (activeVal > SEGMENT_COUNT) activeVal = SEGMENT_COUNT;
@@ -1469,11 +1944,11 @@
                     // --- ANÁLISIS REAL (Android / PC) ---
                     analyser.getByteFrequencyData(dataArr);
                     let maxVal = 0;
-                    for(let i=0; i < dataArr.length; i++) { 
-                        if(dataArr[i] > maxVal) maxVal = dataArr[i]; 
+                    for (let i = 0; i < dataArr.length; i++) {
+                        if (dataArr[i] > maxVal) maxVal = dataArr[i];
                     }
                     const val = Math.pow(maxVal / 255, 2.2);
-                    activeVal = Math.round(val * SEGMENT_COUNT * 1.1); 
+                    activeVal = Math.round(val * SEGMENT_COUNT * 1.1);
                 }
 
                 barsL.forEach((seg, i) => {
@@ -1492,7 +1967,7 @@
             if (!isPlaying) {
                 setStatus('Conectando con Radio Xero...');
                 setIcon('loading');
-                
+
                 // Si NO es iPhone o Edge móvil, activamos CORS para el visualizador real
                 if (!isIosDevice && !isEdgeAndroid) {
                     audio.crossOrigin = "anonymous";
@@ -1502,11 +1977,11 @@
 
                 const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
                 audio.src = STREAM_URL + cacheBuster;
-                
+
                 audio.load();
-                
+
                 const playPromise = audio.play();
-                
+
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
                         isPlaying = true;
@@ -1575,15 +2050,35 @@
 
         const sse = new EventSource('https://api.zeno.fm/mounts/metadata/subscribe/n7fm3s6537zuv');
         const trackTextEl = document.getElementById('trackText');
-        
-        sse.onmessage = function(e) {
+
+        function checkTrackOverflow() {
+            const scroller = document.querySelector('.rx-track-scroller');
+            const content = document.querySelector('.rx-track-content');
+            if (!scroller || !content) return;
+
+            // Reset clase para medir el ancho base
+            scroller.classList.remove('is-scrolling');
+
+            // Un pequeño delay para que el DOM se actualice con el nuevo texto
+            setTimeout(() => {
+                if (content.offsetWidth > scroller.offsetWidth) {
+                    scroller.classList.add('is-scrolling');
+                }
+            }, 50);
+        }
+
+        sse.onmessage = function (e) {
             try {
                 const data = JSON.parse(e.data);
                 trackTextEl.textContent = data.streamTitle || 'Radio Xero | Al Aire';
+                checkTrackOverflow();
             } catch (err) {
                 console.error('Error parsing metadata', err);
             }
         };
+
+        // Recalcular si se cambia el tamaño de la ventana (responsive)
+        window.addEventListener('resize', checkTrackOverflow);
 
         let deferredPrompt;
         const installButton = document.getElementById('installButton');
@@ -1591,7 +2086,7 @@
         // --- REFUERZO DE VISIBILIDAD PARA ANDROID / EDGE ---
         function forceInstallButton() {
             const isAndroidSystem = /Android/i.test(navigator.userAgent) || /EdgA/i.test(navigator.userAgent) || isEdgeAndroid || isAndroid;
-            
+
             if (isAndroidSystem && !isStandalone && !isIosDevice) {
                 installButton.style.display = 'flex';
                 // Aseguramos que sea visible incluso si algo intentó ocultarlo
@@ -1605,14 +2100,14 @@
         setTimeout(forceInstallButton, 1500); // Refuerzo final tras 1.5s
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            if (isIosDevice || isStandalone) return; 
+            if (isIosDevice || isStandalone) return;
             e.preventDefault();
             deferredPrompt = e;
             installButton.style.display = 'flex';
         });
 
         installButton.addEventListener('click', async () => {
-            if (isIosDevice) return; 
+            if (isIosDevice) return;
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 await deferredPrompt.userChoice;
@@ -1631,6 +2126,31 @@
                 const volDiv = document.querySelector('.rx-vol');
                 if (volDiv) volDiv.style.justifyContent = 'flex-end';
             }
+        }
+
+        function rxCopyLink(e, btn) {
+            e.preventDefault();
+            const url = 'https://jf2021070309.github.io/radio-xero/';
+            navigator.clipboard.writeText(url).then(() => {
+                const icon = btn.querySelector('i');
+                const oldClass = icon.className;
+
+                // Efecto visual
+                btn.classList.add('success');
+                icon.className = 'fas fa-check';
+
+                // Toast flotante
+                const toast = document.createElement('div');
+                toast.className = 'copy-toast';
+                toast.innerText = '¡Copiado!';
+                btn.appendChild(toast);
+
+                setTimeout(() => {
+                    btn.classList.remove('success');
+                    icon.className = oldClass;
+                    toast.remove();
+                }, 1500);
+            });
         }
 
         if ('serviceWorker' in navigator) {
@@ -1677,7 +2197,40 @@
             document.getElementById('rx-tw-btn').href = `https://twitter.com/intent/tweet?text=${twText}&url=${encodeURIComponent(shareUrl)}`;
         }
 
+        // --- THEME MANAGEMENT ---
+        function rxToggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            const icon = themeToggle.querySelector('i');
+            const metaTheme = document.querySelector('meta[name="theme-color"]');
+
+            body.classList.toggle('dark-theme');
+            const isDark = body.classList.contains('dark-theme');
+
+            localStorage.setItem('rx-theme', isDark ? 'dark' : 'light');
+
+            if (isDark) {
+                icon.className = 'fas fa-moon';
+                metaTheme.setAttribute('content', '#020617');
+            } else {
+                icon.className = 'fas fa-sun';
+                metaTheme.setAttribute('content', '#f1f5f9');
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('rx-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.body.classList.add('dark-theme');
+                document.getElementById('themeToggle').querySelector('i').className = 'fas fa-moon';
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#020617');
+            }
+        }
+
         window.addEventListener('load', () => {
+            initTheme();
             rxSetVol(50);
             updateShareLinks();
             if (!isIosDevice) {
