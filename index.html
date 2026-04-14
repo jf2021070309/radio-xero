@@ -671,7 +671,8 @@
         }
 
         .rx-track-scroller.is-scrolling {
-            flex: 1; /* Si hay scroll, ocupa todo el espacio disponible */
+            flex: 0 1 auto; /* Cambiado para no empujar el icono de música lejos */
+            max-width: calc(100% - 36px);
         }
 
         .rx-track-scroller.is-scrolling {
@@ -2592,7 +2593,8 @@
                     volDiv.style.border = 'none';
                     volDiv.style.boxShadow = 'none';
                     volDiv.style.padding = '0';
-                    volDiv.style.justifyContent = 'flex-end';
+                    volDiv.style.justifyContent = 'center';
+                    volDiv.style.flex = '0 1 auto';
                 }
             }
         }
