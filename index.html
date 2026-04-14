@@ -2196,6 +2196,19 @@
                 }
             }
 
+            function simulateFrequencyData() {
+                const now = Date.now() / 180;
+                for (let i = 0; i < dataArr.length; i++) {
+                    // Simular caída natural de frecuencias (bajos a agudos)
+                    const freqScale = Math.pow(1 - (i / dataArr.length), 1.5);
+                    const wave1 = Math.sin(now + i * 0.15) * 40;
+                    const wave2 = Math.sin(now * 0.7 - i * 0.05) * 30;
+                    const noise = Math.random() * 40;
+                    
+                    dataArr[i] = Math.max(20, (110 + wave1 + wave2 + noise) * freqScale * 1.2);
+                }
+            }
+
             function drawLed() {
                 let activeValL = 0;
                 let activeValR = 0;
@@ -2231,7 +2244,11 @@
             }
 
             function drawBars() {
-                analyser.getByteFrequencyData(dataArr);
+                if (isIosDevice || isEdgeAndroid || !analyser) {
+                    simulateFrequencyData();
+                } else {
+                    analyser.getByteFrequencyData(dataArr);
+                }
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 const barCount = 32;
@@ -2283,7 +2300,11 @@
             }
 
             function drawWave() {
-                analyser.getByteFrequencyData(dataArr);
+                if (isIosDevice || isEdgeAndroid || !analyser) {
+                    simulateFrequencyData();
+                } else {
+                    analyser.getByteFrequencyData(dataArr);
+                }
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 const canvasW = canvas.width / window.devicePixelRatio;
