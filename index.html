@@ -1374,14 +1374,15 @@
         }
 
         .ios-install-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 2rem 1.5rem;
-            max-width: 340px;
+            background: rgba(15, 23, 42, 0.95); /* Fondo oscuro más sólido y premium */
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 28px;
+            padding: 2.2rem 1.8rem;
+            max-width: 360px;
             width: 100%;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
             position: relative;
+            transform-origin: bottom center;
         }
 
         .ios-install-card h3 {
@@ -1446,13 +1447,7 @@
         }
 
         .ios-arrow-down {
-            position: absolute;
-            bottom: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 2.5rem;
-            color: var(--primary);
-            animation: bounceArrow 1.5s infinite;
+            display: none;
         }
 
         @keyframes fadeInOverlay {
@@ -1724,14 +1719,18 @@
         <div class="ios-install-card">
             <h3>Instala Radio Xero</h3>
             <p>Disfruta de nuestra radio sin interrupciones y con acceso directo desde tu inicio.</p>
-            <div class="ios-steps">
-                <div class="ios-step" style="padding: 16px;">
-                    <i class="fas fa-share-square" style="color: var(--primary); font-size: 1.8rem; width: 32px;"></i>
-                    <span style="font-size: 0.95rem; line-height: 1.5;">Abre el menú de <b>Compartir</b> u <b>Opciones</b> de tu navegador.</span>
+            <div class="ios-steps" style="gap: 12px;">
+                <div class="ios-step" style="padding: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 14px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <div style="background: linear-gradient(135deg, var(--text-main) 0%, rgba(255,255,255,0.8) 100%); color: #000; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0;">1</div>
+                    <span style="font-size: 0.95rem; line-height: 1.4; color: #fff;">Abre el menú de opciones o <b style="color: var(--primary);">Compartir</b>.</span>
                 </div>
-                <div class="ios-step" style="padding: 16px;">
-                    <i class="far fa-plus-square" style="color: var(--text-main); font-size: 1.8rem; width: 32px;"></i>
-                    <span style="font-size: 0.95rem; line-height: 1.5;">Selecciona <b>Agregar a inicio</b> para instalar la aplicación.</span>
+                <div class="ios-step" style="padding: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 14px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <div style="background: linear-gradient(135deg, var(--text-main) 0%, rgba(255,255,255,0.8) 100%); color: #000; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0;">2</div>
+                    <span style="font-size: 0.95rem; line-height: 1.4; color: #fff;">Busca en la lista <b style="color: var(--text-main);">Agregar a inicio</b>.</span>
+                </div>
+                <div class="ios-step" style="padding: 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 14px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <div style="background: linear-gradient(135deg, var(--text-main) 0%, rgba(255,255,255,0.8) 100%); color: #000; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0;">3</div>
+                    <span style="font-size: 0.95rem; line-height: 1.4; color: #fff;">Pulsa <b>Agregar</b> en la parte superior.</span>
                 </div>
             </div>
             <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
