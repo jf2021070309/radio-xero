@@ -1597,11 +1597,13 @@
             }
 
             .install-btn {
-                bottom: 20px;
-                right: 20px;
-                left: 20px;
-                width: auto;
-                padding: 12px;
+                bottom: 24px;
+                right: 0;
+                left: 0;
+                margin-left: auto;
+                margin-right: auto;
+                width: max-content;
+                padding: 10px 24px 10px 10px;
                 justify-content: center;
                 animation: installWakeUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), installPulse 2s infinite;
             }
@@ -1723,22 +1725,13 @@
             <h3>Instala Radio Xero</h3>
             <p>Disfruta de nuestra radio sin interrupciones y con acceso directo desde tu inicio.</p>
             <div class="ios-steps">
-                <div class="ios-step">
-                    <i class="fas fa-ellipsis-h" style="color: var(--primary);"></i>
-                    <span>Presiona los <b style="color: var(--text-main);">3 puntitos</b></span>
+                <div class="ios-step" style="padding: 16px;">
+                    <i class="fas fa-share-square" style="color: var(--primary); font-size: 1.8rem; width: 32px;"></i>
+                    <span style="font-size: 0.95rem; line-height: 1.5;">Abre el menú de <b>Compartir</b> u <b>Opciones</b> de tu navegador.</span>
                 </div>
-                <div class="ios-step">
-                    <i class="fas fa-share-square"></i>
-                    <span>Toca en <b style="color: var(--text-main);">Compartir</b></span>
-                </div>
-                <div class="ios-step">
-                    <i class="fas fa-ellipsis-v" style="color: var(--text-main);"></i>
-                    <span>Ve a <b style="color: var(--text-main);">Ver más</b></span>
-                </div>
-                <div class="ios-step">
-                    <i class="far fa-plus-square" style="color: var(--text-main);"></i>
-                    <span>Selecciona <b style="color: var(--text-main);">Agregar a inicio</b> y luego <b
-                            style="color: var(--text-main);">Agregar</b></span>
+                <div class="ios-step" style="padding: 16px;">
+                    <i class="far fa-plus-square" style="color: var(--text-main); font-size: 1.8rem; width: 32px;"></i>
+                    <span style="font-size: 0.95rem; line-height: 1.5;">Selecciona <b>Agregar a inicio</b> para instalar la aplicación.</span>
                 </div>
             </div>
             <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
