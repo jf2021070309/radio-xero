@@ -2593,15 +2593,14 @@
 
         if (isIosDevice) {
             const volContainer = document.querySelector('.rx-vol-container');
-                if (volContainer) volContainer.style.display = 'none';
-                const volDiv = document.querySelector('.rx-vol');
-                if (volDiv) {
-                    volDiv.style.background = 'transparent';
-                    volDiv.style.border = 'none';
-                    volDiv.style.boxShadow = 'none';
-                    volDiv.style.padding = '0';
-                    volDiv.style.justifyContent = 'flex-end';
-                }
+            if (volContainer) volContainer.style.display = 'none';
+            const volDiv = document.querySelector('.rx-vol');
+            if (volDiv) {
+                volDiv.style.background = 'transparent';
+                volDiv.style.border = 'none';
+                volDiv.style.boxShadow = 'none';
+                volDiv.style.padding = '0';
+                volDiv.style.justifyContent = 'flex-end';
             }
         }
 
