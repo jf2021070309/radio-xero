@@ -2553,9 +2553,7 @@
 
         // --- REFUERZO DE VISIBILIDAD PARA ANDROID / EDGE ---
         function forceInstallButton() {
-            const isAndroidSystem = /Android/i.test(navigator.userAgent) || /EdgA/i.test(navigator.userAgent) || isEdgeAndroid || isAndroid;
-
-            if (isAndroidSystem && !isStandalone && !isIosDevice) {
+            if (!isStandalone) {
                 installButton.style.display = 'flex';
                 // Aseguramos que sea visible incluso si algo intentó ocultarlo
                 installButton.setAttribute('style', 'display: flex !important;');
@@ -2575,7 +2573,10 @@
         });
 
         installButton.addEventListener('click', async () => {
-            if (isIosDevice) return;
+            if (isIosDevice) {
+                document.getElementById('iosHint').style.display = 'flex';
+                return;
+            }
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 await deferredPrompt.userChoice;
@@ -2586,10 +2587,12 @@
             }
         });
 
-        if (isIosDevice || isStandalone) {
+        if (isStandalone) {
             installButton.style.display = 'none';
-            if (isIosDevice) {
-                const volContainer = document.querySelector('.rx-vol-container');
+        }
+
+        if (isIosDevice) {
+            const volContainer = document.querySelector('.rx-vol-container');
                 if (volContainer) volContainer.style.display = 'none';
                 const volDiv = document.querySelector('.rx-vol');
                 if (volDiv) {
