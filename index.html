@@ -1471,9 +1471,6 @@
                 padding: 0 5px;
             }
 
-            .info-card {
-                padding: 1.5rem;
-            }
 
             .info-card h2 {
                 font-size: 1rem;
@@ -1619,6 +1616,28 @@
             .theme-switch {
                 top: -20px;
                 right: 10px;
+            }
+        }
+
+        /* Centrado Global de Cards */
+        .info-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 280px; /* Altura uniforme para simetría */
+            padding: 2.5rem 1.5rem !important;
+        }
+
+        .info-card p {
+            margin-bottom: 0 !important;
+        }
+
+        @media (max-width: 900px) {
+            .info-card {
+                min-height: auto;
+                padding: 1.5rem !important;
             }
         }
     </style>
