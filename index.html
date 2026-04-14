@@ -1076,43 +1076,59 @@
         }
 
         .social-btn {
-            width: 46px;
-            height: 46px;
-            background: #000000;
+            width: 48px;
+            height: 48px;
             color: #ffffff;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-btn.whatsapp {
+            background: #25D366;
+            box-shadow: 0 8px 15px rgba(37, 211, 102, 0.25);
+        }
+
+        .social-btn.facebook {
+            background: #1877F2;
+            box-shadow: 0 8px 15px rgba(24, 119, 242, 0.25);
+        }
+
+        .social-btn.twitter {
+            background: #1DA1F2; /* Twitter Blue */
+            box-shadow: 0 8px 15px rgba(29, 161, 242, 0.25);
+        }
+
+        .social-btn.copy-link {
+            background: #64748b;
+            box-shadow: 0 8px 15px rgba(100, 116, 139, 0.25);
         }
 
         .social-btn:hover {
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            transform: translateY(-6px) scale(1.12);
+            filter: brightness(1.1);
         }
 
         .social-btn.whatsapp:hover {
-            background: #25D366;
-            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 12px 25px rgba(37, 211, 102, 0.45);
         }
 
         .social-btn.facebook:hover {
-            background: #1877F2;
-            box-shadow: 0 10px 20px rgba(24, 119, 242, 0.3);
+            box-shadow: 0 12px 25px rgba(24, 119, 242, 0.45);
         }
 
         .social-btn.twitter:hover {
-            background: #1DA1F2;
-            box-shadow: 0 10px 20px rgba(29, 161, 242, 0.3);
+            box-shadow: 0 12px 25px rgba(29, 161, 242, 0.45);
         }
 
         .social-btn.copy-link:hover {
-            background: #475569;
-            box-shadow: 0 10px 20px rgba(71, 85, 105, 0.3);
+            box-shadow: 0 12px 25px rgba(100, 116, 139, 0.45);
         }
 
         .social-btn.copy-link.success {
