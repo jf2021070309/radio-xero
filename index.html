@@ -716,6 +716,32 @@
             border-radius: 16px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--card-border);
+            position: relative; /* Para el botón de modo */
+        }
+
+        .rx-viz-mode-btn {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 0.7rem;
+            opacity: 0.4;
+            transition: all 0.3s;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rx-viz-mode-btn:hover {
+            opacity: 1;
+            color: var(--primary);
         }
 
         .rx-vu-row {
@@ -1784,6 +1810,10 @@
 
                 <!-- Visualizer bars -->
                 <div class="rx-viz-container" id="rxVizContainer">
+                    <button class="rx-viz-mode-btn" onclick="rxToggleVizMode()" id="vizModeBtn" title="Cambiar modo de visualización">
+                        <i class="fas fa-chart-bar"></i>
+                        <span id="vizModeName">VU</span>
+                    </button>
                     <div class="rx-vu-row">
                         <span class="rx-vu-label">L</span>
                         <div class="rx-vu-meter" id="vuL"></div>
@@ -1951,6 +1981,7 @@
         let analyser = null;
         let lastPauseTime = 0;
         let systemPauseAutoResume = false;
+        let vizMode = 'vu'; // Modes: 'vu', 'spectrum'
 
         // Volumen
         function rxSetVol(v) {
@@ -2061,48 +2092,92 @@
                 if (!isPlaying) return;
                 animId = requestAnimationFrame(draw);
 
-                let activeValL = 0;
-                let activeValR = 0;
-
                 if (isIosDevice || isEdgeAndroid || !analyser) {
-                    // --- SIMULACIÓN REALISTA INDEPENDIENTE PARA L/R ---
-                    const baseL = 0.5 + Math.random() * 0.2;
-                    const peakL = Math.random() > 0.88 ? 0.45 : 0;
-                    simL += (Math.min(1.2, baseL + peakL + (Math.random() * 0.1)) - simL) * 0.25;
-                    activeValL = Math.round(Math.pow(simL, 1.5) * SEGMENT_COUNT * 1.3);
-                    
-                    const baseR = 0.5 + Math.random() * 0.2;
-                    const peakR = Math.random() > 0.90 ? 0.40 : 0;
-                    simR += (Math.min(1.2, baseR + peakR + (Math.random() * 0.1)) - simR) * 0.25;
-                    activeValR = Math.round(Math.pow(simR, 1.5) * SEGMENT_COUNT * 1.3);
-                } else {
-                    // --- ANÁLISIS REAL CON 'JITTER' PARA EL CANAL R ---
-                    analyser.getByteFrequencyData(dataArr);
-                    let maxVal = 0;
-                    for (let i = 0; i < dataArr.length; i++) {
-                        if (dataArr[i] > maxVal) maxVal = dataArr[i];
+                    // --- SIMULACIÓN REALISTA ---
+                    if (vizMode === 'vu') {
+                        const baseL = 0.5 + Math.random() * 0.2;
+                        const peakL = Math.random() > 0.88 ? 0.45 : 0;
+                        simL += (Math.min(1.2, baseL + peakL + (Math.random() * 0.1)) - simL) * 0.25;
+                        const activeValL = Math.round(Math.min(SEGMENT_COUNT, Math.pow(simL, 1.5) * SEGMENT_COUNT * 1.3));
+                        
+                        const baseR = 0.5 + Math.random() * 0.2;
+                        const peakR = Math.random() > 0.90 ? 0.40 : 0;
+                        simR += (Math.min(1.2, baseR + peakR + (Math.random() * 0.1)) - simR) * 0.25;
+                        const activeValR = Math.round(Math.min(SEGMENT_COUNT, Math.pow(simR, 1.5) * SEGMENT_COUNT * 1.3));
+
+                        updateBars(activeValL, activeValR);
+                    } else {
+                        // Simulación de espectro (movimiento aleatorio por bloques)
+                        barsL.forEach((seg, i) => {
+                            const val = (Math.sin(Date.now() / 200 + i * 0.5) + 1) / 2;
+                            const noise = Math.random() * 0.3;
+                            if (i < Math.round((val + noise) * SEGMENT_COUNT)) seg.classList.add('active');
+                            else seg.classList.remove('active');
+                        });
+                        barsR.forEach((seg, i) => {
+                            const val = (Math.cos(Date.now() / 250 + i * 0.5) + 1) / 2;
+                            const noise = Math.random() * 0.3;
+                            if (i < Math.round((val + noise) * SEGMENT_COUNT)) seg.classList.add('active');
+                            else seg.classList.remove('active');
+                        });
                     }
-                    const val = Math.pow(maxVal / 255, 2.2);
-                    activeValL = Math.round(val * SEGMENT_COUNT * 1.1);
+                } else {
+                    analyser.getByteFrequencyData(dataArr);
                     
-                    // Añadimos una pequeña variación aleatoria al canal R para que no sea idéntico
-                    const jitter = (Math.random() - 0.5) * 2; 
-                    activeValR = Math.round(Math.min(SEGMENT_COUNT, Math.max(0, activeValL + jitter)));
+                    if (vizMode === 'vu') {
+                        // --- MODO VÚMETRO (Peak) ---
+                        let maxVal = 0;
+                        for (let i = 0; i < dataArr.length; i++) {
+                            if (dataArr[i] > maxVal) maxVal = dataArr[i];
+                        }
+                        const val = Math.pow(maxVal / 255, 2.2);
+                        const activeValL = Math.round(val * SEGMENT_COUNT * 1.1);
+                        const jitter = (Math.random() - 0.5) * 2; 
+                        const activeValR = Math.round(Math.min(SEGMENT_COUNT, Math.max(0, activeValL + jitter)));
+                        updateBars(activeValL, activeValR);
+                    } else {
+                        // --- MODO ESPECTRO (Bajos a Agudos) ---
+                        // L representará Bajos y Medios-Bajos
+                        // R representará Medios-Altos y Agudos
+                        const step = Math.floor(dataArr.length / SEGMENT_COUNT / 2);
+                        
+                        barsL.forEach((seg, i) => {
+                            const freqIdx = i * step;
+                            const val = Math.pow(dataArr[freqIdx] / 255, 1.5);
+                            if (i < Math.round(val * SEGMENT_COUNT * 1.5)) seg.classList.add('active');
+                            else seg.classList.remove('active');
+                        });
+                        
+                        barsR.forEach((seg, i) => {
+                            const freqIdx = Math.floor(dataArr.length / 2) + (i * step);
+                            const val = Math.pow(dataArr[freqIdx] / 255, 1.5);
+                            if (i < Math.round(val * SEGMENT_COUNT * 1.5)) seg.classList.add('active');
+                            else seg.classList.remove('active');
+                        });
+                    }
                 }
+            }
 
-                if (activeValL > SEGMENT_COUNT) activeValL = SEGMENT_COUNT;
-                if (activeValR > SEGMENT_COUNT) activeValR = SEGMENT_COUNT;
-
+            function updateBars(vL, vR) {
+                const activeL = Math.min(SEGMENT_COUNT, vL);
+                const activeR = Math.min(SEGMENT_COUNT, vR);
                 barsL.forEach((seg, i) => {
-                    if (i < activeValL) seg.classList.add('active');
+                    if (i < activeL) seg.classList.add('active');
                     else seg.classList.remove('active');
                 });
                 barsR.forEach((seg, i) => {
-                    if (i < activeValR) seg.classList.add('active');
+                    if (i < activeR) seg.classList.add('active');
                     else seg.classList.remove('active');
                 });
             }
             draw();
+        }
+
+        function rxToggleVizMode() {
+            vizMode = (vizMode === 'vu' ? 'spectrum' : 'vu');
+            document.getElementById('vizModeName').textContent = vizMode.toUpperCase();
+            const btnIcon = document.getElementById('vizModeBtn').querySelector('i');
+            btnIcon.className = (vizMode === 'vu' ? 'fas fa-chart-bar' : 'fas fa-wave-square');
         }
 
         function rxToggle() {
