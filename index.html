@@ -705,114 +705,54 @@
 
         /* Eliminado rx-track-icon para diseño minimalista */
 
-        /* ─── SEAMLESS INTEGRATED VU METER ─── */
         .rx-viz-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
             margin: 10px 0 20px 0;
-            padding: 15px;
+            padding: 0;
             background: var(--inner-bg);
             border-radius: 16px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--card-border);
-            position: relative; /* Para el botón de modo */
+            position: relative;
+            height: 80px; /* Altura fija para el canvas */
+            overflow: hidden;
+        }
+
+        #vizCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
         .rx-viz-mode-btn {
             position: absolute;
             top: 5px;
             right: 8px;
-            background: transparent;
-            border: none;
+            background: rgba(var(--bg-main), 0.5);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
             color: var(--text-dim);
             cursor: pointer;
-            font-size: 0.7rem;
-            opacity: 0.4;
+            font-size: 0.65rem;
+            opacity: 0.6;
             transition: all 0.3s;
-            z-index: 10;
+            z-index: 20;
             display: flex;
             align-items: center;
-            gap: 4px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            gap: 5px;
+            font-weight: 800;
+            padding: 2px 6px;
         }
 
         .rx-viz-mode-btn:hover {
             opacity: 1;
             color: var(--primary);
+            border-color: var(--primary);
         }
 
-        .rx-vu-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .rx-vu-label {
-            font-size: 11px;
-            font-weight: 900;
-            color: var(--text-dim);
-            width: 15px;
-            text-align: center;
-            opacity: 0.6;
-        }
-
-        .rx-vu-meter {
-            display: flex;
-            gap: 2px;
-            /* Un poco más juntos */
-            flex: 1;
-        }
-
-        .rx-vu-segment {
-            flex: 1;
-            height: 12px;
-            border-radius: 2.5px;
-            background: var(--inner-bg);
-            /* Sin transición para evitar lag masivo de 48 elementos al cambiar tema */
-        }
-
-        /* Ambient color (Inactive) - Now subtle light gray */
-        .rx-vu-segment.low,
-        .rx-vu-segment.mid,
-        .rx-vu-segment.high {
-            background: #e2e8f0;
-        }
-
-        /* Glowing LEDs (Active) - More vibrant on light background */
-        .rx-vu-segment.active.low {
-            background: #22c55e;
-            /* Verde */
-            box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
-        }
-
-        .rx-vu-segment.active.mid {
-            background: #f97316;
-            /* Naranja fuerte */
-            box-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
-        }
-
-        .rx-vu-segment.active.high {
-            background: #ef4444;
-            /* Rojo */
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
-        }
-
-        /* Scale Labels - More minimalist */
-        .rx-vu-scale {
-            display: flex;
-            justify-content: space-between;
-            padding-left: 24px;
-            margin-top: 2px;
-        }
-
-        .rx-vu-scale span {
-            font-size: 8px;
-            font-weight: 600;
-            color: #cbd5e1;
-        }
+        .rx-vu-row { display: none; } /* Ocultamos los antiguos vúmetros */
 
         /* Controls */
         .rx-controls {
@@ -1808,20 +1748,13 @@
                     </div>
                 </div>
 
-                <!-- Visualizer bars -->
+                <!-- Visualizer unificado -->
                 <div class="rx-viz-container" id="rxVizContainer">
-                    <button class="rx-viz-mode-btn" onclick="rxToggleVizMode()" id="vizModeBtn" title="Cambiar modo de visualización">
-                        <i class="fas fa-chart-bar"></i>
-                        <span id="vizModeName">VU</span>
+                    <button class="rx-viz-mode-btn" onclick="rxToggleVizMode()" id="vizModeBtn">
+                        <i class="fas fa-wave-square"></i>
+                        <span id="vizModeName">WAVE</span>
                     </button>
-                    <div class="rx-vu-row">
-                        <span class="rx-vu-label">L</span>
-                        <div class="rx-vu-meter" id="vuL"></div>
-                    </div>
-                    <div class="rx-vu-row">
-                        <span class="rx-vu-label">R</span>
-                        <div class="rx-vu-meter" id="vuR"></div>
-                    </div>
+                    <canvas id="vizCanvas"></canvas>
                 </div>
 
                 <!-- Bottom: Controls -->
@@ -1939,11 +1872,15 @@
         const audio = document.getElementById('rxAudio');
         const statusEl = document.getElementById('rxStatus');
         const playIcon = document.getElementById('playIcon');
-        const vuL = document.getElementById('vuL');
-        const vuR = document.getElementById('vuR');
         const barsL = [];
         const barsR = [];
         const SEGMENT_COUNT = 24;
+        
+        // Canvas Viz
+        const canvas = document.getElementById('vizCanvas');
+        const ctx = canvas.getContext('2d');
+        let vizMode = 'wave'; // modes: 'wave', 'bars', 'led'
+        let timeData = null;
 
         // Detección de Dispositivos y Navegadores
         const isIosDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
@@ -1981,7 +1918,6 @@
         let analyser = null;
         let lastPauseTime = 0;
         let systemPauseAutoResume = false;
-        let vizMode = 'vu'; // Modes: 'vu', 'spectrum'
 
         // Volumen
         function rxSetVol(v) {
@@ -2068,116 +2004,139 @@
         idleAnim();
 
         function startAnalyser() {
-            // En iOS y Edge Android, el análisis real puede bloquear el audio por CORS.
-            // Usamos simulación para estos casos problemáticos.
             if (!isIosDevice && !isEdgeAndroid) {
                 try {
                     if (!audioCtx) {
                         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                         analyser = audioCtx.createAnalyser();
-                        analyser.fftSize = 128;
+                        analyser.fftSize = 256;
                         analyser.smoothingTimeConstant = 0.8;
                         srcNode = audioCtx.createMediaElementSource(audio);
                         srcNode.connect(analyser);
                         analyser.connect(audioCtx.destination);
                         dataArr = new Uint8Array(analyser.frequencyBinCount);
+                        timeData = new Uint8Array(analyser.frequencyBinCount);
                     }
                     if (audioCtx.state === 'suspended') audioCtx.resume();
-                } catch (e) {
-                    console.error("AudioContext error, switching to simulation", e);
-                }
+                } catch (e) { console.error("AudioContext error", e); }
             }
 
             function draw() {
                 if (!isPlaying) return;
                 animId = requestAnimationFrame(draw);
 
-                if (isIosDevice || isEdgeAndroid || !analyser) {
-                    // --- SIMULACIÓN REALISTA ---
-                    if (vizMode === 'vu') {
-                        const baseL = 0.5 + Math.random() * 0.2;
-                        const peakL = Math.random() > 0.88 ? 0.45 : 0;
-                        simL += (Math.min(1.2, baseL + peakL + (Math.random() * 0.1)) - simL) * 0.25;
-                        const activeValL = Math.round(Math.min(SEGMENT_COUNT, Math.pow(simL, 1.5) * SEGMENT_COUNT * 1.3));
-                        
-                        const baseR = 0.5 + Math.random() * 0.2;
-                        const peakR = Math.random() > 0.90 ? 0.40 : 0;
-                        simR += (Math.min(1.2, baseR + peakR + (Math.random() * 0.1)) - simR) * 0.25;
-                        const activeValR = Math.round(Math.min(SEGMENT_COUNT, Math.pow(simR, 1.5) * SEGMENT_COUNT * 1.3));
+                // Resize canvas if needed
+                if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
+                    canvas.width = canvas.clientWidth;
+                    canvas.height = canvas.clientHeight;
+                }
 
-                        updateBars(activeValL, activeValR);
-                    } else {
-                        // Simulación de espectro (movimiento aleatorio por bloques)
-                        barsL.forEach((seg, i) => {
-                            const val = (Math.sin(Date.now() / 200 + i * 0.5) + 1) / 2;
-                            const noise = Math.random() * 0.3;
-                            if (i < Math.round((val + noise) * SEGMENT_COUNT)) seg.classList.add('active');
-                            else seg.classList.remove('active');
-                        });
-                        barsR.forEach((seg, i) => {
-                            const val = (Math.cos(Date.now() / 250 + i * 0.5) + 1) / 2;
-                            const noise = Math.random() * 0.3;
-                            if (i < Math.round((val + noise) * SEGMENT_COUNT)) seg.classList.add('active');
-                            else seg.classList.remove('active');
-                        });
-                    }
-                } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                const isDark = document.body.classList.contains('dark-theme');
+                const primaryColor = '#ED1C24';
+                const accentColor = isDark ? '#ffffff' : '#1A3B70';
+                
+                if (analyser) {
                     analyser.getByteFrequencyData(dataArr);
+                    analyser.getByteTimeDomainData(timeData);
+                }
+
+                if (vizMode === 'wave') {
+                    // --- MODO ONDA (WAVE) ---
+                    ctx.beginPath();
+                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = primaryColor;
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
                     
-                    if (vizMode === 'vu') {
-                        // --- MODO VÚMETRO (Peak) ---
-                        let maxVal = 0;
-                        for (let i = 0; i < dataArr.length; i++) {
-                            if (dataArr[i] > maxVal) maxVal = dataArr[i];
+                    const sliceWidth = canvas.width / (timeData ? timeData.length : 64);
+                    let x = 0;
+
+                    for (let i = 0; i < (timeData ? timeData.length : 64); i++) {
+                        let v = (timeData ? timeData[i] / 128.0 : (1 + Math.sin(Date.now()/200 + i/4)*0.2));
+                        let y = v * canvas.height / 2;
+
+                        if (i === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+
+                        x += sliceWidth;
+                    }
+                    
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = primaryColor;
+                    ctx.stroke();
+                    ctx.shadowBlur = 0;
+                } 
+                else if (vizMode === 'bars') {
+                    // --- MODO BARRAS (SPECTRUM) ---
+                    const barCount = 32;
+                    const barWidth = (canvas.width / barCount) - 2;
+                    let x = 0;
+
+                    for (let i = 0; i < barCount; i++) {
+                        let h;
+                        if (analyser) {
+                            h = (dataArr[i] / 255) * canvas.height;
+                        } else {
+                            h = (Math.sin(Date.now()/300 + i/2) + 1) * 0.4 * canvas.height;
                         }
-                        const val = Math.pow(maxVal / 255, 2.2);
-                        const activeValL = Math.round(val * SEGMENT_COUNT * 1.1);
-                        const jitter = (Math.random() - 0.5) * 2; 
-                        const activeValR = Math.round(Math.min(SEGMENT_COUNT, Math.max(0, activeValL + jitter)));
-                        updateBars(activeValL, activeValR);
-                    } else {
-                        // --- MODO ESPECTRO (Bajos a Agudos) ---
-                        // L representará Bajos y Medios-Bajos
-                        // R representará Medios-Altos y Agudos
-                        const step = Math.floor(dataArr.length / SEGMENT_COUNT / 2);
                         
-                        barsL.forEach((seg, i) => {
-                            const freqIdx = i * step;
-                            const val = Math.pow(dataArr[freqIdx] / 255, 1.5);
-                            if (i < Math.round(val * SEGMENT_COUNT * 1.5)) seg.classList.add('active');
-                            else seg.classList.remove('active');
-                        });
+                        const grad = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - h);
+                        grad.addColorStop(0, primaryColor);
+                        grad.addColorStop(1, '#ff6b6b');
                         
-                        barsR.forEach((seg, i) => {
-                            const freqIdx = Math.floor(dataArr.length / 2) + (i * step);
-                            const val = Math.pow(dataArr[freqIdx] / 255, 1.5);
-                            if (i < Math.round(val * SEGMENT_COUNT * 1.5)) seg.classList.add('active');
-                            else seg.classList.remove('active');
-                        });
+                        ctx.fillStyle = grad;
+                        ctx.roundRect(x, canvas.height - h, barWidth, h, [4, 4, 0, 0]);
+                        ctx.fill();
+                        x += barWidth + 2;
                     }
                 }
-            }
+                else if (vizMode === 'led') {
+                    // --- MODO LED (RETRO) ---
+                    const rows = 2;
+                    const cols = 24;
+                    const gap = 3;
+                    const w = (canvas.width / cols) - gap;
+                    const h = (canvas.height / rows) - (gap * 2);
+                    
+                    for (let r = 0; r < rows; r++) {
+                        for (let c = 0; c < cols; c++) {
+                            let active = false;
+                            if (analyser) {
+                                let val = Math.pow(dataArr[c * 2] / 255, 1.5);
+                                active = (c < val * cols * 1.2);
+                            } else {
+                                active = (c < (Math.sin(Date.now()/400 + r + c/3)+1)/2 * cols);
+                            }
 
-            function updateBars(vL, vR) {
-                const activeL = Math.min(SEGMENT_COUNT, vL);
-                const activeR = Math.min(SEGMENT_COUNT, vR);
-                barsL.forEach((seg, i) => {
-                    if (i < activeL) seg.classList.add('active');
-                    else seg.classList.remove('active');
-                });
-                barsR.forEach((seg, i) => {
-                    if (i < activeR) seg.classList.add('active');
-                    else seg.classList.remove('active');
-                });
+                            ctx.fillStyle = active ? primaryColor : (isDark ? 'rgba(255,255,255,0.05)' : '#e2e8f0');
+                            if (active) {
+                                ctx.shadowBlur = 8;
+                                ctx.shadowColor = primaryColor;
+                            }
+                            ctx.beginPath();
+                            ctx.roundRect(c * (w + gap) + gap, r * (h + gap*2) + gap, w, h, 2);
+                            ctx.fill();
+                            ctx.shadowBlur = 0;
+                        }
+                    }
+                }
             }
             draw();
         }
 
         function rxToggleVizMode() {
-            vizMode = (vizMode === 'vu' ? 'spectrum' : 'vu');
+            const modes = ['wave', 'bars', 'led'];
+            const idx = modes.indexOf(vizMode);
+            vizMode = modes[(idx + 1) % modes.length];
+            
             document.getElementById('vizModeName').textContent = vizMode.toUpperCase();
             const btnIcon = document.getElementById('vizModeBtn').querySelector('i');
-            btnIcon.className = (vizMode === 'vu' ? 'fas fa-chart-bar' : 'fas fa-wave-square');
+            
+            if (vizMode === 'wave') btnIcon.className = 'fas fa-wave-square';
+            else if (vizMode === 'bars') btnIcon.className = 'fas fa-chart-bar';
+            else btnIcon.className = 'fas fa-th';
         }
 
         function rxToggle() {
