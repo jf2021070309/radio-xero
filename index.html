@@ -101,33 +101,50 @@
             display: flex;
             flex-direction: column;
             gap: 2.2rem;
-            margin-top: 0; /* Sin margen negativo para respetar la simetría del logo */
+            margin: 0 auto; 
             animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             z-index: 1;
             position: relative;
         }
 
+        /* Rejilla de información responsiva */
+        .info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2.2rem;
+            width: 100%;
+        }
+
         @media (max-width: 600px) {
             .main-wrapper {
                 max-width: 100%;
-                gap: 2.2rem;
+                padding: 0 10px;
             }
 
-            .info-grid {
-                display: flex;
-                flex-direction: column;
-                gap: 2.2rem;
+            .player-card {
+                flex-direction: column !important;
+                text-align: center !important;
+                padding: 1.8rem !important;
+                gap: 1.5rem !important;
+                border-radius: 32px !important;
             }
 
-            /* Optimización Reproductor Móvil */
-            .rx-track {
-                display: flex !important;
-                flex-direction: row !important; /* Forzado absoluto */
-                flex-wrap: nowrap !important;
+            .rx-player-content {
+                width: 100%;
                 align-items: center !important;
+            }
+
+            .rx-track {
                 justify-content: center !important;
-                font-size: 1.15rem !important; /* Un poco más pequeño para que quepa todo */
-                gap: 10px !important;
+            }
+
+            .rx-live-label {
+                justify-content: center !important;
+            }
+
+            .rx-viz-selector {
+                justify-content: center !important;
+                padding-right: 0 !important;
             }
 
             .rx-track-scroller {
@@ -199,7 +216,7 @@
             }
         }
 
-        @media (min-width: 900px) {
+        @media (min-width: 851px) {
             .main-wrapper {
                 max-width: 1000px;
             }
@@ -208,6 +225,24 @@
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
                 gap: 1.5rem;
+            }
+        }
+
+        /* Corrección específica para iPads / Tablets medias */
+        @media (min-width: 601px) and (max-width: 850px) {
+            .main-wrapper {
+                max-width: 90%;
+            }
+            
+            .player-card {
+                flex-direction: column !important;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .rx-art-container {
+                width: 240px;
+                height: 240px;
             }
         }
 
