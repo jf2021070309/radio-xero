@@ -637,7 +637,7 @@
             overflow: hidden;
             display: flex;
             align-items: center;
-            justify-content: center; /* Centra todo el bloque */
+            justify-content: flex-start; /* Alineado a la izquierda en PC */
             gap: 12px;
         }
 
@@ -1897,6 +1897,8 @@
         let dataArr = null;
         let simL = 0;
         let analyser = null;
+        let lastPauseTime = 0;
+        let systemPauseAutoResume = false;
 
         // Volumen
         function rxSetVol(v) {
@@ -2088,11 +2090,25 @@
         }
 
         audio.addEventListener('error', () => {
-            isPlaying = false;
-            setIcon(false);
-            setStatus('Error de conexión. Reintenta.', 'error');
-            if (animId) cancelAnimationFrame(animId);
-            idleAnim();
+            if (isPlaying) {
+                console.log("Error de audio detectado, intentando reconectar...");
+                const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
+                audio.src = STREAM_URL + cacheBuster;
+                audio.load();
+                audio.play().catch(() => {
+                    isPlaying = false;
+                    setIcon(false);
+                    setStatus('Error de conexión. Reintenta.', 'error');
+                    if (animId) cancelAnimationFrame(animId);
+                    idleAnim();
+                });
+            } else {
+                isPlaying = false;
+                setIcon(false);
+                setStatus('Error de conexión. Reintenta.', 'error');
+                if (animId) cancelAnimationFrame(animId);
+                idleAnim();
+            }
         });
 
         audio.addEventListener('waiting', () => {
@@ -2102,16 +2118,35 @@
         // Sincronización con controles nativos del OS y llamadas telefónicas
         audio.addEventListener('pause', () => {
             if (isPlaying) {
+                lastPauseTime = Date.now();
+                systemPauseAutoResume = true;
                 isPlaying = false;
                 setIcon('paused');
                 document.getElementById('artPulse').style.animationPlayState = 'paused';
                 setStatus('Pausado por sistema');
                 if (animId) cancelAnimationFrame(animId);
                 idleAnim();
+            } else {
+                // Si el usuario pausó manualmente, no auto-reanudamos tras llamadas largas
+                systemPauseAutoResume = false;
             }
         });
 
         audio.addEventListener('play', () => {
+            const pauseDuration = (Date.now() - lastPauseTime) / 1000;
+            
+            // Si la pausa fue muy larga (> 30s) y era una pausa de sistema,
+            // refrescamos la fuente para evitar timeouts de streaming.
+            if (systemPauseAutoResume && pauseDuration > 30) {
+                console.log(`Reconexión automática tras pausa larga: ${pauseDuration.toFixed(1)}s`);
+                systemPauseAutoResume = false;
+                const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
+                audio.src = STREAM_URL + cacheBuster;
+                audio.load();
+                audio.play();
+                return; // El próximo evento 'play' o 'playing' manejará la UI
+            }
+
             if (!isPlaying) {
                 isPlaying = true;
                 setIcon('playing');
@@ -2119,6 +2154,35 @@
                 setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
                 if (animId) cancelAnimationFrame(animId);
                 startAnalyser();
+            }
+        });
+
+        // Manejo de errores y estancamientos (stalled) para auto-reconexión
+        audio.addEventListener('stalled', () => {
+            if (isPlaying) {
+                console.log("Stream estancado, intentando reconectar...");
+                setStatus('Recuperando conexión...', 'playing');
+                const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
+                audio.src = STREAM_URL + cacheBuster;
+                audio.load();
+                audio.play();
+            }
+        });
+
+        // Refuerzo cuando el usuario vuelve a la pestaña
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                // Si el audio debería estar sonando pero el sistema lo dejó en pausa, intentamos play
+                // O si la conexión se murió mientras estaba en segundo plano.
+                if (isPlaying && audio.paused) {
+                    audio.play().catch(() => {
+                        // Si falla el auto-play (bloqueo navegador), refrescamos fuente
+                        const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
+                        audio.src = STREAM_URL + cacheBuster;
+                        audio.load();
+                        audio.play();
+                    });
+                }
             }
         });
 
