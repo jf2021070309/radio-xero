@@ -825,6 +825,8 @@
             display: flex;
             gap: 2px;
             flex: 1;
+            height: 100%;
+            align-items: center;
         }
 
         .rx-vu-segment {
@@ -2012,7 +2014,7 @@
         const vuR = document.getElementById('vuR');
         const barsL = [];
         const barsR = [];
-        const SEGMENT_COUNT = 24;
+        const SEGMENT_COUNT = 40;
 
         // Detección de Dispositivos y Navegadores
         const isIosDevice = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
