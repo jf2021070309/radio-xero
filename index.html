@@ -1511,14 +1511,19 @@
                 gap: 1rem;
             }
 
-            .rx-station-name,
-            .rx-track {
+            .rx-station-name {
                 max-width: 100%;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 display: block;
-                /* Asegura que el truncado funcione */
+                padding: 0 5px;
+            }
+
+            .rx-track {
+                max-width: 100%;
+                display: flex;
+                flex-wrap: nowrap;
                 padding: 0 5px;
             }
 
