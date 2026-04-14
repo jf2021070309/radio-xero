@@ -2194,8 +2194,11 @@
                 audio.src = STREAM_URL + cacheBuster;
                 audio.load();
                 audio.play();
-                return; // El próximo evento 'play' o 'playing' manejará la UI
+                return;
             }
+
+            // Resetear bandera de auto-reanudación al reproducir
+            systemPauseAutoResume = false;
 
             if (!isPlaying) {
                 isPlaying = true;
@@ -2222,9 +2225,8 @@
         // Refuerzo cuando el usuario vuelve a la pestaña
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') {
-                // Si el audio debería estar sonando pero el sistema lo dejó en pausa, intentamos play
-                // O si la conexión se murió mientras estaba en segundo plano.
-                if (isPlaying && audio.paused) {
+                // Si el audio debería estar sonando o fue pausado por el sistema, intentamos reanudar
+                if ((isPlaying || systemPauseAutoResume) && audio.paused) {
                     audio.play().catch(() => {
                         // Si falla el auto-play (bloqueo navegador), refrescamos fuente
                         const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
