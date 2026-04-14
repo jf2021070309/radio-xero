@@ -57,7 +57,7 @@
             --card-border: rgba(255, 255, 255, 0.08);
             --glass: rgba(15, 23, 42, 0.7);
             --glass-border: rgba(237, 28, 36, 0.2);
-            --shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            --shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
             --inner-bg: rgba(255, 255, 255, 0.03);
         }
 
@@ -460,12 +460,13 @@
             border-radius: var(--card-radius);
             padding: 1.5rem;
             /* Optimización: Solo transicionar propiedades necesarias */
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.3s ease, transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             height: auto;
             color: var(--text-main);
             box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
+            will-change: transform, background-color;
         }
 
         .card::before {
@@ -744,7 +745,7 @@
             height: 12px;
             border-radius: 2.5px;
             background: var(--inner-bg);
-            transition: all 0.08s ease;
+            /* Sin transición para evitar lag masivo de 48 elementos al cambiar tema */
         }
 
         /* Ambient color (Inactive) - Now subtle light gray */
