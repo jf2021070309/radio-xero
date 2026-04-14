@@ -705,17 +705,69 @@
 
         /* Eliminado rx-track-icon para diseño minimalista */
 
-        /* ─── SEAMLESS INTEGRATED VU METER ─── */
-        .rx-viz-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        /* ─── ENHANCED VISUALIZERS ─── */
+        .rx-viz-area {
+            position: relative;
             margin: 10px 0 20px 0;
-            padding: 15px;
+            padding: 18px;
             background: var(--inner-bg);
             border-radius: 16px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--card-border);
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .rx-viz-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            justify-content: flex-end;
+            padding-right: 5px;
+        }
+
+        .viz-mode-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-dim);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .viz-mode-btn i {
+            font-size: 12px;
+        }
+
+        .viz-mode-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+        }
+
+        .viz-mode-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .rx-viz-container {
+            display: none; /* Se activa por JS */
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            height: 110px; /* Misma altura que el canvas para estabilidad total */
         }
 
         .rx-vu-row {
@@ -725,27 +777,33 @@
         }
 
         .rx-vu-label {
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 900;
             color: var(--text-dim);
-            width: 15px;
+            width: 20px;
             text-align: center;
-            opacity: 0.6;
+            opacity: 0.8;
+            font-family: 'Poppins', sans-serif;
         }
 
         .rx-vu-meter {
             display: flex;
             gap: 2px;
-            /* Un poco más juntos */
             flex: 1;
         }
 
         .rx-vu-segment {
             flex: 1;
-            height: 12px;
-            border-radius: 2.5px;
+            height: 14px; /* Regresamos a un tamaño elegante, no tan gordo */
+            border-radius: 3px;
             background: var(--inner-bg);
-            /* Sin transición para evitar lag masivo de 48 elementos al cambiar tema */
+        }
+
+        .rx-viz-canvas {
+            width: 100%;
+            height: 110px;
+            display: none;
+            border-radius: 8px;
         }
 
         /* Ambient color (Inactive) - Now subtle light gray */
@@ -753,39 +811,29 @@
         .rx-vu-segment.mid,
         .rx-vu-segment.high {
             background: #e2e8f0;
+            transition: background-color 0.1s ease;
+        }
+
+        .dark-theme .rx-vu-segment.low,
+        .dark-theme .rx-vu-segment.mid,
+        .dark-theme .rx-vu-segment.high {
+            background: rgba(255, 255, 255, 0.05);
         }
 
         /* Glowing LEDs (Active) - More vibrant on light background */
         .rx-vu-segment.active.low {
             background: #22c55e;
-            /* Verde */
-            box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
         }
 
         .rx-vu-segment.active.mid {
             background: #f97316;
-            /* Naranja fuerte */
-            box-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
+            box-shadow: 0 0 8px rgba(249, 115, 22, 0.8);
         }
 
         .rx-vu-segment.active.high {
             background: #ef4444;
-            /* Rojo */
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
-        }
-
-        /* Scale Labels - More minimalist */
-        .rx-vu-scale {
-            display: flex;
-            justify-content: space-between;
-            padding-left: 24px;
-            margin-top: 2px;
-        }
-
-        .rx-vu-scale span {
-            font-size: 8px;
-            font-weight: 600;
-            color: #cbd5e1;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 1);
         }
 
         /* Controls */
@@ -1029,11 +1077,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 1.2rem;
+            padding: 1.4rem 1.5rem;
             background: var(--inner-bg);
-            border-radius: 16px;
+            border-radius: 18px;
             border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .content-item:hover {
@@ -1044,9 +1092,9 @@
 
         .item-name {
             color: var(--text-main);
-            font-size: 1rem;
+            font-size: 1.15rem;
             font-weight: 700;
-            letter-spacing: -0.2px;
+            letter-spacing: -0.3px;
         }
 
         .item-time {
@@ -1782,16 +1830,32 @@
                     </div>
                 </div>
 
-                <!-- Visualizer bars -->
-                <div class="rx-viz-container" id="rxVizContainer">
-                    <div class="rx-vu-row">
-                        <span class="rx-vu-label">L</span>
-                        <div class="rx-vu-meter" id="vuL"></div>
+                <!-- Enhanced Visualizer Area -->
+                <div class="rx-viz-area" id="rxVizArea">
+                    <div class="rx-viz-selector">
+                        <button class="viz-mode-btn active" onclick="setVizMode('led')" id="btn-led">
+                            <i class="fas fa-th"></i> LED
+                        </button>
+                        <button class="viz-mode-btn" onclick="setVizMode('bars')" id="btn-bars">
+                            <i class="fas fa-chart-bar"></i> BARS
+                        </button>
+                        <button class="viz-mode-btn" onclick="setVizMode('wave')" id="btn-wave">
+                            <i class="fas fa-wave-square"></i> WAVE
+                        </button>
                     </div>
-                    <div class="rx-vu-row">
-                        <span class="rx-vu-label">R</span>
-                        <div class="rx-vu-meter" id="vuR"></div>
+
+                    <div class="rx-viz-container" id="rxVizContainer">
+                        <div class="rx-vu-row">
+                            <span class="rx-vu-label">L</span>
+                            <div class="rx-vu-meter" id="vuL"></div>
+                        </div>
+                        <div class="rx-vu-row">
+                            <span class="rx-vu-label">R</span>
+                            <div class="rx-vu-meter" id="vuR"></div>
+                        </div>
                     </div>
+
+                    <canvas id="rxCanvas" class="rx-viz-canvas"></canvas>
                 </div>
 
                 <!-- Bottom: Controls -->
@@ -1952,6 +2016,11 @@
         let lastPauseTime = 0;
         let systemPauseAutoResume = false;
 
+        // Variables de Visualización
+        let currentVizMode = 'led';
+        let canvas = document.getElementById('rxCanvas');
+        let ctx = canvas ? canvas.getContext('2d') : null;
+
         // Volumen
         function rxSetVol(v) {
             audio.volume = v / 100;
@@ -2017,81 +2086,139 @@
                 animId = requestAnimationFrame(frame);
                 t += 0.05;
 
-                const valL = Math.abs(Math.sin(t)) * 0.35;
-                const valR = Math.abs(Math.cos(t)) * 0.35;
+                if (currentVizMode === 'led') {
+                    const valL = Math.abs(Math.sin(t)) * 0.35;
+                    const valR = Math.abs(Math.cos(t)) * 0.35;
+                    const activeL = Math.round(valL * SEGMENT_COUNT);
+                    const activeR = Math.round(valR * SEGMENT_COUNT);
 
-                const activeL = Math.round(valL * SEGMENT_COUNT);
-                const activeR = Math.round(valR * SEGMENT_COUNT);
-
-                barsL.forEach((seg, i) => {
-                    if (i < activeL) seg.classList.add('active');
-                    else seg.classList.remove('active');
-                });
-                barsR.forEach((seg, i) => {
-                    if (i < activeR) seg.classList.add('active');
-                    else seg.classList.remove('active');
-                });
+                    barsL.forEach((seg, i) => {
+                        if (i < activeL) seg.classList.add('active');
+                        else seg.classList.remove('active');
+                    });
+                    barsR.forEach((seg, i) => {
+                        if (i < activeR) seg.classList.add('active');
+                        else seg.classList.remove('active');
+                    });
+                } else {
+                    // Animación sutil para Canvas en pausa
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    if (currentVizMode === 'bars') {
+                        const count = 32;
+                        const barWidth = (canvas.width / window.devicePixelRatio / count) * 0.8;
+                        for(let i=0; i<count; i++) {
+                            const h = 5 + Math.abs(Math.sin(t + i*0.2)) * 10;
+                            const x = i * barWidth * 1.25;
+                            const y = (canvas.height / window.devicePixelRatio) - h;
+                            ctx.fillStyle = document.body.classList.contains('dark-theme') ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)';
+                            ctx.fillRect(x, y, barWidth, h);
+                        }
+                    } else if (currentVizMode === 'wave') {
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = document.body.classList.contains('dark-theme') ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)';
+                        ctx.beginPath();
+                        const w = canvas.width / window.devicePixelRatio;
+                        const h = canvas.height / window.devicePixelRatio;
+                        ctx.moveTo(0, h/2);
+                        for(let x=0; x<w; x+=5) {
+                            const y = h/2 + Math.sin(x*0.02 + t) * 5;
+                            ctx.lineTo(x, y);
+                        }
+                        ctx.stroke();
+                    }
+                }
             }
             frame();
         }
         idleAnim();
 
+        // Manejo de redimensionado para el Canvas
+        window.addEventListener('resize', () => {
+            if (currentVizMode !== 'led') {
+                const canvasEl = document.getElementById('rxCanvas');
+                canvas.width = canvasEl.offsetWidth * window.devicePixelRatio;
+                canvas.height = canvasEl.offsetHeight * window.devicePixelRatio;
+                ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            }
+            checkTrackOverflow();
+        });
+
+        function setVizMode(mode) {
+            currentVizMode = mode;
+            
+            // UI Update
+            document.querySelectorAll('.viz-mode-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + mode).classList.add('active');
+
+            const container = document.getElementById('rxVizContainer');
+            const canvasEl = document.getElementById('rxCanvas');
+
+            if (mode === 'led') {
+                container.style.display = 'flex';
+                canvasEl.style.display = 'none';
+            } else {
+                container.style.display = 'none';
+                canvasEl.style.display = 'block';
+                // Resize canvas to its display size
+                canvas.width = canvasEl.offsetWidth * window.devicePixelRatio;
+                canvas.height = canvasEl.offsetHeight * window.devicePixelRatio;
+                ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            }
+        }
+
         function startAnalyser() {
-            // En iOS y Edge Android, el análisis real puede bloquear el audio por CORS.
-            // Usamos simulación para estos casos problemáticos.
-            if (!isIosDevice && !isEdgeAndroid) {
+            if (!audioCtx || audioCtx.state === 'closed') {
                 try {
-                    if (!audioCtx) {
-                        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                        analyser = audioCtx.createAnalyser();
-                        analyser.fftSize = 128;
-                        analyser.smoothingTimeConstant = 0.8;
-                        srcNode = audioCtx.createMediaElementSource(audio);
-                        srcNode.connect(analyser);
-                        analyser.connect(audioCtx.destination);
-                        dataArr = new Uint8Array(analyser.frequencyBinCount);
-                    }
-                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    analyser = audioCtx.createAnalyser();
+                    analyser.fftSize = 256; // Mayor resolución para Bars/Wave
+                    analyser.smoothingTimeConstant = 0.75;
+                    srcNode = audioCtx.createMediaElementSource(audio);
+                    srcNode.connect(analyser);
+                    analyser.connect(audioCtx.destination);
+                    dataArr = new Uint8Array(analyser.frequencyBinCount);
                 } catch (e) {
-                    console.error("AudioContext error, switching to simulation", e);
+                    console.error("AudioContext error", e);
                 }
             }
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
 
             function draw() {
                 if (!isPlaying) return;
                 animId = requestAnimationFrame(draw);
 
+                if (currentVizMode === 'led') {
+                    drawLed();
+                } else if (currentVizMode === 'bars') {
+                    drawBars();
+                } else if (currentVizMode === 'wave') {
+                    drawWave();
+                }
+            }
+
+            function drawLed() {
                 let activeValL = 0;
                 let activeValR = 0;
 
                 if (isIosDevice || isEdgeAndroid || !analyser) {
-                    // --- SIMULACIÓN REALISTA INDEPENDIENTE PARA L/R ---
                     const baseL = 0.5 + Math.random() * 0.2;
-                    const peakL = Math.random() > 0.88 ? 0.45 : 0;
-                    simL += (Math.min(1.2, baseL + peakL + (Math.random() * 0.1)) - simL) * 0.25;
+                    simL += (Math.min(1.2, baseL + (Math.random() * 0.1)) - simL) * 0.25;
                     activeValL = Math.round(Math.pow(simL, 1.5) * SEGMENT_COUNT * 1.3);
-                    
-                    const baseR = 0.5 + Math.random() * 0.2;
-                    const peakR = Math.random() > 0.90 ? 0.40 : 0;
-                    simR += (Math.min(1.2, baseR + peakR + (Math.random() * 0.1)) - simR) * 0.25;
-                    activeValR = Math.round(Math.pow(simR, 1.5) * SEGMENT_COUNT * 1.3);
+                    activeValR = Math.round(Math.min(SEGMENT_COUNT, activeValL + (Math.random() - 0.5) * 4));
                 } else {
-                    // --- ANÁLISIS REAL CON 'JITTER' PARA EL CANAL R ---
                     analyser.getByteFrequencyData(dataArr);
-                    let maxVal = 0;
-                    for (let i = 0; i < dataArr.length; i++) {
-                        if (dataArr[i] > maxVal) maxVal = dataArr[i];
-                    }
-                    const val = Math.pow(maxVal / 255, 2.2);
-                    activeValL = Math.round(val * SEGMENT_COUNT * 1.1);
+                    let avgL = 0;
+                    let avgR = 0;
+                    // Promedios simples para L/R simulado desde mono stream
+                    for(let i=0; i<10; i++) avgL += dataArr[i];
+                    for(let i=10; i<20; i++) avgR += dataArr[i];
                     
-                    // Añadimos una pequeña variación aleatoria al canal R para que no sea idéntico
-                    const jitter = (Math.random() - 0.5) * 2; 
-                    activeValR = Math.round(Math.min(SEGMENT_COUNT, Math.max(0, activeValL + jitter)));
+                    activeValL = Math.round((avgL/10/255) * SEGMENT_COUNT * 1.05);
+                    activeValR = Math.round((avgR/10/255) * SEGMENT_COUNT * 1.05);
                 }
 
-                if (activeValL > SEGMENT_COUNT) activeValL = SEGMENT_COUNT;
-                if (activeValR > SEGMENT_COUNT) activeValR = SEGMENT_COUNT;
+                activeValL = Math.min(SEGMENT_COUNT, activeValL);
+                activeValR = Math.min(SEGMENT_COUNT, activeValR);
 
                 barsL.forEach((seg, i) => {
                     if (i < activeValL) seg.classList.add('active');
@@ -2102,6 +2229,110 @@
                     else seg.classList.remove('active');
                 });
             }
+
+            function drawBars() {
+                analyser.getByteFrequencyData(dataArr);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                const barCount = 32;
+                const canvasW = canvas.width / window.devicePixelRatio;
+                const canvasH = canvas.height / window.devicePixelRatio;
+                const barWidth = (canvasW / barCount) * 0.8;
+                const gap = (canvasW / barCount) * 0.2;
+                
+                const brickHeight = 4; // Altura de cada bloque
+                const brickGap = 1.5;   // Espacio entre bloques
+                const totalBricks = Math.floor(canvasH / (brickHeight + brickGap));
+                
+                let x = gap / 2;
+                const step = Math.floor(dataArr.length / 2 / barCount);
+
+                for (let i = 0; i < barCount; i++) {
+                    let sum = 0;
+                    for(let j=0; j<step; j++) sum += dataArr[i*step + j];
+                    let avg = sum / step;
+
+                    // Escala inteligente: atenuar bajos (izq) y potenciar medios/altos (der)
+                    const factor = i < 8 ? 0.95 : (i < 16 ? 1.2 : 1.4);
+                    const activeHeight = (avg / 255) * canvasH * factor;
+                    const activeBricks = Math.ceil(activeHeight / (brickHeight + brickGap));
+
+                    for (let b = 0; b < totalBricks; b++) {
+                        const y = canvasH - (b * (brickHeight + brickGap)) - brickHeight;
+                        
+                        // Determinar color del ladrillo
+                        const percent = (b / totalBricks) * 100;
+                        if (b < activeBricks) {
+                            if (percent < 50) ctx.fillStyle = '#22c55e'; // Verde
+                            else if (percent < 80) ctx.fillStyle = '#f97316'; // Naranja
+                            else ctx.fillStyle = '#ef4444'; // Rojo
+                            
+                            ctx.shadowBlur = 4;
+                            ctx.shadowColor = ctx.fillStyle;
+                        } else {
+                            // Ladrillos inactivos (fondo sutil)
+                            ctx.fillStyle = document.body.classList.contains('dark-theme') ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.05)';
+                            ctx.shadowBlur = 0;
+                        }
+
+                        ctx.fillRect(x, y, barWidth, brickHeight);
+                    }
+
+                    x += barWidth + gap;
+                }
+            }
+
+            function drawWave() {
+                analyser.getByteFrequencyData(dataArr);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                const canvasW = canvas.width / window.devicePixelRatio;
+                const canvasH = canvas.height / window.devicePixelRatio;
+                
+                // Degradado tricolor para la onda
+                const gradient = ctx.createLinearGradient(0, canvasH, 0, 0);
+                gradient.addColorStop(0, '#22c55e');   // Verde abajo
+                gradient.addColorStop(0.5, '#f97316'); // Naranja medio
+                gradient.addColorStop(0.9, '#ef4444'); // Rojo arriba (picos)
+                
+                ctx.beginPath();
+                ctx.lineWidth = 2.5;
+                ctx.strokeStyle = gradient;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'rgba(237, 28, 36, 0.3)';
+                
+                const sliceWidth = canvasW / (dataArr.length / 2);
+                let x = 0;
+
+                for (let i = 0; i < dataArr.length / 2; i++) {
+                    // Gradiente de sensibilidad de izquierda a derecha
+                    const factor = i < 15 ? (0.8 + (i/15) * 0.5) : 1.4;
+                    const v = (dataArr[i] / 255) * canvasH * factor;
+                    const y = canvasH - v;
+
+                    if (i === 0) ctx.moveTo(x, y);
+                    else {
+                        // Suavizado leve con factor compensado
+                        const prevFactor = (i-1) < 15 ? (0.8 + ((i-1)/15) * 0.5) : 1.4;
+                        const prevY = canvasH - (dataArr[i-1] / 255 * canvasH * prevFactor);
+                        ctx.quadraticCurveTo(x - sliceWidth/2, prevY, x, y);
+                    }
+                    x += sliceWidth;
+                }
+
+                ctx.stroke();
+
+                // Relleno degradado fluido
+                ctx.lineTo(canvasW, canvasH);
+                ctx.lineTo(0, canvasH);
+                const fillGradient = ctx.createLinearGradient(0, canvasH, 0, 0);
+                fillGradient.addColorStop(0, 'rgba(34, 197, 94, 0.1)');
+                fillGradient.addColorStop(0.5, 'rgba(249, 115, 22, 0.1)');
+                fillGradient.addColorStop(1, 'rgba(239, 68, 68, 0.1)');
+                ctx.fillStyle = fillGradient;
+                ctx.fill();
+            }
+
             draw();
         }
 
@@ -2448,6 +2679,8 @@
                 setTimeout(() => { rxToggle(); }, 500);
             }
         });
+        // Inicialización final
+        setVizMode(currentVizMode);
     </script>
 </body>
 
