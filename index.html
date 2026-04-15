@@ -1374,29 +1374,32 @@
         }
 
         .ios-install-card {
-            background: #ffffff; /* Blanco radiante para que NO se pierda */
-            border: 1px solid #f1f5f9;
+            background: #f2f2f7; /* iOS Modal Background */
+            border: none;
             border-radius: 28px;
             padding: 2.2rem 1.8rem;
             max-width: 360px;
             width: 100%;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             position: relative;
             transform-origin: bottom center;
         }
 
         .ios-install-card h3 {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
             font-size: 1.4rem;
-            margin-bottom: 0.75rem;
-            color: #0f172a; /* Texto oscuro */
+            margin-bottom: 0.5rem;
+            color: #1c1c1e;
         }
 
         .ios-install-card>p {
-            font-size: 0.9rem;
-            color: #64748b; /* Gris oscuro para lectura fácil */
-            line-height: 1.5;
-            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #8e8e93;
+            line-height: 1.4;
+            margin-bottom: 2rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
         }
 
         .ios-steps {
@@ -1411,11 +1414,11 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            background: #f8fafc;
+            background: transparent; /* overridden above */
             padding: 10px 14px;
             border-radius: 12px;
             font-size: 0.85rem;
-            border: 1px solid #e2e8f0;
+            border: none; /* overridden above */
         }
 
         .ios-step i {
@@ -1719,23 +1722,30 @@
     <div id="iosHint" class="ios-install-overlay">
         <div class="ios-install-card">
             <h3>Instala Radio Xero</h3>
-            <p>Disfruta de nuestra radio sin interrupciones y con acceso directo desde tu inicio.</p>
-            <div class="ios-steps" style="gap: 12px;">
-                <div class="ios-step" style="padding: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
-                    <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; box-shadow: 0 2px 6px rgba(239,68,68,0.4);">1</div>
-                    <span style="font-size: 0.95rem; line-height: 1.4; color: #1e293b;">Abre el menú de opciones o <b style="color: #0f172a;">Compartir</b>.</span>
+            <p>Escucha nuestra música con acceso directo desde tu celular.</p>
+            <div class="ios-steps" style="gap: 15px; margin-bottom: 2rem;">
+                <!-- Paso 1 -->
+                <div class="ios-step" style="padding: 12px 16px; background: transparent; border: none; border-radius: 0; display: flex; align-items: center; gap: 15px; box-shadow: none;">
+                    <div style="display: flex; gap: 10px;">
+                        <div style="background: #eef2ff; color: #3b82f6; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;"><i class="fas fa-external-link-alt" style="transform: rotate(-90deg) scaleX(-1);"></i></div>
+                        <div style="background: #f1f5f9; color: #64748b; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0;"><i class="fas fa-ellipsis-h"></i></div>
+                    </div>
+                    <span style="font-size: 0.95rem; line-height: 1.4; color: #475569;">Toca el botón de <b style="color: #0f172a; font-weight: 600;">Menu</b> o <br><b style="color: #0f172a; font-weight: 600;">Compartir</b></span>
                 </div>
-                <div class="ios-step" style="padding: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
-                    <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; box-shadow: 0 2px 6px rgba(239,68,68,0.4);">2</div>
-                    <span style="font-size: 0.95rem; line-height: 1.4; color: #1e293b;">Busca en la lista <b style="color: #0f172a;">Agregar a inicio</b>.</span>
+                <!-- Paso 2 -->
+                <div class="ios-step" style="padding: 12px 16px; background: transparent; border: none; border-radius: 0; display: flex; align-items: center; gap: 15px; box-shadow: none;">
+                    <div style="background: #eef2ff; color: #3b82f6; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; margin-right: 42px;"><i class="fas fa-plus"></i></div>
+                    <span style="font-size: 0.95rem; line-height: 1.4; color: #475569;">Busca la opción <b style="color: #0f172a; font-weight: 600;">Agregar a<br>inicio</b></span>
                 </div>
-                <div class="ios-step" style="padding: 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
-                    <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; flex-shrink: 0; box-shadow: 0 2px 6px rgba(239,68,68,0.4);">3</div>
-                    <span style="font-size: 0.95rem; line-height: 1.4; color: #1e293b;">Pulsa <b>Agregar</b> en la parte superior.</span>
+                <!-- Paso 3 -->
+                <div class="ios-step" style="padding: 12px 16px; background: transparent; border: none; border-radius: 0; display: flex; align-items: center; gap: 15px; box-shadow: none;">
+                    <div style="background: #dcfce7; color: #22c55e; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; margin-right: 42px;"><i class="fas fa-check"></i></div>
+                    <span style="font-size: 0.95rem; line-height: 1.4; color: #475569;">Presiona <b style="color: #0f172a; font-weight: 600;">Agregar</b> y la app se<br>instalará</span>
                 </div>
             </div>
-            <button class="ios-close-btn" onclick="document.getElementById('iosHint').style.display='none'">
-                Quizás más tarde
+            <p style="font-size: 0.8rem; color: #94a3b8; text-align: center; margin-bottom: 2rem;">* Recomendamos usar Safari para la mejor<br>experiencia.</p>
+            <button class="ios-close-btn" style="background: #f1f5f9; color: #475569; font-weight: 600; padding: 14px; border-radius: 12px; width: 100%; border: none; font-size: 0.95rem;" onclick="document.getElementById('iosHint').style.display='none'">
+                Entendido
             </button>
             <i class="fas fa-arrow-down ios-arrow-down"></i>
         </div>
