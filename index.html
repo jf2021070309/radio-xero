@@ -167,20 +167,12 @@
                 min-width: 0 !important;
             }
 
-            /* Logo y Cabecera Móvil */
-            .main-logo {
-                max-height: 90px !important; /* Logo más pequeño */
-            }
-
             header {
-                padding-top: 1.5rem !important; /* Menos espacio arriba */
-                padding-bottom: 1rem !important;
+                padding: 0.5rem 0 !important;
             }
 
             .theme-switch {
-                top: 6px !important;
-                right: 6px !important;
-                transform: scale(0.75); /* Más pequeño para celular y más lejos del logo */
+                transform: scale(0.85);
             }
 
             .rx-mute-btn {
@@ -206,7 +198,7 @@
 
             .info-grid {
                 display: grid;
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
                 gap: 1.5rem;
             }
         }
@@ -287,21 +279,20 @@
         /* Header */
         header {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 0; 
-            padding: 2.5rem 0; /* Simetría perfecta arriba y abajo del logo */
+            justify-content: flex-end;
+            margin-bottom: 0.5rem; 
+            padding: 0.5rem 0;
             width: 100%;
+            max-width: 600px;
             position: relative;
             z-index: 2;
         }
 
-        .main-logo {
-            max-height: 140px;
-            width: auto;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
+        @media (min-width: 900px) {
+            header {
+                max-width: 1000px;
+            }
         }
 
         .visually-hidden {
@@ -1625,9 +1616,7 @@
         }
 
         .theme-switch {
-            position: absolute;
-            top: 10px;
-            right: 0;
+            position: relative;
             width: 64px;
             height: 34px;
             border-radius: 50px;
@@ -1640,6 +1629,7 @@
             align-items: center;
             padding: 4px;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-left: auto;
         }
 
         .theme-switch:hover {
@@ -1722,10 +1712,312 @@
                 padding: 1.5rem !important;
             }
         }
+
+        /* ══════════════════════════════════════════════════════════════════
+           PREMIUM STUDIO INTRO / AUTOPLAY SPLASH SCREEN
+        ══════════════════════════════════════════════════════════════════ */
+        .rx-intro-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 42%, #0d1527 0%, #030712 65%, #000000 100%);
+            color: #ffffff;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 1.5rem;
+            transform: translateZ(0);
+            will-change: opacity, transform;
+            transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                        transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        visibility 0.4s;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .rx-intro-overlay.rx-intro-hiding {
+            opacity: 0;
+            transform: scale3d(1.05, 1.05, 1);
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Ambient Center Studio Glow */
+        .rx-intro-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%, -50%, 0);
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(237, 28, 36, 0.2) 0%, rgba(26, 59, 112, 0.15) 50%, transparent 70%);
+            pointer-events: none;
+            filter: blur(60px);
+        }
+
+        /* Intro Content Container */
+        .rx-intro-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            max-width: 550px;
+            width: 100%;
+            gap: 2.2rem;
+            transform: translateZ(0);
+            will-change: opacity, transform;
+            animation: introContentPop 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes introContentPop {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0) scale3d(0.95, 0.95, 1);
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+            }
+        }
+
+        /* Large Studio Logo */
+        .rx-intro-logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateZ(0);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .rx-intro-logo {
+            max-width: 330px;
+            max-height: 190px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 35px rgba(237, 28, 36, 0.45)) drop-shadow(0 15px 30px rgba(0, 0, 0, 0.8));
+            transform: translateZ(0);
+            will-change: transform;
+            animation: introLogoFloat 4s ease-in-out infinite alternate;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .rx-intro-logo-container:hover .rx-intro-logo {
+            transform: scale3d(1.05, 1.05, 1);
+            filter: drop-shadow(0 0 45px rgba(237, 28, 36, 0.65)) drop-shadow(0 15px 35px rgba(0, 0, 0, 0.9));
+        }
+
+        @keyframes introLogoFloat {
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+            100% {
+                transform: translate3d(0, -8px, 0);
+            }
+        }
+
+        /* Tactile Play Button & Perfectly Centered Halo */
+        .rx-intro-play-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateZ(0);
+        }
+
+        .rx-intro-play-halo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(237, 28, 36, 0.45) 0%, rgba(237, 28, 36, 0) 70%);
+            transform: translate3d(-50%, -50%, 0);
+            will-change: transform, opacity;
+            animation: rxHaloPulse 2.2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rxHaloPulse {
+            0%, 100% {
+                transform: translate3d(-50%, -50%, 0) scale3d(0.88, 0.88, 1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translate3d(-50%, -50%, 0) scale3d(1.3, 1.3, 1);
+                opacity: 0.85;
+            }
+        }
+
+        .rx-intro-play-btn {
+            position: relative;
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #ff2e38 0%, #ED1C24 45%, #a81116 100%);
+            box-shadow: 0 12px 35px rgba(237, 28, 36, 0.65), 
+                        0 0 0 4px rgba(255, 255, 255, 0.18),
+                        inset 0 2px 4px rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            outline: none;
+            transform: translateZ(0);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                        box-shadow 0.25s ease;
+            -webkit-tap-highlight-color: transparent;
+            z-index: 2;
+        }
+
+        .rx-intro-play-btn:hover {
+            transform: scale3d(1.08, 1.08, 1);
+            box-shadow: 0 16px 45px rgba(237, 28, 36, 0.85),
+                        0 0 0 6px rgba(255, 255, 255, 0.28),
+                        inset 0 3px 6px rgba(255, 255, 255, 0.6);
+        }
+
+        .rx-intro-play-btn:active,
+        .rx-intro-play-btn.pressed {
+            transform: scale3d(0.92, 0.92, 1);
+            box-shadow: 0 6px 20px rgba(237, 28, 36, 0.5),
+                        0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .rx-intro-icon-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding-left: 5px; /* Centrado visual del triángulo de Play */
+        }
+
+        .rx-intro-svg-play {
+            width: 40px;
+            height: 40px;
+            fill: #ffffff;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4));
+            transition: transform 0.2s ease;
+        }
+
+        .rx-intro-play-btn:hover .rx-intro-svg-play {
+            transform: scale(1.1);
+        }
+
+        /* Clean Typography Prompt (Sin Card) */
+        .rx-intro-prompt {
+            font-family: 'Poppins', 'Inter', -apple-system, sans-serif;
+            font-size: 0.86rem;
+            font-weight: 600;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            cursor: pointer;
+            margin: 0;
+            padding: 0;
+            background: none;
+            border: none;
+            box-shadow: none;
+            user-select: none;
+            transition: color 0.3s ease, letter-spacing 0.3s ease, transform 0.3s ease;
+            animation: rxTextPulse 2.6s ease-in-out infinite alternate;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .rx-intro-prompt:hover {
+            color: #ffffff;
+            letter-spacing: 4.5px;
+        }
+
+        @keyframes rxTextPulse {
+            0% {
+                opacity: 0.7;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(-2px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .rx-intro-content {
+                gap: 1.8rem;
+            }
+
+            .rx-intro-logo {
+                max-width: 260px;
+                max-height: 150px;
+            }
+
+            .rx-intro-play-wrapper {
+                width: 105px;
+                height: 105px;
+            }
+
+            .rx-intro-play-btn {
+                width: 86px;
+                height: 86px;
+            }
+
+            .rx-intro-svg-play {
+                width: 36px;
+                height: 36px;
+            }
+
+            .rx-intro-prompt {
+                font-size: 0.76rem;
+                letter-spacing: 2.5px;
+            }
+
+            .rx-intro-prompt:hover {
+                letter-spacing: 3px;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <!-- ─── INTRO / AUTOPLAY SPLASH SCREEN OVERLAY ─── -->
+    <div id="rxIntroOverlay" class="rx-intro-overlay" onclick="rxStartFromIntro()" role="dialog" aria-modal="true" aria-label="Bienvenido a Radio Xero">
+        <div class="rx-intro-glow"></div>
+
+        <div class="rx-intro-content">
+            <!-- Large Studio Logo -->
+            <div class="rx-intro-logo-container" title="Iniciar Radio Xero">
+                <img src="logo%20xero.png" alt="Radio Xero" class="rx-intro-logo">
+            </div>
+
+            <!-- Giant Play Button -->
+            <div class="rx-intro-play-wrapper">
+                <div class="rx-intro-play-halo"></div>
+                <button id="rxIntroPlayBtn" class="rx-intro-play-btn" aria-label="Iniciar Radio Xero" tabindex="0">
+                    <div class="rx-intro-icon-wrap">
+                        <svg class="rx-intro-svg-play" viewBox="0 0 24 24">
+                            <polygon points="7,4 21,12 7,20" />
+                        </svg>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Clean Typography (Sin Card) -->
+            <p class="rx-intro-prompt">PULSE PLAY PARA ESCUCHAR</p>
+        </div>
+    </div>
+
     <div class="top-bg"></div>
 
     <!-- Floating Install Button -->
@@ -1839,7 +2131,6 @@
                 <i class="fas fa-sun"></i>
             </div>
         </div>
-        <img src="logo%20xero.png" alt="Radio Xero Logo" class="main-logo">
     </header>
 
     <div class="main-wrapper">
@@ -1971,29 +2262,6 @@
                         style="position: relative;" aria-label="Copiar Enlace">
                         <i class="fas fa-link"></i>
                     </a>
-                </div>
-            </section>
-
-            <section id="programacion" class="card info-card">
-                <h2>
-                    <div class="rx-icon-wrap rx-icon-schedule">
-                        <span></span><span></span><span></span>
-                    </div>
-                    Programación
-                </h2>
-                <div class="content-list">
-                    <div class="content-item">
-                        <span class="item-name">Amanecer Digital</span>
-                        <span class="item-time">08:00</span>
-                    </div>
-                    <div class="content-item">
-                        <span class="item-name">Xero Top Hits 40</span>
-                        <span class="item-time">14:00</span>
-                    </div>
-                    <div class="content-item">
-                        <span class="item-name">Vibras Retro</span>
-                        <span class="item-time">21:00</span>
-                    </div>
                 </div>
             </section>
 
@@ -2754,13 +3022,48 @@
             }
         }
 
+        // ─── INTRO SPLASH & AUTOPLAY HANDLER ──────────────────────────────
+        let introStarted = false;
+        function rxStartFromIntro() {
+            if (introStarted) return;
+            introStarted = true;
+
+            const introOverlay = document.getElementById('rxIntroOverlay');
+            const introBtn = document.getElementById('rxIntroPlayBtn');
+
+            if (introBtn) {
+                introBtn.classList.add('pressed');
+            }
+
+            // Iniciar reproducción instantáneamente gracias al gesto del usuario
+            if (!isPlaying) {
+                rxToggle();
+            }
+
+            // Transición inmediata, fluida y sin bloqueos de renderizado
+            if (introOverlay) {
+                introOverlay.classList.add('rx-intro-hiding');
+                setTimeout(() => {
+                    introOverlay.style.display = 'none';
+                }, 480);
+            }
+        }
+
+        // Atajos de teclado para accesibilidad en la pantalla de bienvenida
+        window.addEventListener('keydown', (e) => {
+            if (!introStarted && (e.code === 'Space' || e.code === 'Enter')) {
+                const introOverlay = document.getElementById('rxIntroOverlay');
+                if (introOverlay && introOverlay.style.display !== 'none') {
+                    e.preventDefault();
+                    rxStartFromIntro();
+                }
+            }
+        });
+
         window.addEventListener('load', () => {
             initTheme();
             rxSetVol(50);
             updateShareLinks();
-            if (!isIosDevice) {
-                setTimeout(() => { rxToggle(); }, 500);
-            }
         });
         // Inicialización final
         setVizMode(currentVizMode);
