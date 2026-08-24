@@ -551,6 +551,12 @@
             border-radius: 26px;
             background: #ffffff;
             z-index: 1;
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .rx-art-container img.fading {
+            opacity: 0.3;
+            transform: scale(0.95);
         }
 
         .rx-pulse {
@@ -2141,8 +2147,8 @@
             <!-- Top: Artwork -->
             <div class="rx-art-container">
                 <div class="rx-pulse" id="artPulse"></div>
-                <img src="icon-512.png" alt="Radio Xero"
-                    onerror="this.style.display='none';document.getElementById('artFallback').style.display='flex'">
+                <img id="rxCoverImg" src="icon-512.png" alt="Radio Xero"
+                    onerror="this.src='icon-512.png';">
                 <div class="rx-art-fallback" id="artFallback" style="display:none;">
                     <svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
                         <rect width="80" height="80" fill="white" />
@@ -2830,6 +2836,122 @@
 
         const sse = new EventSource('https://api.zeno.fm/mounts/metadata/subscribe/n7fm3s6537zuv');
         const trackTextEl = document.getElementById('trackText');
+        const DEFAULT_COVER = 'icon-512.png';
+        const coverImg = document.getElementById('rxCoverImg');
+        const artFallback = document.getElementById('artFallback');
+        const artCache = new Map();
+        let currentTrackTitle = '';
+
+        function setCoverImageSrc(url) {
+            if (!coverImg) return;
+            coverImg.classList.add('fading');
+            const preloader = new Image();
+            preloader.onload = () => {
+                coverImg.src = url;
+                coverImg.style.display = 'block';
+                if (artFallback) artFallback.style.display = 'none';
+                setTimeout(() => coverImg.classList.remove('fading'), 50);
+            };
+            preloader.onerror = () => {
+                coverImg.src = DEFAULT_COVER;
+                coverImg.style.display = 'block';
+                coverImg.classList.remove('fading');
+            };
+            preloader.src = url;
+        }
+
+        function cleanTrackQuery(raw) {
+            if (!raw) return '';
+            let text = raw.trim();
+            if (/^(radio\s*xero|sintonizando|en\s*vivo|al\s*aire)/i.test(text)) return '';
+            text = text
+                .replace(/\|\s*Radio\s*Xero/gi, '')
+                .replace(/-\s*Radio\s*Xero/gi, '')
+                .replace(/\[(official|video|audio|lyrics?|hd|4k|hq|remastered?|clip|visualizer).*?\]/gi, '')
+                .replace(/\((official|video|audio|lyrics?|hd|4k|hq|remastered?|clip|visualizer|album version|single version|extended).*?\)/gi, '')
+                .replace(/\[.*?\]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+            return text;
+        }
+
+        async function fetchAlbumArt(rawTitle) {
+            if (!rawTitle) {
+                setCoverImageSrc(DEFAULT_COVER);
+                updateMediaSession('Radio Xero', DEFAULT_COVER);
+                return;
+            }
+
+            const query = cleanTrackQuery(rawTitle);
+            if (!query || query.length < 3) {
+                setCoverImageSrc(DEFAULT_COVER);
+                updateMediaSession(rawTitle, DEFAULT_COVER);
+                return;
+            }
+
+            if (artCache.has(query)) {
+                const cached = artCache.get(query);
+                setCoverImageSrc(cached.url);
+                updateMediaSession(cached.title || rawTitle, cached.url, cached.artist);
+                return;
+            }
+
+            try {
+                const itunesUrl = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&entity=song&limit=1`;
+                const res = await fetch(itunesUrl);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.results && data.results.length > 0 && data.results[0].artworkUrl100) {
+                        const hiResUrl = data.results[0].artworkUrl100.replace('100x100bb', '600x600bb');
+                        const artistName = data.results[0].artistName || '';
+                        const songTitle = data.results[0].trackName || rawTitle;
+
+                        const artData = { url: hiResUrl, artist: artistName, title: songTitle };
+                        artCache.set(query, artData);
+                        setCoverImageSrc(hiResUrl);
+                        updateMediaSession(songTitle, hiResUrl, artistName);
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.warn('Error al buscar portada en iTunes:', err);
+            }
+
+            // Fallback por defecto si no se encuentra portada
+            artCache.set(query, { url: DEFAULT_COVER, title: rawTitle });
+            setCoverImageSrc(DEFAULT_COVER);
+            updateMediaSession(rawTitle, DEFAULT_COVER);
+        }
+
+        function updateMediaSession(title, artworkUrl, artist) {
+            if ('mediaSession' in navigator) {
+                let artistName = artist || 'Radio Xero';
+                let trackTitle = title || 'Radio Xero - En Vivo';
+
+                if (!artist && title && title.includes(' - ')) {
+                    const parts = title.split(' - ');
+                    artistName = parts[0].trim();
+                    trackTitle = parts.slice(1).join(' - ').trim();
+                }
+
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: trackTitle,
+                    artist: artistName,
+                    album: 'Radio Xero Digital HD',
+                    artwork: [
+                        { src: artworkUrl || DEFAULT_COVER, sizes: '512x512', type: 'image/png' },
+                        { src: artworkUrl || DEFAULT_COVER, sizes: '256x256', type: 'image/png' },
+                        { src: artworkUrl || DEFAULT_COVER, sizes: '128x128', type: 'image/png' }
+                    ]
+                });
+
+                try {
+                    navigator.mediaSession.setActionHandler('play', () => { if (!isPlaying) rxToggle(); });
+                    navigator.mediaSession.setActionHandler('pause', () => { if (isPlaying) rxToggle(); });
+                    navigator.mediaSession.setActionHandler('stop', () => { if (isPlaying) rxToggle(); });
+                } catch(e) {}
+            }
+        }
 
         function checkTrackOverflow() {
             const scroller = document.querySelector('.rx-track-scroller');
@@ -2855,8 +2977,13 @@
         sse.onmessage = function (e) {
             try {
                 const data = JSON.parse(e.data);
-                trackTextEl.textContent = data.streamTitle || 'Radio Xero | Al Aire';
-                checkTrackOverflow();
+                const newTitle = data.streamTitle || 'Radio Xero | Al Aire';
+                if (newTitle !== currentTrackTitle) {
+                    currentTrackTitle = newTitle;
+                    trackTextEl.textContent = newTitle;
+                    checkTrackOverflow();
+                    fetchAlbumArt(newTitle);
+                }
             } catch (err) {
                 console.error('Error parsing metadata', err);
             }
