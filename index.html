@@ -37,28 +37,28 @@
             --primary: #ED1C24;
             --secondary: #1A3B70;
             --primary-glow: rgba(237, 28, 36, 0.3);
-            --bg-main: #ffffff;
-            --text-main: #000000;
+            --bg-main: #f1f5f9;
+            --text-main: #0f172a;
             --text-dim: #64748b;
-            --card-bg: transparent;
-            --card-border: rgba(0, 0, 0, 0.08);
-            --glass: transparent;
-            --glass-border: transparent;
-            --shadow: none;
-            --inner-bg: transparent;
-            --card-radius: 0px;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(255, 255, 255, 0.8);
+            --glass: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            --inner-bg: rgba(255, 255, 255, 0.5);
+            --card-radius: 32px;
         }
 
         .dark-theme {
-            --bg-main: #0a0d14;
+            --bg-main: #020617;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
-            --card-bg: transparent;
-            --card-border: rgba(255, 255, 255, 0.1);
-            --glass: transparent;
-            --glass-border: transparent;
-            --shadow: none;
-            --inner-bg: transparent;
+            --card-bg: rgba(15, 23, 42, 0.6);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(237, 28, 36, 0.2);
+            --shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            --inner-bg: rgba(255, 255, 255, 0.03);
         }
 
         * {
@@ -77,19 +77,32 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 1.5rem 1rem;
+            padding: 2rem 1rem;
             overflow-x: hidden;
             position: relative;
         }
 
+        .top-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 380px;
+            /* Degradado ajustado: Predomina el Guinda del lado derecho */
+            background: linear-gradient(110deg, #020617 0%, #0f172a 35%, #991b1b 85%, #b3141a 100%);
+            z-index: 0;
+            clip-path: ellipse(150% 100% at 50% 0%);
+            /* Curva elegante en la transición */
+        }
+
         .main-wrapper {
             width: 100%;
-            max-width: 520px;
+            max-width: 600px;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            margin-top: 0;
-            animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            gap: 2.2rem;
+            margin-top: 0; /* Sin margen negativo para respetar la simetría del logo */
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             z-index: 1;
             position: relative;
         }
@@ -97,12 +110,19 @@
         @media (max-width: 600px) {
             .main-wrapper {
                 max-width: 100%;
-                gap: 1rem;
+                gap: 2.2rem;
             }
 
+            .info-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 2.2rem;
+            }
+
+            /* Optimización Reproductor Móvil - MODELO 1 */
             .player-card {
-                padding: 1rem 0.5rem !important;
-                gap: 1rem !important;
+                padding: 1.8rem 1.2rem !important;
+                gap: 1.2rem !important;
             }
 
             .rx-art-wrapper {
@@ -113,6 +133,7 @@
             .rx-art-ambient {
                 width: 175px !important;
                 height: 175px !important;
+                filter: blur(28px) !important;
             }
 
             .rx-art-container {
@@ -121,20 +142,21 @@
             }
 
             .rx-track-centered {
-                font-size: 1.35rem !important;
+                font-size: 1.25rem !important;
             }
 
             .rx-vol-bar {
-                max-width: 320px !important;
+                padding: 8px 14px !important;
+                gap: 10px !important;
             }
 
             .rx-controls-row {
-                gap: 1.5rem !important;
+                gap: 1.4rem !important;
             }
 
             .rx-play-btn {
-                width: 62px !important;
-                height: 62px !important;
+                width: 66px !important;
+                height: 66px !important;
             }
 
             .rx-play-btn svg {
@@ -143,13 +165,18 @@
             }
 
             .rx-side-ctrl-btn {
-                width: 38px !important;
-                height: 38px !important;
-                font-size: 1.1rem !important;
+                width: 42px !important;
+                height: 42px !important;
+                font-size: 1.05rem !important;
+            }
+
+            .rx-live-pill {
+                padding: 6px 12px !important;
+                font-size: 0.72rem !important;
             }
 
             header {
-                padding: 0.2rem 0 !important;
+                padding: 0.5rem 0 !important;
             }
 
             .theme-switch {
@@ -444,59 +471,58 @@
 
         /* ─── CUSTOM PLAYER ─── */
         /* ─── MODELO 1: CIRCULAR PLAYER CARD ─── */
-        /* ─── MODELO 1: CLEAN FRAMELESS PLAYER (NO CARDS) ─── */
         .player-card {
-            padding: 1rem 0;
-            background: transparent !important;
+            padding: 2.6rem 2.2rem 2.2rem;
+            background: var(--card-bg);
             color: var(--text-main);
-            border: none !important;
-            box-shadow: none !important;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            border-radius: 40px;
             position: relative;
-            gap: 1rem;
-            width: 100%;
-            max-width: 480px;
-            margin: 0 auto;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
+            overflow: hidden;
+            gap: 1.5rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
-        /* ─── ARTWORK & AMBIENT SHADOW ─── */
+        /* ─── ARTWORK & AMBIENT GLOW (MODELO 1) ─── */
         .rx-art-wrapper {
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 210px;
-            height: 210px;
-            margin: 0.5rem auto 0;
+            width: 220px;
+            height: 220px;
+            margin: 0.2rem auto 0;
         }
 
         .rx-art-ambient {
             position: absolute;
-            inset: -5px;
+            inset: 0;
             border-radius: 50%;
             background-image: url('icon-512.png');
             background-size: cover;
             background-position: center;
             filter: blur(35px);
-            opacity: 0.35;
-            transform: scale(1.1);
+            opacity: 0.55;
+            transform: scale(1.15);
             z-index: 0;
             pointer-events: none;
-            transition: opacity 0.6s ease;
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
         .dark-theme .rx-art-ambient {
             filter: blur(40px);
-            opacity: 0.45;
+            opacity: 0.65;
         }
 
         .rx-art-ambient.fading {
-            opacity: 0.1;
+            opacity: 0.15;
+            transform: scale(0.95);
         }
 
         .rx-art-container {
@@ -506,39 +532,53 @@
             flex-shrink: 0;
             position: relative;
             z-index: 1;
-            background: #ffffff;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
-            border: 4px solid rgba(0, 0, 0, 0.05);
+            background: var(--inner-bg);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), 0 0 0 5px rgba(255, 255, 255, 0.15);
             overflow: hidden;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .dark-theme .rx-art-container {
-            background: #1e293b;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
-            border: 4px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 0 4px rgba(255, 255, 255, 0.08);
+        }
+
+        .rx-art-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg,
+                    transparent 60%,
+                    var(--primary) 80%,
+                    var(--secondary) 100%);
+            animation: spinFrame 3.5s linear infinite;
+            z-index: 0;
+            border-radius: 50%;
         }
 
         .rx-art-container:hover {
-            transform: scale(1.03);
+            transform: scale(1.04);
         }
 
         .rx-art-container img,
         .rx-art-fallback {
             position: absolute !important;
-            inset: 0;
-            width: 100% !important;
-            height: 100% !important;
+            top: 6px;
+            left: 6px;
+            width: calc(100% - 12px) !important;
+            height: calc(100% - 12px) !important;
             object-fit: cover;
             border-radius: 50% !important;
             background: #ffffff;
             z-index: 1;
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .rx-art-container img.fading {
             opacity: 0.3;
-            transform: scale(0.96);
+            transform: scale(0.95);
         }
 
         .rx-pulse {
@@ -558,9 +598,14 @@
                 transform: scale(1);
             }
             50% {
-                opacity: 0.6;
-                transform: scale(1.05);
+                opacity: 0.7;
+                transform: scale(1.06);
             }
+        }
+
+        @keyframes spinFrame {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         /* ─── CONTENT & METADATA ─── */
@@ -569,7 +614,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
+            gap: 1.2rem;
             min-width: 0;
             z-index: 1;
         }
@@ -579,22 +624,21 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            gap: 4px;
-            margin-top: 0.4rem;
+            gap: 5px;
         }
 
         .rx-station-title {
-            font-family: 'Poppins', 'Inter', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 500;
+            font-size: 0.95rem;
+            font-weight: 600;
             color: var(--text-dim);
-            letter-spacing: 0.3px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
         }
 
         .rx-track-centered {
-            font-size: 1.85rem;
+            font-size: 1.55rem;
             color: var(--text-main);
-            font-weight: 700;
+            font-weight: 800;
             line-height: 1.25;
             width: 100%;
             overflow: hidden;
@@ -637,37 +681,36 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* ─── VOLUME BAR (MINIMALIST LINE AS IN MODELO 1) ─── */
+        /* ─── VOLUME BAR (MODELO 1) ─── */
         .rx-vol-bar {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             width: 100%;
-            max-width: 360px;
-            margin: 0.2rem auto;
-            background: transparent;
-            border: none;
-            box-shadow: none;
-            padding: 4px 0;
+            max-width: 440px;
+            padding: 9px 18px;
+            background: var(--inner-bg);
+            border-radius: 100px;
+            border: 1px solid var(--card-border);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .rx-vol-icon-btn {
             background: transparent;
             border: none;
-            color: var(--text-main);
-            font-size: 1.15rem;
+            color: var(--text-dim);
+            font-size: 1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
-            transition: opacity 0.2s, transform 0.2s;
-            opacity: 0.85;
+            padding: 4px;
+            transition: all 0.2s ease;
         }
 
         .rx-vol-icon-btn:hover {
-            opacity: 1;
-            transform: scale(1.1);
+            color: var(--primary);
+            transform: scale(1.15);
         }
 
         .rx-vol-slider-wrap {
@@ -679,30 +722,26 @@
         .rx-vol-right-info {
             display: flex;
             align-items: center;
-            gap: 6px;
-            color: var(--text-main);
+            gap: 8px;
+            color: var(--text-dim);
             font-size: 0.85rem;
-            font-weight: 500;
-            opacity: 0.85;
+            font-weight: 700;
         }
 
         .rx-vol-right-info i {
-            font-size: 1.15rem;
+            font-size: 0.95rem;
         }
 
         .rx-vol-slider {
             width: 100%;
             -webkit-appearance: none;
             appearance: none;
-            height: 3px;
-            border-radius: 2px;
+            height: 4px;
+            border-radius: 3px;
             outline: none;
             cursor: pointer;
-            background: #cbd5e1;
-        }
-
-        .dark-theme .rx-vol-slider {
-            background: #334155;
+            background: linear-gradient(to right, #ED1C24 80%, rgba(237, 28, 36, 0.2) 80%);
+            min-width: 0;
         }
 
         .rx-vol-slider::-webkit-slider-thumb {
@@ -710,74 +749,80 @@
             width: 13px;
             height: 13px;
             border-radius: 50%;
-            background: #94a3b8;
+            background: #ED1C24;
             cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-            transition: transform 0.15s, background-color 0.15s;
-            border: none;
+            box-shadow: 0 2px 6px rgba(237, 28, 36, 0.5);
+            transition: all 0.15s;
+            border: 2px solid #ffffff;
         }
 
         .rx-vol-slider::-webkit-slider-thumb:hover {
             transform: scale(1.25);
-            background: var(--text-main);
+            box-shadow: 0 4px 12px rgba(237, 28, 36, 0.6);
         }
 
         .rx-vol-slider::-moz-range-thumb {
             width: 13px;
             height: 13px;
             border-radius: 50%;
-            background: #94a3b8;
+            background: #ED1C24;
             cursor: pointer;
-            border: none;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-            transition: transform 0.15s, background-color 0.15s;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(237, 28, 36, 0.5);
+            transition: all 0.15s;
+        }
+
+        .rx-vol-slider::-moz-range-thumb:hover {
+            transform: scale(1.25);
+            box-shadow: 0 4px 12px rgba(237, 28, 36, 0.6);
         }
 
         .rx-vol-value {
             color: var(--text-dim);
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             min-width: 32px;
             text-align: right;
             flex-shrink: 0;
         }
 
-        /* ─── 3 VISUALIZER MODES (NOT IN A CARD) ─── */
+        /* ─── ENHANCED VISUALIZERS (3 MODES: LED, BARS, WAVE) ─── */
         .rx-viz-area {
             position: relative;
             width: 100%;
-            max-width: 440px;
-            margin: 0.4rem auto;
-            padding: 0;
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-            min-height: 85px;
+            margin: 4px 0 6px 0;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 20px;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.07);
+            border: 1.5px solid rgba(237, 28, 36, 0.22);
+            min-height: 135px;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
         .dark-theme .rx-viz-area {
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1.5px solid rgba(237, 28, 36, 0.28);
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
         }
 
         .rx-viz-selector {
             display: flex;
-            gap: 6px;
-            margin-bottom: 8px;
-            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            justify-content: flex-end;
+            padding-right: 5px;
         }
 
         .viz-mode-btn {
-            background: transparent;
-            border: 1px solid rgba(0, 0, 0, 0.12);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
             color: var(--text-dim);
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 9px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -785,62 +830,47 @@
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 4px;
-        }
-
-        .dark-theme .viz-mode-btn {
-            border-color: rgba(255, 255, 255, 0.15);
+            gap: 5px;
         }
 
         .viz-mode-btn i {
-            font-size: 10px;
+            font-size: 12px;
         }
 
         .viz-mode-btn:hover {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.1);
             color: var(--text-main);
         }
 
-        .dark-theme .viz-mode-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
         .viz-mode-btn.active {
-            background: #000000;
-            color: #ffffff;
-            border-color: #000000;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-        }
-
-        .dark-theme .viz-mode-btn.active {
-            background: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
-            box-shadow: 0 2px 6px rgba(255, 255, 255, 0.25);
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
         }
 
         .rx-viz-container {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
             width: 100%;
-            height: 70px;
+            height: 100px;
         }
 
         .rx-vu-row {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
 
         .rx-vu-label {
-            font-size: 11px;
-            font-weight: 800;
+            font-size: 13px;
+            font-weight: 900;
             color: var(--text-dim);
-            width: 14px;
+            width: 20px;
             text-align: center;
-            opacity: 0.7;
+            opacity: 0.8;
             font-family: 'Poppins', sans-serif;
         }
 
@@ -852,35 +882,44 @@
 
         .rx-vu-segment {
             flex: 1;
-            height: 10px;
-            border-radius: 2px;
-            background: #e2e8f0;
-        }
-
-        .dark-theme .rx-vu-segment {
-            background: rgba(255, 255, 255, 0.08);
+            height: 14px;
+            border-radius: 3px;
+            background: var(--inner-bg);
         }
 
         .rx-viz-canvas {
             width: 100%;
-            height: 70px;
+            height: 100px;
             display: none;
-            border-radius: 6px;
+            border-radius: 8px;
+        }
+
+        .rx-vu-segment.low,
+        .rx-vu-segment.mid,
+        .rx-vu-segment.high {
+            background: #e2e8f0;
+            transition: background-color 0.1s ease;
+        }
+
+        .dark-theme .rx-vu-segment.low,
+        .dark-theme .rx-vu-segment.mid,
+        .dark-theme .rx-vu-segment.high {
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .rx-vu-segment.active.low {
             background: #22c55e;
-            box-shadow: 0 0 6px rgba(34, 197, 94, 0.7);
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
         }
 
         .rx-vu-segment.active.mid {
             background: #f97316;
-            box-shadow: 0 0 6px rgba(249, 115, 22, 0.7);
+            box-shadow: 0 0 8px rgba(249, 115, 22, 0.8);
         }
 
         .rx-vu-segment.active.high {
             background: #ef4444;
-            box-shadow: 0 0 8px rgba(239, 68, 68, 0.9);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 1);
         }
 
         /* ─── BOTTOM CONTROLS ROW (MODELO 1) ─── */
@@ -888,36 +927,40 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 2rem;
+            gap: 2.2rem;
             width: 100%;
-            margin-top: 0.5rem;
+            margin-top: 0.3rem;
         }
 
         .rx-side-ctrl-btn {
-            width: 42px;
-            height: 42px;
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            font-size: 1.25rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--inner-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-dim);
+            font-size: 1.15rem;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.2s, color 0.2s;
-            opacity: 0.85;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .rx-side-ctrl-btn:hover {
-            transform: scale(1.15);
-            opacity: 1;
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: scale(1.12) translateY(-2px);
+            background: rgba(237, 28, 36, 0.1);
+            box-shadow: 0 8px 20px rgba(237, 28, 36, 0.25);
         }
 
         .rx-play-btn {
-            width: 68px;
-            height: 68px;
+            width: 78px;
+            height: 78px;
             border-radius: 50%;
-            background: #000000;
+            background: #0f172a;
             color: #ffffff;
             border: none;
             cursor: pointer;
@@ -925,20 +968,22 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+            position: relative;
         }
 
         .dark-theme .rx-play-btn {
-            background: #ffffff;
-            color: #000000;
-            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+            background: #000000;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(237, 28, 36, 0.35);
         }
 
-        .dark-theme .rx-play-btn svg path,
-        .dark-theme .rx-play-btn svg polygon,
-        .dark-theme .rx-play-btn svg rect {
-            fill: #000000 !important;
+        .rx-play-btn svg {
+            width: 28px;
+            height: 28px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
 
         .rx-play-btn svg path,
@@ -948,39 +993,38 @@
         }
 
         .rx-play-btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 20px 45px var(--primary-glow);
+            background: var(--primary);
         }
 
         .rx-play-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.94);
         }
 
         .rx-live-pill {
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 0;
-            background: transparent;
-            border: none;
-            box-shadow: none;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-dim);
+            gap: 7px;
+            padding: 8px 16px;
+            border-radius: 100px;
+            background: var(--inner-bg);
+            border: 1px solid var(--card-border);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            color: var(--text-main);
             cursor: default;
             user-select: none;
-        }
-
-        .rx-live-pill i {
-            font-size: 1.15rem;
-            color: var(--text-dim);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.25s ease;
         }
 
         .rx-status {
             font-size: 0.85rem;
             color: var(--text-dim);
             font-weight: 500;
-            letter-spacing: 0.2px;
+            letter-spacing: 0.3px;
             margin-top: 2px;
         }
 
@@ -990,28 +1034,6 @@
 
         .rx-status.playing {
             color: var(--text-dim);
-        }
-
-        /* Minimal Social Share */
-        .rx-minimal-social {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 1rem;
-        }
-
-        .social-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: transform 0.2s;
         }
 
         /* Loading Spinner */
@@ -1994,6 +2016,8 @@
         </div>
     </div>
 
+    <div class="top-bg"></div>
+
     <!-- Floating Install Button -->
     <button id="installButton" class="install-btn">
         <i class="fas fa-download"></i>
@@ -2109,8 +2133,8 @@
 
     <div class="main-wrapper">
 
-        <!-- ─── CUSTOM PLAYER (MODELO 1 + 3 VIZ EFFECTS) ─── -->
-        <section class="player-card">
+        <!-- ─── CUSTOM PLAYER CARD (MODELO 1 + 3 VIZ EFFECTS) ─── -->
+        <section class="card player-card">
 
             <!-- Artwork Section with Circular Frame & Ambient Glow -->
             <div class="rx-art-wrapper">
@@ -2148,7 +2172,7 @@
                     </div>
                 </div>
 
-                <!-- Volume Bar (Minimalist Line as in Modelo 1) -->
+                <!-- Volume Bar (as in Modelo 1) -->
                 <div class="rx-vol-bar">
                     <button class="rx-vol-icon-btn" id="muteBtn" onclick="rxToggleMute()" aria-label="Silenciar">
                         <i class="fas fa-volume-low" id="muteIconLeft"></i>
@@ -2163,7 +2187,7 @@
                     </div>
                 </div>
 
-                <!-- 3 Visualizer Modes Area (NOT IN A CARD) -->
+                <!-- Enhanced Visualizer Area (LED, BARS, WAVE) -->
                 <div class="rx-viz-area" id="rxVizArea">
                     <div class="rx-viz-selector">
                         <button class="viz-mode-btn active" onclick="setVizMode('led')" id="btn-led">
@@ -2191,46 +2215,79 @@
                     <canvas id="rxCanvas" class="rx-viz-canvas"></canvas>
                 </div>
 
-                <!-- Bottom Controls Row (Modelo 1: EQ button, Center Play button, LIVE icon) -->
+                <!-- Bottom Controls Row (Modelo 1: EQ button, Center Play button, LIVE pill) -->
                 <div class="rx-controls-row">
                     <!-- Left: Visualizer Cycle Button -->
                     <button class="rx-side-ctrl-btn" onclick="rxCycleVizMode()" title="Cambiar modo de visualizador">
-                        <i class="fas fa-bars-staggered"></i>
+                        <i class="fas fa-chart-simple"></i>
                     </button>
 
                     <!-- Center: Main Play Button -->
                     <button class="rx-play-btn" id="playBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
-                        <svg id="playIcon" width="26" height="26" viewBox="0 0 24 24" fill="none">
+                        <svg id="playIcon" width="28" height="28" viewBox="0 0 24 24" fill="none">
                             <polygon points="6,4 20,12 6,20" fill="currentColor" />
                         </svg>
                     </button>
 
                     <!-- Right: Live Indicator Badge -->
                     <div class="rx-live-pill" id="livePill" title="Transmisión en vivo">
-                        <i class="fas fa-tower-broadcast"></i>
+                        <span class="rx-dot" id="liveDot"></span>
                         <span>LIVE</span>
                     </div>
                 </div>
 
                 <div class="rx-status" id="rxStatus">Listo para escuchar</div>
+            </div>
+        </section>
 
-                <!-- Minimal Social Share Icons -->
-                <div class="social-grid rx-minimal-social">
-                    <a id="rx-wa-btn" href="#" target="_blank" class="social-btn whatsapp" aria-label="WhatsApp">
+
+        <!-- Info grid -->
+        <div class="info-grid">
+            <section class="card info-card">
+                <h2>
+                    <div class="rx-icon-wrap rx-icon-share">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    Comparte el Sonido
+                </h2>
+                <p style="margin-bottom: 0.5rem !important;">Lleva la mejor música a todas partes. Comparte el enlace con tus amigos y expande la experiencia Xero.</p>
+
+                <div class="social-grid">
+                    <a id="rx-wa-btn" href="#" target="_blank" class="social-btn whatsapp"
+                        aria-label="Compartir en WhatsApp">
                         <i class="fab fa-whatsapp"></i>
                     </a>
-                    <a id="rx-fb-btn" href="#" target="_blank" class="social-btn facebook" aria-label="Facebook">
+                    <a id="rx-fb-btn" href="#" target="_blank" class="social-btn facebook"
+                        aria-label="Compartir en Facebook">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a id="rx-tw-btn" href="#" target="_blank" class="social-btn twitter" aria-label="Twitter">
+                    <a id="rx-tw-btn" href="#" target="_blank" class="social-btn twitter"
+                        aria-label="Compartir en Twitter">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="#" onclick="rxCopyLink(event, this)" class="social-btn copy-link" style="position: relative;" aria-label="Copiar Enlace">
+                    <a href="#" onclick="rxCopyLink(event, this)" class="social-btn copy-link"
+                        style="position: relative;" aria-label="Copiar Enlace">
                         <i class="fas fa-link"></i>
                     </a>
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <section class="card info-card">
+                <h2>
+                    <div class="rx-icon-wrap rx-icon-signal">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    Somos Radio Xero
+                </h2>
+                <p>
+                    Tu conexión 24/7 con el universo musical. Transmitimos con fidelidad HD para acompañar cada uno de tus momentos, sin límites y sin interrupciones. Siente la diferencia, vive el sonido.
+                </p>
+            </section>
+        </div>
 
         <footer>
             <p>&copy; 2025 Radio Xero - Todos los derechos reservados</p>
@@ -2360,10 +2417,10 @@
 
             btn.disabled = false;
             btn.classList.remove('loading');
-            btn.innerHTML = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            btn.innerHTML = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none">
                 ${state === 'playing'
-                    ? '<rect x="6" y="4" width="4" height="16" rx="1.5" fill="currentColor"/><rect x="14" y="4" width="4" height="16" rx="1.5" fill="currentColor"/>'
-                    : '<polygon points="6,4 20,12 6,20" fill="currentColor"/>'}
+                    ? '<rect x="6" y="4" width="4" height="16" rx="1.5" fill="#fff"/><rect x="14" y="4" width="4" height="16" rx="1.5" fill="#fff"/>'
+                    : '<polygon points="6,4 20,12 6,20" fill="#fff"/>'}
             </svg>`;
         }
 
@@ -3116,14 +3173,12 @@
 
         function initTheme() {
             const savedTheme = localStorage.getItem('rx-theme');
-            if (savedTheme === 'dark') {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
                 document.body.classList.add('dark-theme');
                 document.getElementById('themeToggle').querySelector('i').className = 'fas fa-moon';
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0a0d14');
-            } else {
-                document.body.classList.remove('dark-theme');
-                document.getElementById('themeToggle').querySelector('i').className = 'fas fa-sun';
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#020617');
             }
         }
 
