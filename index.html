@@ -2396,25 +2396,31 @@
                 } else {
                     // Animación sutil para Canvas en pausa
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    const canvasW = canvas.width / window.devicePixelRatio;
+                    const canvasH = canvas.height / window.devicePixelRatio;
+
                     if (currentVizMode === 'bars') {
                         const count = 32;
-                        const barWidth = (canvas.width / window.devicePixelRatio / count) * 0.8;
+                        const barWidth = (canvasW / count) * 0.78;
+                        const gap = (canvasW / count) * 0.22;
                         for(let i=0; i<count; i++) {
-                            const h = 5 + Math.abs(Math.sin(t + i*0.2)) * 10;
-                            const x = i * barWidth * 1.25;
-                            const y = (canvas.height / window.devicePixelRatio) - h;
-                            ctx.fillStyle = document.body.classList.contains('dark-theme') ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)';
+                            const progress = i / count;
+                            const envelope = Math.sin(0.1 + progress * 0.8 * Math.PI);
+                            const h = 4 + Math.abs(Math.sin(t + i*0.2)) * 12 * envelope;
+                            const x = gap/2 + i * (barWidth + gap);
+                            const y = canvasH - 3 - h;
+                            ctx.fillStyle = document.body.classList.contains('dark-theme') ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
                             ctx.fillRect(x, y, barWidth, h);
                         }
                     } else if (currentVizMode === 'wave') {
                         ctx.lineWidth = 2;
                         ctx.strokeStyle = document.body.classList.contains('dark-theme') ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)';
                         ctx.beginPath();
-                        const w = canvas.width / window.devicePixelRatio;
-                        const h = canvas.height / window.devicePixelRatio;
-                        ctx.moveTo(0, h/2);
-                        for(let x=0; x<w; x+=5) {
-                            const y = h/2 + Math.sin(x*0.02 + t) * 5;
+                        ctx.moveTo(0, canvasH - 4);
+                        for(let x=0; x<=canvasW; x+=4) {
+                            const progress = x / canvasW;
+                            const envelope = Math.sin(progress * Math.PI);
+                            const y = (canvasH - 4) - Math.abs(Math.sin(x*0.02 + t)) * 8 * envelope;
                             ctx.lineTo(x, y);
                         }
                         ctx.stroke();
@@ -2490,15 +2496,19 @@
             }
 
             function simulateFrequencyData() {
-                const now = Date.now() / 180;
+                if (!dataArr) dataArr = new Uint8Array(128);
+                const now = Date.now() / 160;
                 for (let i = 0; i < dataArr.length; i++) {
-                    // Simular caída natural de frecuencias (bajos a agudos)
-                    const freqScale = Math.pow(1 - (i / dataArr.length), 1.5);
-                    const wave1 = Math.sin(now + i * 0.15) * 40;
-                    const wave2 = Math.sin(now * 0.7 - i * 0.05) * 30;
-                    const noise = Math.random() * 40;
+                    const progress = i / dataArr.length;
+                    // Envolvente acústica: inicio suave, medios dinámicos y caída suave en agudos
+                    const envelope = Math.sin(progress * Math.PI);
+                    const wave1 = Math.sin(now * 1.4 + i * 0.18) * 35;
+                    const wave2 = Math.sin(now * 0.7 - i * 0.08) * 25;
+                    const wave3 = Math.cos(now * 2.2 + i * 0.3) * 15;
+                    const base = 45 + (1 - progress) * 75;
                     
-                    dataArr[i] = Math.max(20, (110 + wave1 + wave2 + noise) * freqScale * 1.2);
+                    const val = (base + wave1 + wave2 + wave3) * envelope * 1.15;
+                    dataArr[i] = Math.max(10, Math.min(235, val));
                 }
             }
 
@@ -2515,16 +2525,21 @@
                     analyser.getByteFrequencyData(dataArr);
                     let avgL = 0;
                     let avgR = 0;
-                    // Promedios simples para L/R simulado desde mono stream
                     for(let i=0; i<10; i++) avgL += dataArr[i];
                     for(let i=10; i<20; i++) avgR += dataArr[i];
                     
+                    if (avgL + avgR === 0) {
+                        simulateFrequencyData();
+                        avgL = dataArr[2] + dataArr[4];
+                        avgR = dataArr[3] + dataArr[5];
+                    }
+
                     activeValL = Math.round((avgL/10/255) * SEGMENT_COUNT * 1.05);
                     activeValR = Math.round((avgR/10/255) * SEGMENT_COUNT * 1.05);
                 }
 
-                activeValL = Math.min(SEGMENT_COUNT, activeValL);
-                activeValR = Math.min(SEGMENT_COUNT, activeValR);
+                activeValL = Math.max(0, Math.min(SEGMENT_COUNT, activeValL));
+                activeValR = Math.max(0, Math.min(SEGMENT_COUNT, activeValR));
 
                 barsL.forEach((seg, i) => {
                     if (i < activeValL) seg.classList.add('active');
@@ -2541,37 +2556,48 @@
                     simulateFrequencyData();
                 } else {
                     analyser.getByteFrequencyData(dataArr);
+                    let totalEnergy = 0;
+                    for (let i = 0; i < 20; i++) totalEnergy += dataArr[i];
+                    if (totalEnergy === 0) simulateFrequencyData();
                 }
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 const barCount = 32;
                 const canvasW = canvas.width / window.devicePixelRatio;
                 const canvasH = canvas.height / window.devicePixelRatio;
-                const barWidth = (canvasW / barCount) * 0.8;
-                const gap = (canvasW / barCount) * 0.2;
+                const barWidth = (canvasW / barCount) * 0.78;
+                const gap = (canvasW / barCount) * 0.22;
                 
-                const brickHeight = 4; // Altura de cada bloque
-                const brickGap = 1.5;   // Espacio entre bloques
-                const totalBricks = Math.floor(canvasH / (brickHeight + brickGap));
+                const brickHeight = 4;
+                const brickGap = 1.5;
+                const totalBricks = Math.floor((canvasH - 4) / (brickHeight + brickGap));
                 
                 let x = gap / 2;
-                const step = Math.floor(dataArr.length / 2 / barCount);
+                const usableBins = Math.min(dataArr.length, 64);
+                const step = usableBins / barCount;
 
                 for (let i = 0; i < barCount; i++) {
-                    let sum = 0;
-                    for(let j=0; j<step; j++) sum += dataArr[i*step + j];
-                    let avg = sum / step;
+                    const binIdx = Math.floor(i * step);
+                    let avg = 0;
+                    let count = 0;
+                    for (let j = 0; j < Math.ceil(step) && (binIdx + j) < usableBins; j++) {
+                        avg += dataArr[binIdx + j];
+                        count++;
+                    }
+                    avg = count > 0 ? avg / count : (dataArr[binIdx] || 0);
 
-                    // Escala inteligente: atenuar bajos (izq) y potenciar medios/altos (der)
-                    const factor = i < 8 ? 0.95 : (i < 16 ? 1.2 : 1.4);
-                    const activeHeight = (avg / 255) * canvasH * factor;
-                    const activeBricks = Math.ceil(activeHeight / (brickHeight + brickGap));
+                    // Escala musical armónica con caída suave en frecuencias ultrasónicas
+                    const progress = i / barCount;
+                    const windowFactor = Math.sin(0.15 + progress * 0.85 * Math.PI);
+                    const factor = (0.9 + (1 - progress) * 0.25) * windowFactor;
+                    
+                    const activeHeight = Math.min(canvasH - 6, (avg / 255) * canvasH * factor);
+                    const activeBricks = Math.max(0, Math.min(totalBricks, Math.ceil(activeHeight / (brickHeight + brickGap))));
 
                     for (let b = 0; b < totalBricks; b++) {
-                        const y = canvasH - (b * (brickHeight + brickGap)) - brickHeight;
-                        
-                        // Determinar color del ladrillo
+                        const y = canvasH - 3 - (b * (brickHeight + brickGap)) - brickHeight;
                         const percent = (b / totalBricks) * 100;
+                        
                         if (b < activeBricks) {
                             if (percent < 50) ctx.fillStyle = '#22c55e'; // Verde
                             else if (percent < 80) ctx.fillStyle = '#f97316'; // Naranja
@@ -2580,8 +2606,7 @@
                             ctx.shadowBlur = 4;
                             ctx.shadowColor = ctx.fillStyle;
                         } else {
-                            // Ladrillos inactivos (fondo sutil)
-                            ctx.fillStyle = document.body.classList.contains('dark-theme') ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.05)';
+                            ctx.fillStyle = document.body.classList.contains('dark-theme') ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
                             ctx.shadowBlur = 0;
                         }
 
@@ -2597,52 +2622,64 @@
                     simulateFrequencyData();
                 } else {
                     analyser.getByteFrequencyData(dataArr);
+                    let totalEnergy = 0;
+                    for (let i = 0; i < 20; i++) totalEnergy += dataArr[i];
+                    if (totalEnergy === 0) simulateFrequencyData();
                 }
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 const canvasW = canvas.width / window.devicePixelRatio;
                 const canvasH = canvas.height / window.devicePixelRatio;
+                const pointsCount = 48;
+                const usableBins = Math.min(dataArr.length, 64);
+                const step = usableBins / pointsCount;
                 
-                // Degradado tricolor para la onda
+                // Mapeo suave de puntos con caída armónica en ambos extremos
+                const points = [];
+                for (let i = 0; i <= pointsCount; i++) {
+                    const binIdx = Math.min(usableBins - 1, Math.floor(i * step));
+                    const val = dataArr[binIdx] || 0;
+                    const progress = i / pointsCount;
+                    const windowFactor = Math.sin(progress * Math.PI);
+                    const v = (val / 255) * (canvasH - 14) * windowFactor;
+                    const x = (i / pointsCount) * canvasW;
+                    const y = Math.max(6, Math.min(canvasH - 4, canvasH - 4 - v));
+                    points.push({ x, y });
+                }
+
+                // 1. Trazado de la onda superior con degradado
                 const gradient = ctx.createLinearGradient(0, canvasH, 0, 0);
-                gradient.addColorStop(0, '#22c55e');   // Verde abajo
-                gradient.addColorStop(0.5, '#f97316'); // Naranja medio
-                gradient.addColorStop(0.9, '#ef4444'); // Rojo arriba (picos)
+                gradient.addColorStop(0, '#22c55e');   // Verde
+                gradient.addColorStop(0.5, '#f97316'); // Naranja
+                gradient.addColorStop(0.9, '#ef4444'); // Rojo
                 
                 ctx.beginPath();
                 ctx.lineWidth = 2.5;
                 ctx.strokeStyle = gradient;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = 'rgba(237, 28, 36, 0.3)';
-                
-                const sliceWidth = canvasW / (dataArr.length / 2);
-                let x = 0;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = 'rgba(237, 28, 36, 0.35)';
 
-                for (let i = 0; i < dataArr.length / 2; i++) {
-                    // Gradiente de sensibilidad de izquierda a derecha
-                    const factor = i < 15 ? (0.8 + (i/15) * 0.5) : 1.4;
-                    const v = (dataArr[i] / 255) * canvasH * factor;
-                    const y = canvasH - v;
-
-                    if (i === 0) ctx.moveTo(x, y);
-                    else {
-                        // Suavizado leve con factor compensado
-                        const prevFactor = (i-1) < 15 ? (0.8 + ((i-1)/15) * 0.5) : 1.4;
-                        const prevY = canvasH - (dataArr[i-1] / 255 * canvasH * prevFactor);
-                        ctx.quadraticCurveTo(x - sliceWidth/2, prevY, x, y);
-                    }
-                    x += sliceWidth;
+                ctx.moveTo(points[0].x, points[0].y);
+                for (let i = 1; i < points.length; i++) {
+                    const prev = points[i - 1];
+                    const curr = points[i];
+                    const mx = (prev.x + curr.x) / 2;
+                    const my = (prev.y + curr.y) / 2;
+                    ctx.quadraticCurveTo(prev.x, prev.y, mx, my);
                 }
-
+                ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
                 ctx.stroke();
 
-                // Relleno degradado fluido
+                // 2. Relleno inferior degradado limpio
                 ctx.lineTo(canvasW, canvasH);
                 ctx.lineTo(0, canvasH);
+                ctx.closePath();
+                
+                ctx.shadowBlur = 0;
                 const fillGradient = ctx.createLinearGradient(0, canvasH, 0, 0);
-                fillGradient.addColorStop(0, 'rgba(34, 197, 94, 0.1)');
-                fillGradient.addColorStop(0.5, 'rgba(249, 115, 22, 0.1)');
-                fillGradient.addColorStop(1, 'rgba(239, 68, 68, 0.1)');
+                fillGradient.addColorStop(0, 'rgba(34, 197, 94, 0.12)');
+                fillGradient.addColorStop(0.5, 'rgba(249, 115, 22, 0.12)');
+                fillGradient.addColorStop(1, 'rgba(239, 68, 68, 0.12)');
                 ctx.fillStyle = fillGradient;
                 ctx.fill();
             }
@@ -2655,15 +2692,8 @@
                 setStatus('Conectando con Radio Xero...');
                 setIcon('loading');
 
-                // Si NO es iPhone o Edge móvil, activamos CORS para el visualizador real
-                if (!isIosDevice && !isEdgeAndroid) {
-                    audio.crossOrigin = "anonymous";
-                } else {
-                    audio.removeAttribute('crossorigin');
-                }
-
-                const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
-                audio.src = STREAM_URL + cacheBuster;
+                audio.removeAttribute('crossorigin');
+                audio.src = STREAM_URL;
 
                 audio.load();
 
@@ -2699,8 +2729,8 @@
         audio.addEventListener('error', () => {
             if (isPlaying) {
                 console.log("Error de audio detectado, intentando reconectar...");
-                const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
-                audio.src = STREAM_URL + cacheBuster;
+                audio.removeAttribute('crossorigin');
+                audio.src = STREAM_URL;
                 audio.load();
                 audio.play().catch(() => {
                     isPlaying = false;
@@ -2747,10 +2777,10 @@
             if (systemPauseAutoResume && pauseDuration > 30) {
                 console.log(`Reconexión automática tras pausa larga: ${pauseDuration.toFixed(1)}s`);
                 systemPauseAutoResume = false;
-                const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
-                audio.src = STREAM_URL + cacheBuster;
+                audio.removeAttribute('crossorigin');
+                audio.src = STREAM_URL;
                 audio.load();
-                audio.play();
+                audio.play().catch(() => {});
                 return;
             }
 
@@ -2772,10 +2802,10 @@
             if (isPlaying) {
                 console.log("Stream estancado, intentando reconectar...");
                 setStatus('Recuperando conexión...', 'playing');
-                const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
-                audio.src = STREAM_URL + cacheBuster;
+                audio.removeAttribute('crossorigin');
+                audio.src = STREAM_URL;
                 audio.load();
-                audio.play();
+                audio.play().catch(() => {});
             }
         });
 
@@ -2786,10 +2816,10 @@
                 if ((isPlaying || systemPauseAutoResume) && audio.paused) {
                     audio.play().catch(() => {
                         // Si falla el auto-play (bloqueo navegador), refrescamos fuente
-                        const cacheBuster = (STREAM_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
-                        audio.src = STREAM_URL + cacheBuster;
+                        audio.removeAttribute('crossorigin');
+                        audio.src = STREAM_URL;
                         audio.load();
-                        audio.play();
+                        audio.play().catch(() => {});
                     });
                 }
             }
