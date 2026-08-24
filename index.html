@@ -119,52 +119,60 @@
                 gap: 2.2rem;
             }
 
-            /* Optimización Reproductor Móvil */
-            .rx-track {
-                display: flex !important;
-                flex-direction: row !important; /* Forzado absoluto */
-                flex-wrap: nowrap !important;
-                align-items: center !important;
-                justify-content: center !important;
-                font-size: 1.15rem !important; /* Un poco más pequeño para que quepa todo */
+            /* Optimización Reproductor Móvil - MODELO 1 */
+            .player-card {
+                padding: 1.8rem 1.2rem !important;
+                gap: 1.2rem !important;
+            }
+
+            .rx-art-wrapper {
+                width: 175px !important;
+                height: 175px !important;
+            }
+
+            .rx-art-ambient {
+                width: 175px !important;
+                height: 175px !important;
+                filter: blur(28px) !important;
+            }
+
+            .rx-art-container {
+                width: 160px !important;
+                height: 160px !important;
+            }
+
+            .rx-track-centered {
+                font-size: 1.25rem !important;
+            }
+
+            .rx-vol-bar {
+                padding: 8px 14px !important;
                 gap: 10px !important;
             }
 
-            .rx-track-scroller {
-                flex: 0 1 auto !important;
-                display: flex !important;
-                align-items: center !important;
-            }
-
-            .rx-track-scroller.is-scrolling {
-                flex: 1 !important;
-            }
-
-            .rx-track-icon {
-                font-size: 0.95rem !important;
-                margin-right: 0px !important; /* El gap de rx-track ya hace el trabajo */
-            }
-
-            .rx-controls {
-                gap: 0.5rem !important; /* Aún más compacto */
-                margin-top: 1rem !important;
+            .rx-controls-row {
+                gap: 1.4rem !important;
             }
 
             .rx-play-btn {
-                width: 48px !important;
-                height: 48px !important;
+                width: 66px !important;
+                height: 66px !important;
             }
 
             .rx-play-btn svg {
-                width: 16px !important;
-                height: 16px !important;
+                width: 22px !important;
+                height: 22px !important;
             }
 
-            .rx-vol {
-                padding: 8px 12px !important;
-                gap: 8px !important;
-                height: 44px !important; /* Contenedor más delgado */
-                min-width: 0 !important;
+            .rx-side-ctrl-btn {
+                width: 42px !important;
+                height: 42px !important;
+                font-size: 1.05rem !important;
+            }
+
+            .rx-live-pill {
+                padding: 6px 12px !important;
+                font-size: 0.72rem !important;
             }
 
             header {
@@ -173,21 +181,6 @@
 
             .theme-switch {
                 transform: scale(0.85);
-            }
-
-            .rx-mute-btn {
-                width: 34px !important;
-                height: 34px !important;
-            }
-
-            .rx-mute-btn svg {
-                width: 14px !important;
-                height: 14px !important;
-            }
-
-            .rx-vol-slider::-webkit-slider-thumb {
-                width: 10px !important;
-                height: 10px !important;
             }
         }
 
@@ -477,33 +470,76 @@
         }
 
         /* ─── CUSTOM PLAYER ─── */
+        /* ─── MODELO 1: CIRCULAR PLAYER CARD ─── */
         .player-card {
-            padding: 2.22rem;
+            padding: 2.6rem 2.2rem 2.2rem;
             background: var(--card-bg);
             color: var(--text-main);
-            border: 1px solid var(--card-border); /* Grosor unificado sutil */
+            border: 1px solid var(--card-border);
             box-shadow: var(--shadow);
             display: flex;
-            flex-direction: row;
-            gap: 2.5rem;
+            flex-direction: column;
             align-items: center;
+            text-align: center;
             border-radius: 40px;
             position: relative;
             overflow: hidden;
-            text-align: left;
+            gap: 1.5rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* ─── ARTWORK & AMBIENT GLOW (MODELO 1) ─── */
+        .rx-art-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 220px;
+            height: 220px;
+            margin: 0.2rem auto 0;
+        }
+
+        .rx-art-ambient {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background-image: url('icon-512.png');
+            background-size: cover;
+            background-position: center;
+            filter: blur(35px);
+            opacity: 0.55;
+            transform: scale(1.15);
+            z-index: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .dark-theme .rx-art-ambient {
+            filter: blur(40px);
+            opacity: 0.65;
+        }
+
+        .rx-art-ambient.fading {
+            opacity: 0.15;
+            transform: scale(0.95);
         }
 
         .rx-art-container {
-            width: 200px;
-            height: 200px;
-            border-radius: 32px;
+            width: 195px;
+            height: 195px;
+            border-radius: 50%;
             flex-shrink: 0;
             position: relative;
             z-index: 1;
             background: var(--inner-bg);
-            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), 0 0 0 5px rgba(255, 255, 255, 0.15);
             overflow: hidden;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .dark-theme .rx-art-container {
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 0 4px rgba(255, 255, 255, 0.08);
         }
 
         .rx-art-container::before {
@@ -517,27 +553,13 @@
                     transparent 60%,
                     var(--primary) 80%,
                     var(--secondary) 100%);
-            animation: spinFrame 3s linear infinite;
+            animation: spinFrame 3.5s linear infinite;
             z-index: 0;
+            border-radius: 50%;
         }
 
         .rx-art-container:hover {
-            transform: scale(1.03);
-        }
-
-        .rx-art-sidebar::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg,
-                    transparent 60%,
-                    rgba(237, 28, 36, 1) 80%,
-                    rgba(26, 59, 112, 1) 100%);
-            animation: spinFrame 3s linear infinite;
-            z-index: 0;
+            transform: scale(1.04);
         }
 
         .rx-art-container img,
@@ -548,7 +570,7 @@
             width: calc(100% - 12px) !important;
             height: calc(100% - 12px) !important;
             object-fit: cover;
-            border-radius: 26px;
+            border-radius: 50% !important;
             background: #ffffff;
             z-index: 1;
             transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -562,7 +584,7 @@
         .rx-pulse {
             position: absolute;
             inset: 0;
-            border-radius: 32px;
+            border-radius: 50%;
             border: 3px solid var(--primary);
             animation: pulseBorder 2s ease-in-out infinite;
             opacity: 0;
@@ -571,164 +593,225 @@
         }
 
         @keyframes pulseBorder {
-
-            0%,
-            100% {
+            0%, 100% {
                 opacity: 0;
                 transform: scale(1);
             }
-
             50% {
                 opacity: 0.7;
-                transform: scale(1.05);
+                transform: scale(1.06);
             }
         }
 
         @keyframes spinFrame {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
+        /* ─── CONTENT & METADATA ─── */
         .rx-player-content {
-            flex: 1;
+            width: 100%;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
             min-width: 0;
-            justify-content: center;
             z-index: 1;
         }
 
-        .rx-meta {
-            margin-bottom: 15px;
-        }
-
-        .rx-live-label {
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            margin-bottom: 4px;
+        .rx-meta-centered {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            gap: 8px;
+            width: 100%;
+            gap: 5px;
         }
 
-        .rx-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: inline-block;
-            animation: blink 1.2s ease-in-out infinite;
+        .rx-station-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
         }
 
-        @keyframes blink {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.2;
-            }
-        }
-
-        /* Eliminado rx-station-name para simplificar */
-
-        .rx-track {
-            font-size: 1.5rem;
+        .rx-track-centered {
+            font-size: 1.55rem;
             color: var(--text-main);
-            margin-top: 8px;
             font-weight: 800;
-            line-height: 1.2;
+            line-height: 1.25;
             width: 100%;
             overflow: hidden;
             display: flex;
             align-items: center;
-            justify-content: flex-start; /* Alineado a la izquierda en PC */
-            gap: 12px;
+            justify-content: center;
         }
 
-        /* Marquee Container - Máscara SOLO cuando hay scrolling */
         .rx-track-scroller {
-            flex: 0 1 auto; /* Permite que el bloque se encoja y se centre si el texto es corto */
+            flex: 0 1 auto;
             min-width: 0;
+            max-width: 100%;
             overflow: hidden;
             display: flex;
             align-items: center;
+            justify-content: center;
         }
 
         .rx-track-scroller.is-scrolling {
-            flex: 1; /* Si hay scroll, ocupa todo el espacio disponible */
-        }
-
-        .rx-track-scroller.is-scrolling {
+            flex: 1;
             -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
             mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
         }
 
         .rx-track-content {
             white-space: nowrap;
-            display: flex; /* Cambiado a flex para soportar las dos copias del texto */
+            display: flex;
             align-items: center;
+            justify-content: center;
             transition: transform 0.5s ease;
-            transform: translateX(0);
         }
 
-        /* Solo se activa si JavaScript detecta desbordamiento */
         .rx-track-scroller.is-scrolling .rx-track-content {
             animation: rx-marquee 15s linear infinite;
-            /* La rueda infinita no necesita padding-right fijo aquí, se maneja en el clon */
+            justify-content: flex-start;
         }
 
         @keyframes rx-marquee {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
-        /* Eliminado rx-track-icon para diseño minimalista */
+        /* ─── VOLUME BAR (MODELO 1) ─── */
+        .rx-vol-bar {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            max-width: 440px;
+            padding: 9px 18px;
+            background: var(--inner-bg);
+            border-radius: 100px;
+            border: 1px solid var(--card-border);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
 
-        /* ─── ENHANCED VISUALIZERS ─── */
+        .rx-vol-icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .rx-vol-icon-btn:hover {
+            color: var(--primary);
+            transform: scale(1.15);
+        }
+
+        .rx-vol-slider-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .rx-vol-right-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .rx-vol-right-info i {
+            font-size: 0.95rem;
+        }
+
+        .rx-vol-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+            background: linear-gradient(to right, #ED1C24 80%, rgba(237, 28, 36, 0.2) 80%);
+            min-width: 0;
+        }
+
+        .rx-vol-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #ED1C24;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(237, 28, 36, 0.5);
+            transition: all 0.15s;
+            border: 2px solid #ffffff;
+        }
+
+        .rx-vol-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.25);
+            box-shadow: 0 4px 12px rgba(237, 28, 36, 0.6);
+        }
+
+        .rx-vol-slider::-moz-range-thumb {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #ED1C24;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(237, 28, 36, 0.5);
+            transition: all 0.15s;
+        }
+
+        .rx-vol-slider::-moz-range-thumb:hover {
+            transform: scale(1.25);
+            box-shadow: 0 4px 12px rgba(237, 28, 36, 0.6);
+        }
+
+        .rx-vol-value {
+            color: var(--text-dim);
+            font-size: 13px;
+            font-weight: 700;
+            min-width: 32px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        /* ─── ENHANCED VISUALIZERS (3 MODES: LED, BARS, WAVE) ─── */
         .rx-viz-area {
             position: relative;
-            margin: 10px 0 20px 0;
-            padding: 18px;
-            /* Modo claro: gris muy suave para que contraste con el card blanco */
-            background: rgba(0, 0, 0, 0.04);
-            border-radius: 16px;
+            width: 100%;
+            margin: 4px 0 6px 0;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 20px;
             box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.07);
-            /* Borde con tinte rojo sutil para destacar */
-            border: 1.5px solid rgba(237, 28, 36, 0.25);
-            min-height: 140px;
+            border: 1.5px solid rgba(237, 28, 36, 0.22);
+            min-height: 135px;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        /* Modo oscuro: fondo oscuro que contrasta con la card semitransparente */
         .dark-theme .rx-viz-area {
             background: rgba(0, 0, 0, 0.35);
-            border: 1.5px solid rgba(237, 28, 36, 0.3);
+            border: 1.5px solid rgba(237, 28, 36, 0.28);
             box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
         }
 
         .rx-viz-selector {
             display: flex;
             gap: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             justify-content: flex-end;
             padding-right: 5px;
         }
@@ -767,12 +850,12 @@
         }
 
         .rx-viz-container {
-            display: none; /* Se activa por JS */
+            display: flex;
             flex-direction: column;
             justify-content: center;
             gap: 15px;
             width: 100%;
-            height: 110px; /* Misma altura que el canvas para estabilidad total */
+            height: 100px;
         }
 
         .rx-vu-row {
@@ -799,19 +882,18 @@
 
         .rx-vu-segment {
             flex: 1;
-            height: 14px; /* Regresamos a un tamaño elegante, no tan gordo */
+            height: 14px;
             border-radius: 3px;
             background: var(--inner-bg);
         }
 
         .rx-viz-canvas {
             width: 100%;
-            height: 110px;
+            height: 100px;
             display: none;
             border-radius: 8px;
         }
 
-        /* Ambient color (Inactive) - Now subtle light gray */
         .rx-vu-segment.low,
         .rx-vu-segment.mid,
         .rx-vu-segment.high {
@@ -825,7 +907,6 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-        /* Glowing LEDs (Active) - More vibrant on light background */
         .rx-vu-segment.active.low {
             background: #22c55e;
             box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
@@ -841,19 +922,43 @@
             box-shadow: 0 0 10px rgba(239, 68, 68, 1);
         }
 
-        /* Controls */
-        .rx-controls {
+        /* ─── BOTTOM CONTROLS ROW (MODELO 1) ─── */
+        .rx-controls-row {
             display: flex;
-            flex-direction: row;
             align-items: center;
-            gap: 1.5rem;
+            justify-content: center;
+            gap: 2.2rem;
             width: 100%;
-            margin-top: 1.5rem;
+            margin-top: 0.3rem;
+        }
+
+        .rx-side-ctrl-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--inner-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-dim);
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .rx-side-ctrl-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            transform: scale(1.12) translateY(-2px);
+            background: rgba(237, 28, 36, 0.1);
+            box-shadow: 0 8px 20px rgba(237, 28, 36, 0.25);
         }
 
         .rx-play-btn {
-            width: 84px;
-            height: 84px;
+            width: 78px;
+            height: 78px;
             border-radius: 50%;
             background: #0f172a;
             color: #ffffff;
@@ -863,16 +968,16 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
             position: relative;
         }
 
         .dark-theme .rx-play-btn {
             background: #000000;
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(237, 28, 36, 0.35);
         }
 
         .rx-play-btn svg {
@@ -888,127 +993,39 @@
         }
 
         .rx-play-btn:hover {
-            transform: scale(1.1) translateY(-5px);
-            box-shadow: 0 25px 50px var(--primary-glow);
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 20px 45px var(--primary-glow);
             background: var(--primary);
         }
 
         .rx-play-btn:active {
-            transform: scale(0.92);
+            transform: scale(0.94);
         }
 
-        .rx-vol {
+        .rx-live-pill {
             display: flex;
             align-items: center;
-            gap: 15px;
-            flex: 1;
-            background: var(--inner-bg);
-            padding: 12px 24px;
+            gap: 7px;
+            padding: 8px 16px;
             border-radius: 100px;
+            background: var(--inner-bg);
             border: 1px solid var(--card-border);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .rx-vol-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .rx-mute-btn {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            background: #000000;
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all 0.2s ease;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        .rx-mute-btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
-            background: #232d3e;
-        }
-
-        .rx-mute-btn:active {
-            transform: scale(0.96);
-        }
-
-        .rx-mute-btn svg {
-            width: 22px;
-            height: 22px;
-            stroke: #ffffff;
-            stroke-width: 1.5;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .rx-vol-slider {
-            flex: 1;
-            -webkit-appearance: none;
-            appearance: none;
-            height: 4px;
-            border-radius: 3px;
-            outline: none;
-            cursor: pointer;
-            background: linear-gradient(to right, #ED1C24 70%, rgba(237, 28, 36, 0.2) 70%);
-            min-width: 0;
-        }
-
-        .rx-vol-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #ED1C24;
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(237, 28, 36, 0.5);
-            transition: all 0.15s;
-            border: 2px solid #ffffff;
-        }
-
-        .rx-vol-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-            box-shadow: 0 4px 12px rgba(237, 28, 36, 0.6);
-        }
-
-        .rx-vol-slider::-moz-range-thumb {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #ED1C24;
-            cursor: pointer;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 6px rgba(237, 28, 36, 0.5);
-            transition: all 0.15s;
-        }
-
-        .rx-vol-slider::-moz-range-thumb:hover {
-            transform: scale(1.2);
-            box-shadow: 0 4px 12px rgba(237, 28, 36, 0.6);
-        }
-
-        .rx-vol-value {
-            color: #94a3b8;
-            font-size: 13px;
-            font-weight: 500;
-            min-width: 32px;
-            text-align: right;
-            flex-shrink: 0;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            color: var(--text-main);
+            cursor: default;
+            user-select: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.25s ease;
         }
 
         .rx-status {
-            display: none;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            margin-top: 2px;
         }
 
         .rx-status.error {
@@ -1016,7 +1033,7 @@
         }
 
         .rx-status.playing {
-            color: #64748b;
+            color: var(--text-dim);
         }
 
         /* Loading Spinner */
@@ -1581,32 +1598,7 @@
                 gap: 15px;
             }
 
-            .rx-art-container {
-                width: 180px;
-                height: 180px;
-            }
 
-            .player-card {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-            }
-
-            .rx-live-label,
-            .rx-track,
-            .rx-controls {
-                justify-content: center;
-            }
-
-            .rx-station-name {
-                text-align: center;
-            }
-
-            .rx-mute-btn,
-            .rx-play-btn {
-                width: 72px;
-                height: 72px;
-            }
 
             .install-btn {
                 bottom: 24px;
@@ -2141,38 +2133,37 @@
 
     <div class="main-wrapper">
 
-        <!-- ─── CUSTOM PLAYER CARD (REDESIGNED) ─── -->
+        <!-- ─── CUSTOM PLAYER CARD (MODELO 1 + 3 VIZ EFFECTS) ─── -->
         <section class="card player-card">
 
-            <!-- Top: Artwork -->
-            <div class="rx-art-container">
-                <div class="rx-pulse" id="artPulse"></div>
-                <img id="rxCoverImg" src="icon-512.png" alt="Radio Xero"
-                    onerror="this.src='icon-512.png';">
-                <div class="rx-art-fallback" id="artFallback" style="display:none;">
-                    <svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="80" height="80" fill="white" />
-                        <circle cx="40" cy="40" r="30" fill="#ED1C24" />
-                        <circle cx="40" cy="40" r="22" fill="white" />
-                        <circle cx="40" cy="40" r="4" fill="#ED1C24" />
-                        <text x="40" y="36" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
-                            font-size="8" fill="#ED1C24">RADIO</text>
-                        <text x="40" y="48" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
-                            font-size="12" fill="#1A3B70">XERO</text>
-                    </svg>
+            <!-- Artwork Section with Circular Frame & Ambient Glow -->
+            <div class="rx-art-wrapper">
+                <div class="rx-art-ambient" id="artAmbient"></div>
+                <div class="rx-art-container">
+                    <div class="rx-pulse" id="artPulse"></div>
+                    <img id="rxCoverImg" src="icon-512.png" alt="Radio Xero"
+                        onerror="this.src='icon-512.png';">
+                    <div class="rx-art-fallback" id="artFallback" style="display:none;">
+                        <svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="40" cy="40" r="38" fill="white" />
+                            <circle cx="40" cy="40" r="30" fill="#ED1C24" />
+                            <circle cx="40" cy="40" r="22" fill="white" />
+                            <circle cx="40" cy="40" r="4" fill="#ED1C24" />
+                            <text x="40" y="36" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
+                                font-size="8" fill="#ED1C24">RADIO</text>
+                            <text x="40" y="48" text-anchor="middle" font-family="Arial Black,Arial" font-weight="900"
+                                font-size="12" fill="#1A3B70">XERO</text>
+                        </svg>
+                    </div>
                 </div>
             </div>
 
-            <!-- Middle: Metadata & Visualizer -->
+            <!-- Middle: Metadata (Station & Song Title) -->
             <div class="rx-player-content">
-                <div class="rx-meta">
-                    <div class="rx-live-label">
-                        <span class="rx-dot" id="liveDot"></span>
-                        Estás Escuchando
-                    </div>
+                <div class="rx-meta-centered">
+                    <div class="rx-station-title">Radio Xero</div>
 
-                    <div class="rx-track" id="trackInfo">
-                        <i class="fas fa-music rx-track-icon"></i>
+                    <div class="rx-track rx-track-centered" id="trackInfo">
                         <div class="rx-track-scroller">
                             <div class="rx-track-content">
                                 <span id="trackText">Sintonizando señal...</span>
@@ -2181,7 +2172,22 @@
                     </div>
                 </div>
 
-                <!-- Enhanced Visualizer Area -->
+                <!-- Volume Bar (as in Modelo 1) -->
+                <div class="rx-vol-bar">
+                    <button class="rx-vol-icon-btn" id="muteBtn" onclick="rxToggleMute()" aria-label="Silenciar">
+                        <i class="fas fa-volume-low" id="muteIconLeft"></i>
+                    </button>
+                    <div class="rx-vol-slider-wrap">
+                        <input type="range" min="0" max="100" value="80" id="volSlider" class="rx-vol-slider"
+                            oninput="rxSetVol(this.value)" aria-label="Volumen">
+                    </div>
+                    <div class="rx-vol-right-info">
+                        <span class="rx-vol-value" id="volValue">80%</span>
+                        <i class="fas fa-volume-high"></i>
+                    </div>
+                </div>
+
+                <!-- Enhanced Visualizer Area (LED, BARS, WAVE) -->
                 <div class="rx-viz-area" id="rxVizArea">
                     <div class="rx-viz-selector">
                         <button class="viz-mode-btn active" onclick="setVizMode('led')" id="btn-led">
@@ -2209,31 +2215,28 @@
                     <canvas id="rxCanvas" class="rx-viz-canvas"></canvas>
                 </div>
 
-                <!-- Bottom: Controls -->
-                <div class="rx-controls">
+                <!-- Bottom Controls Row (Modelo 1: EQ button, Center Play button, LIVE pill) -->
+                <div class="rx-controls-row">
+                    <!-- Left: Visualizer Cycle Button -->
+                    <button class="rx-side-ctrl-btn" onclick="rxCycleVizMode()" title="Cambiar modo de visualizador">
+                        <i class="fas fa-chart-simple"></i>
+                    </button>
+
+                    <!-- Center: Main Play Button -->
                     <button class="rx-play-btn" id="playBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
-                        <svg id="playIcon" width="32" height="32" viewBox="0 0 24 24" fill="none">
+                        <svg id="playIcon" width="28" height="28" viewBox="0 0 24 24" fill="none">
                             <polygon points="6,4 20,12 6,20" fill="currentColor" />
                         </svg>
                     </button>
 
-                    <div class="rx-vol">
-                        <button class="rx-mute-btn" id="muteBtn" onclick="rxToggleMute()" aria-label="Silenciar">
-                            <svg id="muteIcon" viewBox="0 0 24 24">
-                                <path
-                                    d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
-                            </svg>
-                        </button>
-                        <div class="rx-vol-container">
-                            <input type="range" min="0" max="100" value="50" id="volSlider" class="rx-vol-slider"
-                                oninput="rxSetVol(this.value)" aria-label="Volumen">
-                            <span class="rx-vol-value" id="volValue">50%</span>
-                        </div>
+                    <!-- Right: Live Indicator Badge -->
+                    <div class="rx-live-pill" id="livePill" title="Transmisión en vivo">
+                        <span class="rx-dot" id="liveDot"></span>
+                        <span>LIVE</span>
                     </div>
                 </div>
 
-                <div class="rx-status" id="rxStatus" style="margin-top: 15px; font-weight: 500;">Listo para escuchar
-                </div>
+                <div class="rx-status" id="rxStatus">Listo para escuchar</div>
             </div>
         </section>
 
@@ -2354,8 +2357,20 @@
             audio.volume = v / 100;
             const slider = document.getElementById('volSlider');
             const volValue = document.getElementById('volValue');
-            slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
-            volValue.textContent = v + '%';
+            const muteIcon = document.getElementById('muteIconLeft');
+            
+            if (slider) slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
+            if (volValue) volValue.textContent = v + '%';
+
+            if (muteIcon) {
+                if (v == 0) {
+                    muteIcon.className = 'fas fa-volume-xmark';
+                } else if (v < 50) {
+                    muteIcon.className = 'fas fa-volume-low';
+                } else {
+                    muteIcon.className = 'fas fa-volume-high';
+                }
+            }
 
             if (v > 0 && audio.muted) {
                 rxToggleMute();
@@ -2369,19 +2384,26 @@
 
         function rxToggleMute() {
             const muteBtn = document.getElementById('muteBtn');
-            const muteIcon = document.getElementById('muteIcon');
+            const muteIcon = document.getElementById('muteIconLeft');
 
             isMuted = !isMuted;
             audio.muted = isMuted;
 
             if (isMuted) {
                 volumeBeforeMute = parseInt(document.getElementById('volSlider').value);
-                muteIcon.innerHTML = '<g><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/><line x1="2.5" y1="21.5" x2="21.5" y2="2.5"/></g>';
-                muteBtn.style.opacity = '0.65';
+                if (muteIcon) muteIcon.className = 'fas fa-volume-xmark';
+                if (muteBtn) muteBtn.style.opacity = '0.55';
             } else {
-                muteIcon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>';
-                muteBtn.style.opacity = '1';
+                if (muteIcon) muteIcon.className = volumeBeforeMute < 50 ? 'fas fa-volume-low' : 'fas fa-volume-high';
+                if (muteBtn) muteBtn.style.opacity = '1';
             }
+        }
+
+        // Cambio rápido de modo de visualizador (LED -> BARS -> WAVE -> LED)
+        const vizModesList = ['led', 'bars', 'wave'];
+        function rxCycleVizMode() {
+            const nextIndex = (vizModesList.indexOf(currentVizMode) + 1) % vizModesList.length;
+            setVizMode(vizModesList[nextIndex]);
         }
 
         function setIcon(state) {
@@ -2845,17 +2867,28 @@
         function setCoverImageSrc(url) {
             if (!coverImg) return;
             coverImg.classList.add('fading');
+            const ambient = document.getElementById('artAmbient');
+            if (ambient) ambient.classList.add('fading');
+
             const preloader = new Image();
             preloader.onload = () => {
                 coverImg.src = url;
                 coverImg.style.display = 'block';
                 if (artFallback) artFallback.style.display = 'none';
+                if (ambient) {
+                    ambient.style.backgroundImage = `url('${url}')`;
+                    ambient.classList.remove('fading');
+                }
                 setTimeout(() => coverImg.classList.remove('fading'), 50);
             };
             preloader.onerror = () => {
                 coverImg.src = DEFAULT_COVER;
                 coverImg.style.display = 'block';
                 coverImg.classList.remove('fading');
+                if (ambient) {
+                    ambient.style.backgroundImage = `url('${DEFAULT_COVER}')`;
+                    ambient.classList.remove('fading');
+                }
             };
             preloader.src = url;
         }
