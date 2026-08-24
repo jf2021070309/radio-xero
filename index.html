@@ -2466,21 +2466,7 @@
         }
 
         function startAnalyser() {
-            if (!audioCtx || audioCtx.state === 'closed') {
-                try {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    analyser = audioCtx.createAnalyser();
-                    analyser.fftSize = 256; // Mayor resolución para Bars/Wave
-                    analyser.smoothingTimeConstant = 0.75;
-                    srcNode = audioCtx.createMediaElementSource(audio);
-                    srcNode.connect(analyser);
-                    analyser.connect(audioCtx.destination);
-                    dataArr = new Uint8Array(analyser.frequencyBinCount);
-                } catch (e) {
-                    console.error("AudioContext error", e);
-                }
-            }
-            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            if (!dataArr) dataArr = new Uint8Array(128);
 
             function draw() {
                 if (!isPlaying) return;
@@ -2494,208 +2480,175 @@
                     drawWave();
                 }
             }
-
-            function simulateFrequencyData() {
-                if (!dataArr) dataArr = new Uint8Array(128);
-                const now = Date.now() / 160;
-                for (let i = 0; i < dataArr.length; i++) {
-                    const progress = i / dataArr.length;
-                    // Envolvente acústica: inicio suave, medios dinámicos y caída suave en agudos
-                    const envelope = Math.sin(progress * Math.PI);
-                    const wave1 = Math.sin(now * 1.4 + i * 0.18) * 35;
-                    const wave2 = Math.sin(now * 0.7 - i * 0.08) * 25;
-                    const wave3 = Math.cos(now * 2.2 + i * 0.3) * 15;
-                    const base = 45 + (1 - progress) * 75;
-                    
-                    const val = (base + wave1 + wave2 + wave3) * envelope * 1.15;
-                    dataArr[i] = Math.max(10, Math.min(235, val));
-                }
-            }
-
-            function drawLed() {
-                let activeValL = 0;
-                let activeValR = 0;
-
-                if (isIosDevice || isEdgeAndroid || !analyser) {
-                    const baseL = 0.5 + Math.random() * 0.2;
-                    simL += (Math.min(1.2, baseL + (Math.random() * 0.1)) - simL) * 0.25;
-                    activeValL = Math.round(Math.pow(simL, 1.5) * SEGMENT_COUNT * 1.3);
-                    activeValR = Math.round(Math.min(SEGMENT_COUNT, activeValL + (Math.random() - 0.5) * 4));
-                } else {
-                    analyser.getByteFrequencyData(dataArr);
-                    let avgL = 0;
-                    let avgR = 0;
-                    for(let i=0; i<10; i++) avgL += dataArr[i];
-                    for(let i=10; i<20; i++) avgR += dataArr[i];
-                    
-                    if (avgL + avgR === 0) {
-                        simulateFrequencyData();
-                        avgL = dataArr[2] + dataArr[4];
-                        avgR = dataArr[3] + dataArr[5];
-                    }
-
-                    activeValL = Math.round((avgL/10/255) * SEGMENT_COUNT * 1.05);
-                    activeValR = Math.round((avgR/10/255) * SEGMENT_COUNT * 1.05);
-                }
-
-                activeValL = Math.max(0, Math.min(SEGMENT_COUNT, activeValL));
-                activeValR = Math.max(0, Math.min(SEGMENT_COUNT, activeValR));
-
-                barsL.forEach((seg, i) => {
-                    if (i < activeValL) seg.classList.add('active');
-                    else seg.classList.remove('active');
-                });
-                barsR.forEach((seg, i) => {
-                    if (i < activeValR) seg.classList.add('active');
-                    else seg.classList.remove('active');
-                });
-            }
-
-            function drawBars() {
-                if (isIosDevice || isEdgeAndroid || !analyser) {
-                    simulateFrequencyData();
-                } else {
-                    analyser.getByteFrequencyData(dataArr);
-                    let totalEnergy = 0;
-                    for (let i = 0; i < 20; i++) totalEnergy += dataArr[i];
-                    if (totalEnergy === 0) simulateFrequencyData();
-                }
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                const barCount = 32;
-                const canvasW = canvas.width / window.devicePixelRatio;
-                const canvasH = canvas.height / window.devicePixelRatio;
-                const barWidth = (canvasW / barCount) * 0.78;
-                const gap = (canvasW / barCount) * 0.22;
-                
-                const brickHeight = 4;
-                const brickGap = 1.5;
-                const totalBricks = Math.floor((canvasH - 4) / (brickHeight + brickGap));
-                
-                let x = gap / 2;
-                const usableBins = Math.min(dataArr.length, 64);
-                const step = usableBins / barCount;
-
-                for (let i = 0; i < barCount; i++) {
-                    const binIdx = Math.floor(i * step);
-                    let avg = 0;
-                    let count = 0;
-                    for (let j = 0; j < Math.ceil(step) && (binIdx + j) < usableBins; j++) {
-                        avg += dataArr[binIdx + j];
-                        count++;
-                    }
-                    avg = count > 0 ? avg / count : (dataArr[binIdx] || 0);
-
-                    // Escala musical armónica con caída suave en frecuencias ultrasónicas
-                    const progress = i / barCount;
-                    const windowFactor = Math.sin(0.15 + progress * 0.85 * Math.PI);
-                    const factor = (0.9 + (1 - progress) * 0.25) * windowFactor;
-                    
-                    const activeHeight = Math.min(canvasH - 6, (avg / 255) * canvasH * factor);
-                    const activeBricks = Math.max(0, Math.min(totalBricks, Math.ceil(activeHeight / (brickHeight + brickGap))));
-
-                    for (let b = 0; b < totalBricks; b++) {
-                        const y = canvasH - 3 - (b * (brickHeight + brickGap)) - brickHeight;
-                        const percent = (b / totalBricks) * 100;
-                        
-                        if (b < activeBricks) {
-                            if (percent < 50) ctx.fillStyle = '#22c55e'; // Verde
-                            else if (percent < 80) ctx.fillStyle = '#f97316'; // Naranja
-                            else ctx.fillStyle = '#ef4444'; // Rojo
-                            
-                            ctx.shadowBlur = 4;
-                            ctx.shadowColor = ctx.fillStyle;
-                        } else {
-                            ctx.fillStyle = document.body.classList.contains('dark-theme') ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
-                            ctx.shadowBlur = 0;
-                        }
-
-                        ctx.fillRect(x, y, barWidth, brickHeight);
-                    }
-
-                    x += barWidth + gap;
-                }
-            }
-
-            function drawWave() {
-                if (isIosDevice || isEdgeAndroid || !analyser) {
-                    simulateFrequencyData();
-                } else {
-                    analyser.getByteFrequencyData(dataArr);
-                    let totalEnergy = 0;
-                    for (let i = 0; i < 20; i++) totalEnergy += dataArr[i];
-                    if (totalEnergy === 0) simulateFrequencyData();
-                }
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                const canvasW = canvas.width / window.devicePixelRatio;
-                const canvasH = canvas.height / window.devicePixelRatio;
-                const pointsCount = 48;
-                const usableBins = Math.min(dataArr.length, 64);
-                const step = usableBins / pointsCount;
-                
-                // Mapeo suave de puntos con caída armónica en ambos extremos
-                const points = [];
-                for (let i = 0; i <= pointsCount; i++) {
-                    const binIdx = Math.min(usableBins - 1, Math.floor(i * step));
-                    const val = dataArr[binIdx] || 0;
-                    const progress = i / pointsCount;
-                    const windowFactor = Math.sin(progress * Math.PI);
-                    const v = (val / 255) * (canvasH - 14) * windowFactor;
-                    const x = (i / pointsCount) * canvasW;
-                    const y = Math.max(6, Math.min(canvasH - 4, canvasH - 4 - v));
-                    points.push({ x, y });
-                }
-
-                // 1. Trazado de la onda superior con degradado
-                const gradient = ctx.createLinearGradient(0, canvasH, 0, 0);
-                gradient.addColorStop(0, '#22c55e');   // Verde
-                gradient.addColorStop(0.5, '#f97316'); // Naranja
-                gradient.addColorStop(0.9, '#ef4444'); // Rojo
-                
-                ctx.beginPath();
-                ctx.lineWidth = 2.5;
-                ctx.strokeStyle = gradient;
-                ctx.shadowBlur = 8;
-                ctx.shadowColor = 'rgba(237, 28, 36, 0.35)';
-
-                ctx.moveTo(points[0].x, points[0].y);
-                for (let i = 1; i < points.length; i++) {
-                    const prev = points[i - 1];
-                    const curr = points[i];
-                    const mx = (prev.x + curr.x) / 2;
-                    const my = (prev.y + curr.y) / 2;
-                    ctx.quadraticCurveTo(prev.x, prev.y, mx, my);
-                }
-                ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
-                ctx.stroke();
-
-                // 2. Relleno inferior degradado limpio
-                ctx.lineTo(canvasW, canvasH);
-                ctx.lineTo(0, canvasH);
-                ctx.closePath();
-                
-                ctx.shadowBlur = 0;
-                const fillGradient = ctx.createLinearGradient(0, canvasH, 0, 0);
-                fillGradient.addColorStop(0, 'rgba(34, 197, 94, 0.12)');
-                fillGradient.addColorStop(0.5, 'rgba(249, 115, 22, 0.12)');
-                fillGradient.addColorStop(1, 'rgba(239, 68, 68, 0.12)');
-                ctx.fillStyle = fillGradient;
-                ctx.fill();
-            }
-
             draw();
         }
 
+        function simulateFrequencyData() {
+            if (!dataArr) dataArr = new Uint8Array(128);
+            const now = Date.now() / 160;
+            for (let i = 0; i < dataArr.length; i++) {
+                const progress = i / dataArr.length;
+                // Envolvente acústica: inicio suave, medios dinámicos y caída suave en agudos
+                const envelope = Math.sin(progress * Math.PI);
+                const wave1 = Math.sin(now * 1.4 + i * 0.18) * 35;
+                const wave2 = Math.sin(now * 0.7 - i * 0.08) * 25;
+                const wave3 = Math.cos(now * 2.2 + i * 0.3) * 15;
+                const base = 45 + (1 - progress) * 75;
+                
+                const val = (base + wave1 + wave2 + wave3) * envelope * 1.15;
+                dataArr[i] = Math.max(10, Math.min(235, val));
+            }
+        }
+
+        function drawLed() {
+            const baseL = 0.5 + Math.random() * 0.2;
+            simL += (Math.min(1.2, baseL + (Math.random() * 0.1)) - simL) * 0.25;
+            let activeValL = Math.round(Math.pow(simL, 1.5) * SEGMENT_COUNT * 1.3);
+            let activeValR = Math.round(Math.min(SEGMENT_COUNT, activeValL + (Math.random() - 0.5) * 4));
+
+            activeValL = Math.max(0, Math.min(SEGMENT_COUNT, activeValL));
+            activeValR = Math.max(0, Math.min(SEGMENT_COUNT, activeValR));
+
+            barsL.forEach((seg, i) => {
+                if (i < activeValL) seg.classList.add('active');
+                else seg.classList.remove('active');
+            });
+            barsR.forEach((seg, i) => {
+                if (i < activeValR) seg.classList.add('active');
+                else seg.classList.remove('active');
+            });
+        }
+
+        function drawBars() {
+            simulateFrequencyData();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const barCount = 32;
+            const canvasW = canvas.width / window.devicePixelRatio;
+            const canvasH = canvas.height / window.devicePixelRatio;
+            const barWidth = (canvasW / barCount) * 0.78;
+            const gap = (canvasW / barCount) * 0.22;
+            
+            const brickHeight = 4;
+            const brickGap = 1.5;
+            const totalBricks = Math.floor((canvasH - 4) / (brickHeight + brickGap));
+            
+            let x = gap / 2;
+            const usableBins = Math.min(dataArr.length, 64);
+            const step = usableBins / barCount;
+
+            for (let i = 0; i < barCount; i++) {
+                const binIdx = Math.floor(i * step);
+                let avg = 0;
+                let count = 0;
+                for (let j = 0; j < Math.ceil(step) && (binIdx + j) < usableBins; j++) {
+                    avg += dataArr[binIdx + j];
+                    count++;
+                }
+                avg = count > 0 ? avg / count : (dataArr[binIdx] || 0);
+
+                // Escala musical armónica con caída suave en frecuencias ultrasónicas
+                const progress = i / barCount;
+                const windowFactor = Math.sin(0.15 + progress * 0.85 * Math.PI);
+                const factor = (0.9 + (1 - progress) * 0.25) * windowFactor;
+                
+                const activeHeight = Math.min(canvasH - 6, (avg / 255) * canvasH * factor);
+                const activeBricks = Math.max(0, Math.min(totalBricks, Math.ceil(activeHeight / (brickHeight + brickGap))));
+
+                for (let b = 0; b < totalBricks; b++) {
+                    const y = canvasH - 3 - (b * (brickHeight + brickGap)) - brickHeight;
+                    const percent = (b / totalBricks) * 100;
+                    
+                    if (b < activeBricks) {
+                        if (percent < 50) ctx.fillStyle = '#22c55e'; // Verde
+                        else if (percent < 80) ctx.fillStyle = '#f97316'; // Naranja
+                        else ctx.fillStyle = '#ef4444'; // Rojo
+                        
+                        ctx.shadowBlur = 4;
+                        ctx.shadowColor = ctx.fillStyle;
+                    } else {
+                        ctx.fillStyle = document.body.classList.contains('dark-theme') ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
+                        ctx.shadowBlur = 0;
+                    }
+
+                    ctx.fillRect(x, y, barWidth, brickHeight);
+                }
+
+                x += barWidth + gap;
+            }
+        }
+
+        function drawWave() {
+            simulateFrequencyData();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const canvasW = canvas.width / window.devicePixelRatio;
+            const canvasH = canvas.height / window.devicePixelRatio;
+            const pointsCount = 48;
+            const usableBins = Math.min(dataArr.length, 64);
+            const step = usableBins / pointsCount;
+            
+            // Mapeo suave de puntos con caída armónica en ambos extremos
+            const points = [];
+            for (let i = 0; i <= pointsCount; i++) {
+                const binIdx = Math.min(usableBins - 1, Math.floor(i * step));
+                const val = dataArr[binIdx] || 0;
+                const progress = i / pointsCount;
+                const windowFactor = Math.sin(progress * Math.PI);
+                const v = (val / 255) * (canvasH - 14) * windowFactor;
+                const x = (i / pointsCount) * canvasW;
+                const y = Math.max(6, Math.min(canvasH - 4, canvasH - 4 - v));
+                points.push({ x, y });
+            }
+
+            // 1. Trazado de la onda superior con degradado
+            const gradient = ctx.createLinearGradient(0, canvasH, 0, 0);
+            gradient.addColorStop(0, '#22c55e');   // Verde
+            gradient.addColorStop(0.5, '#f97316'); // Naranja
+            gradient.addColorStop(0.9, '#ef4444'); // Rojo
+            
+            ctx.beginPath();
+            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = gradient;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = 'rgba(237, 28, 36, 0.35)';
+
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                const prev = points[i - 1];
+                const curr = points[i];
+                const mx = (prev.x + curr.x) / 2;
+                const my = (prev.y + curr.y) / 2;
+                ctx.quadraticCurveTo(prev.x, prev.y, mx, my);
+            }
+            ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+            ctx.stroke();
+
+            // 2. Relleno inferior degradado limpio
+            ctx.lineTo(canvasW, canvasH);
+            ctx.lineTo(0, canvasH);
+            ctx.closePath();
+            
+            ctx.shadowBlur = 0;
+            const fillGradient = ctx.createLinearGradient(0, canvasH, 0, 0);
+            fillGradient.addColorStop(0, 'rgba(34, 197, 94, 0.12)');
+            fillGradient.addColorStop(0.5, 'rgba(249, 115, 22, 0.12)');
+            fillGradient.addColorStop(1, 'rgba(239, 68, 68, 0.12)');
+            ctx.fillStyle = fillGradient;
+            ctx.fill();
+        }
+
+        let bufferTimer = null;
+
         function rxToggle() {
             if (!isPlaying) {
-                setStatus('Conectando con Radio Xero...');
+                setStatus('Conectando...');
                 setIcon('loading');
 
-                audio.removeAttribute('crossorigin');
-                audio.src = STREAM_URL;
-
-                audio.load();
+                if (audio.src !== STREAM_URL) {
+                    audio.removeAttribute('crossorigin');
+                    audio.src = STREAM_URL;
+                }
 
                 const playPromise = audio.play();
 
@@ -2716,7 +2669,6 @@
                 }
             } else {
                 audio.pause();
-                audio.src = '';
                 isPlaying = false;
                 setIcon('paused');
                 document.getElementById('artPulse').style.animationPlayState = 'paused';
@@ -2728,10 +2680,9 @@
 
         audio.addEventListener('error', () => {
             if (isPlaying) {
-                console.log("Error de audio detectado, intentando reconectar...");
+                console.log("Error de audio detectado, reconectando...");
                 audio.removeAttribute('crossorigin');
                 audio.src = STREAM_URL;
-                audio.load();
                 audio.play().catch(() => {
                     isPlaying = false;
                     setIcon(false);
@@ -2745,6 +2696,23 @@
                 setStatus('Error de conexión. Reintenta.', 'error');
                 if (animId) cancelAnimationFrame(animId);
                 idleAnim();
+            }
+        });
+
+        audio.addEventListener('waiting', () => {
+            if (isPlaying) {
+                clearTimeout(bufferTimer);
+                bufferTimer = setTimeout(() => {
+                    if (isPlaying && audio.paused) setStatus('Buffering...', 'playing');
+                }, 600);
+            }
+        });
+
+        audio.addEventListener('playing', () => {
+            clearTimeout(bufferTimer);
+            if (isPlaying) {
+                setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
+                setIcon('playing');
             }
         });
 
