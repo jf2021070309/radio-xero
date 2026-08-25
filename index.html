@@ -1042,18 +1042,18 @@
         }
 
         @keyframes rxLiveNeon {
-            0%, 100% { 
-                color: #7f1d1d; /* Rojo oscuro apagado */
-                text-shadow: 0 0 2px rgba(239, 68, 68, 0.3); 
-            }
-            50% { 
+            0%, 49% { 
                 color: #ff4a4a; /* Rojo brillante encendido */
                 text-shadow: 0 0 10px rgba(255, 74, 74, 0.8), 0 0 20px rgba(255, 74, 74, 0.6), 0 0 30px rgba(255, 74, 74, 0.4); 
+            }
+            50%, 100% { 
+                color: #222222; /* Negro completamente apagado */
+                text-shadow: none; 
             }
         }
 
         .rx-live-pill.active i, .rx-live-pill.active span {
-            animation: rxLiveNeon 2.5s infinite ease-in-out;
+            animation: rxLiveNeon 1.5s infinite;
         }
 
         .rx-status {
@@ -2847,7 +2847,7 @@
                 document.getElementById('artPulse').style.animationPlayState = 'paused';
                 document.getElementById('rxCoverImg').style.animationPlayState = 'paused';
                 if (document.getElementById('artFallback')) document.getElementById('artFallback').style.animationPlayState = 'paused';
-                setStatus('Pausado');
+                setStatus('');
                 if (animId) cancelAnimationFrame(animId);
                 idleAnim();
             }
@@ -2904,7 +2904,7 @@
                 document.getElementById('artPulse').style.animationPlayState = 'paused';
                 document.getElementById('rxCoverImg').style.animationPlayState = 'paused';
                 if (document.getElementById('artFallback')) document.getElementById('artFallback').style.animationPlayState = 'paused';
-                setStatus('Pausado por sistema');
+                setStatus('');
                 if (animId) cancelAnimationFrame(animId);
                 idleAnim();
             } else {
