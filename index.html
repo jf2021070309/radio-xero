@@ -2322,7 +2322,7 @@
                 <div class="rx-status" id="rxStatus">Listo para escuchar</div>
 
                 <!-- Minimal Social Share Icons -->
-                <div class="rx-social-title">Síguenos en nuestras redes sociales</div>
+                <div class="rx-social-title">Comparte la radio con tus amigos</div>
                 <div class="social-grid rx-minimal-social">
                     <a id="rx-wa-btn" href="#" target="_blank" class="social-btn whatsapp" aria-label="WhatsApp">
                         <i class="fab fa-whatsapp"></i>
@@ -3202,7 +3202,7 @@
 
         function rxCopyLink(e, btn) {
             e.preventDefault();
-            const url = 'https://jf2021070309.github.io/radio-xero/';
+            const url = 'https://radioxero.com/';
             navigator.clipboard.writeText(url).then(() => {
                 const icon = btn.querySelector('i');
                 const oldClass = icon.className;
@@ -3255,7 +3255,7 @@
                     "Escuchanos aqui: ";
             }
 
-            const shareUrl = "https://jf2021070309.github.io/radio-xero/";
+            const shareUrl = "https://radioxero.com/";
             const fullMsg = encodeURIComponent(msgBody + shareUrl);
 
             // Botón de WhatsApp
