@@ -2240,17 +2240,7 @@
 
                 <!-- 3 Visualizer Modes Area (NOT IN A CARD) -->
                 <div class="rx-viz-area" id="rxVizArea">
-                    <div class="rx-viz-selector">
-                        <button class="viz-mode-btn active" onclick="setVizMode('led')" id="btn-led">
-                            <i class="fas fa-th"></i> LED
-                        </button>
-                        <button class="viz-mode-btn" onclick="setVizMode('bars')" id="btn-bars">
-                            <i class="fas fa-chart-bar"></i> BARS
-                        </button>
-                        <button class="viz-mode-btn" onclick="setVizMode('wave')" id="btn-wave">
-                            <i class="fas fa-wave-square"></i> WAVE
-                        </button>
-                    </div>
+                    <!-- Visualizer Selector Removed -->
 
                     <div class="rx-viz-container" id="rxVizContainer">
                         <div class="rx-vu-row">
@@ -2365,7 +2355,7 @@
         let systemPauseAutoResume = false;
 
         // Variables de Visualización
-        let currentVizMode = 'led';
+        let currentVizMode = 'bars';
         let canvas = document.getElementById('rxCanvas');
         let ctx = canvas ? canvas.getContext('2d') : null;
 
@@ -2538,21 +2528,23 @@
         function setVizMode(mode) {
             currentVizMode = mode;
             
-            // UI Update
-            document.querySelectorAll('.viz-mode-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-' + mode).classList.add('active');
-
             const container = document.getElementById('rxVizContainer');
             const canvasEl = document.getElementById('rxCanvas');
 
-            if (mode === 'led') {
-                container.style.display = 'flex';
-                canvasEl.style.display = 'none';
-            } else {
-                container.style.display = 'none';
-                canvasEl.style.display = 'block';
+            if (container && canvasEl) {
+                if (mode === 'led') {
+                    container.style.display = 'flex';
+                    canvasEl.style.display = 'none';
+                } else {
+                    container.style.display = 'none';
+                    canvasEl.style.display = 'block';
+                }
             }
         }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            setVizMode(currentVizMode);
+        });
 
         function startAnalyser() {
             if (!dataArr) dataArr = new Uint8Array(128);
