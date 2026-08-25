@@ -976,11 +976,11 @@
             height: 85px;
             border-radius: 50%;
             border: none;
-            background: linear-gradient(135deg, #ff2e38 0%, #ED1C24 45%, #a81116 100%);
-            box-shadow: 0 12px 35px rgba(237, 28, 36, 0.65), 
+            background: #ffffff;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), 
                         0 0 0 4px rgba(255, 255, 255, 0.18),
                         inset 0 2px 4px rgba(255, 255, 255, 0.5);
-            color: #ffffff;
+            color: #000000;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -991,7 +991,7 @@
         }
 
         .dark-theme .rx-play-btn {
-            box-shadow: 0 12px 35px rgba(237, 28, 36, 0.8), 
+            box-shadow: 0 12px 35px rgba(255, 255, 255, 0.15), 
                         0 0 0 4px rgba(255, 255, 255, 0.1),
                         inset 0 2px 4px rgba(255, 255, 255, 0.3);
         }
@@ -999,19 +999,25 @@
         .rx-play-btn svg path,
         .rx-play-btn svg polygon,
         .rx-play-btn svg rect {
-            fill: #ffffff !important;
+            fill: #000000 !important;
         }
 
         .rx-play-btn:hover {
             transform: scale3d(1.08, 1.08, 1);
-            box-shadow: 0 16px 45px rgba(237, 28, 36, 0.85),
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.25),
+                        0 0 0 6px rgba(255, 255, 255, 0.28),
+                        inset 0 3px 6px rgba(255, 255, 255, 0.6);
+        }
+
+        .dark-theme .rx-play-btn:hover {
+            box-shadow: 0 16px 45px rgba(255, 255, 255, 0.25),
                         0 0 0 6px rgba(255, 255, 255, 0.28),
                         inset 0 3px 6px rgba(255, 255, 255, 0.6);
         }
 
         .rx-play-btn:active {
             transform: scale3d(0.92, 0.92, 1);
-            box-shadow: 0 6px 20px rgba(237, 28, 36, 0.5),
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15),
                         0 0 0 2px rgba(255, 255, 255, 0.1);
         }
 
@@ -1781,10 +1787,11 @@
             -webkit-backdrop-filter: blur(25px);
             padding: 1.5rem;
             transform: translateZ(0);
-            will-change: opacity, transform;
-            transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                        transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
-                        visibility 0.4s;
+            will-change: opacity, transform, backdrop-filter;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                        backdrop-filter 0.8s ease,
+                        visibility 0.8s;
             overflow: hidden;
             cursor: pointer;
         }
@@ -1804,9 +1811,22 @@
 
         .rx-intro-overlay.rx-intro-hiding {
             opacity: 0;
-            transform: scale3d(1.05, 1.05, 1);
+            transform: scale3d(1.15, 1.15, 1);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
             visibility: hidden;
             pointer-events: none;
+        }
+
+        .rx-intro-overlay.rx-intro-hiding .rx-intro-content {
+            opacity: 0;
+            transform: translateY(-40px) scale(0.9);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .rx-intro-overlay.rx-intro-hiding .rx-intro-glow {
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         /* Ambient Center Studio Glow */
@@ -1906,7 +1926,7 @@
             width: 140px;
             height: 140px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(237, 28, 36, 0.45) 0%, rgba(237, 28, 36, 0) 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
             transform: translate3d(-50%, -50%, 0);
             will-change: transform, opacity;
             animation: rxHaloPulse 2.2s ease-in-out infinite;
@@ -1930,15 +1950,15 @@
             height: 96px;
             border-radius: 50%;
             border: none;
-            background: linear-gradient(135deg, #ff2e38 0%, #ED1C24 45%, #a81116 100%);
-            box-shadow: 0 12px 35px rgba(237, 28, 36, 0.65), 
+            background: #ffffff;
+            box-shadow: 0 12px 35px rgba(255, 255, 255, 0.25), 
                         0 0 0 4px rgba(255, 255, 255, 0.18),
                         inset 0 2px 4px rgba(255, 255, 255, 0.5);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
+            color: #000000;
             outline: none;
             transform: translateZ(0);
             transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), 
@@ -1949,7 +1969,7 @@
 
         .rx-intro-play-btn:hover {
             transform: scale3d(1.08, 1.08, 1);
-            box-shadow: 0 16px 45px rgba(237, 28, 36, 0.85),
+            box-shadow: 0 16px 45px rgba(255, 255, 255, 0.4),
                         0 0 0 6px rgba(255, 255, 255, 0.28),
                         inset 0 3px 6px rgba(255, 255, 255, 0.6);
         }
@@ -1957,7 +1977,7 @@
         .rx-intro-play-btn:active,
         .rx-intro-play-btn.pressed {
             transform: scale3d(0.92, 0.92, 1);
-            box-shadow: 0 6px 20px rgba(237, 28, 36, 0.5),
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15),
                         0 0 0 2px rgba(255, 255, 255, 0.1);
         }
 
@@ -1973,8 +1993,8 @@
         .rx-intro-svg-play {
             width: 40px;
             height: 40px;
-            fill: #ffffff;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4));
+            fill: #000000;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
             transition: transform 0.2s ease;
         }
 
@@ -3302,7 +3322,7 @@
                 introOverlay.classList.add('rx-intro-hiding');
                 setTimeout(() => {
                     introOverlay.style.display = 'none';
-                }, 480);
+                }, 850);
             }
         }
 
