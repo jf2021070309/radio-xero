@@ -2353,7 +2353,10 @@
             const volValue = document.getElementById('volValue');
             const muteIcon = document.getElementById('muteIconLeft');
             
-            if (slider) slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
+            if (slider) {
+                slider.value = v;
+                slider.style.background = `linear-gradient(to right, #ED1C24 ${v}%, rgba(237, 28, 36, 0.2) ${v}%)`;
+            }
             if (volValue) volValue.textContent = v + '%';
 
             if (muteIcon) {
