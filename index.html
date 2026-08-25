@@ -1034,6 +1034,18 @@
             color: var(--text-dim);
         }
 
+        @keyframes rxLivePulse {
+            0% { transform: scale(1); opacity: 0.85; text-shadow: 0 0 5px rgba(239, 68, 68, 0.4); }
+            50% { transform: scale(1.08); opacity: 1; text-shadow: 0 0 15px rgba(239, 68, 68, 0.9), 0 0 25px rgba(239, 68, 68, 0.6); }
+            100% { transform: scale(1); opacity: 0.85; text-shadow: 0 0 5px rgba(239, 68, 68, 0.4); }
+        }
+
+        .rx-live-pill.active i, .rx-live-pill.active span {
+            color: #ef4444 !important;
+            animation: rxLivePulse 1.8s infinite ease-in-out;
+            display: inline-block;
+        }
+
         .rx-status {
             font-size: 0.85rem;
             color: var(--text-dim);
@@ -2766,6 +2778,7 @@
                     playPromise.then(() => {
                         isPlaying = true;
                         setIcon('playing');
+                        document.getElementById('livePill').classList.add('active');
                         document.getElementById('artPulse').style.animationPlayState = 'running';
                         document.getElementById('rxCoverImg').style.animationPlayState = 'running';
                         if (document.getElementById('artFallback')) document.getElementById('artFallback').style.animationPlayState = 'running';
@@ -2777,12 +2790,14 @@
                         setStatus('Presiona PLAY para escuchar.', 'playing');
                         isPlaying = false;
                         setIcon('paused');
+                        document.getElementById('livePill').classList.remove('active');
                     });
                 }
             } else {
                 audio.pause();
                 isPlaying = false;
                 setIcon('paused');
+                document.getElementById('livePill').classList.remove('active');
                 document.getElementById('artPulse').style.animationPlayState = 'paused';
                 document.getElementById('rxCoverImg').style.animationPlayState = 'paused';
                 if (document.getElementById('artFallback')) document.getElementById('artFallback').style.animationPlayState = 'paused';
@@ -2800,6 +2815,7 @@
                 audio.play().catch(() => {
                     isPlaying = false;
                     setIcon(false);
+                    document.getElementById('livePill').classList.remove('active');
                     setStatus('Error de conexión. Reintenta.', 'error');
                     if (animId) cancelAnimationFrame(animId);
                     idleAnim();
@@ -2807,6 +2823,7 @@
             } else {
                 isPlaying = false;
                 setIcon(false);
+                document.getElementById('livePill').classList.remove('active');
                 setStatus('Error de conexión. Reintenta.', 'error');
                 if (animId) cancelAnimationFrame(animId);
                 idleAnim();
@@ -2841,6 +2858,7 @@
                 systemPauseAutoResume = true;
                 isPlaying = false;
                 setIcon('paused');
+                document.getElementById('livePill').classList.remove('active');
                 document.getElementById('artPulse').style.animationPlayState = 'paused';
                 document.getElementById('rxCoverImg').style.animationPlayState = 'paused';
                 if (document.getElementById('artFallback')) document.getElementById('artFallback').style.animationPlayState = 'paused';
