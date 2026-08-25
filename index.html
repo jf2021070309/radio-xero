@@ -1103,10 +1103,10 @@
 
         /* Loading Spinner */
         .rx-loader {
-            width: 22px;
-            height: 22px;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            border-top-color: #ffffff;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-top-color: #000000;
             border-radius: 50%;
             animation: rx-spin 0.8s linear infinite;
         }
@@ -1118,9 +1118,15 @@
         }
 
         .rx-play-btn.loading {
-            background: #1e293b;
+            background: #f8fafc;
             cursor: wait;
             transform: scale(0.95);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .dark-theme .rx-play-btn.loading {
+            background: #e2e8f0;
+            box-shadow: 0 4px 10px rgba(255,255,255,0.1);
         }
 
         .info-card h2 {
@@ -1781,10 +1787,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle at 50% 42%, #0d1527 0%, #030712 65%, #000000 100%);
+            background: radial-gradient(circle at 50% 42%, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.8) 65%, rgba(0, 0, 0, 0.95) 100%);
             color: #ffffff;
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             padding: 1.5rem;
             transform: translateZ(0);
             will-change: opacity, transform, backdrop-filter;
@@ -1794,19 +1800,6 @@
                         visibility 0.8s;
             overflow: hidden;
             cursor: pointer;
-        }
-        
-        .rx-intro-overlay::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-image: url('fondo.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0.15;
-            z-index: 0;
-            pointer-events: none;
         }
 
         .rx-intro-overlay.rx-intro-hiding {
@@ -2872,7 +2865,7 @@
             if (isPlaying) {
                 clearTimeout(bufferTimer);
                 bufferTimer = setTimeout(() => {
-                    if (isPlaying && audio.paused) setStatus('Buffering...', 'playing');
+                    if (isPlaying && audio.paused) setStatus('<i class="fas fa-circle-notch fa-spin"></i> Sintonizando señal...', 'playing');
                 }, 600);
             }
         });
@@ -2883,10 +2876,6 @@
                 setStatus('', 'playing');
                 setIcon('playing');
             }
-        });
-
-        audio.addEventListener('waiting', () => {
-            if (isPlaying) setStatus('Buffering...', 'playing');
         });
 
         // Sincronización con controles nativos del OS y llamadas telefónicas
