@@ -2495,10 +2495,11 @@
             }
             frame();
         }
-        idleAnim();
 
         let canvasW = 0;
         let canvasH = 0;
+
+        idleAnim();
 
         if (canvas) {
             const resizeObserver = new ResizeObserver(entries => {
