@@ -93,9 +93,14 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 0.1;
+            opacity: 0.2;
             z-index: 0;
             pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        body.dark-theme::before {
+            opacity: 0.1;
         }
 
         .main-wrapper {
@@ -260,21 +265,10 @@
 
         /* Header */
         header {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            margin-bottom: 0.5rem; 
-            padding: 0.5rem 0;
-            width: 100%;
-            max-width: 600px;
-            position: relative;
-            z-index: 2;
-        }
-
-        @media (min-width: 900px) {
-            header {
-                max-width: 1000px;
-            }
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
         }
 
         .visually-hidden {
@@ -1693,12 +1687,7 @@
             }
         }
 
-        @media (max-width: 600px) {
-            .theme-switch {
-                top: -20px;
-                right: 10px;
-            }
-        }
+
 
         /* Centrado Global de Cards */
         .info-card {
@@ -2350,8 +2339,9 @@
                 rxToggleMute();
             }
         }
-        rxSetVol(100);
-
+        document.addEventListener('DOMContentLoaded', () => {
+            rxSetVol(100);
+        });
         // Mute / Unmute
         let isMuted = false;
         let volumeBeforeMute = 100;
