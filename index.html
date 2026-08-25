@@ -2083,7 +2083,7 @@
     </style>
 </head>
 
-<body>
+<body class="dark-theme">
     <!-- ─── INTRO / AUTOPLAY SPLASH SCREEN OVERLAY ─── -->
     <div id="rxIntroOverlay" class="rx-intro-overlay" onclick="rxStartFromIntro()" role="dialog" aria-modal="true" aria-label="Bienvenido a Radio Xero">
         <div class="rx-intro-glow"></div>
@@ -2276,7 +2276,6 @@
                     </div>
                     <div class="rx-vol-right-info">
                         <span class="rx-vol-value" id="volValue">100%</span>
-                        <i class="fas fa-volume-high"></i>
                     </div>
                 </div>
 
@@ -3292,14 +3291,15 @@
 
         function initTheme() {
             const savedTheme = localStorage.getItem('rx-theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark-theme');
-                document.getElementById('themeToggle').querySelector('i').className = 'fas fa-moon';
-                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0a0d14');
-            } else {
+            // Default to dark theme unless user explicitly saved 'light'
+            if (savedTheme === 'light') {
                 document.body.classList.remove('dark-theme');
                 document.getElementById('themeToggle').querySelector('i').className = 'fas fa-sun';
                 document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
+            } else {
+                document.body.classList.add('dark-theme');
+                document.getElementById('themeToggle').querySelector('i').className = 'fas fa-moon';
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0a0d14');
             }
         }
 
