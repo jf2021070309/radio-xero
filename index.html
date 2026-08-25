@@ -2541,6 +2541,8 @@
         function simulateFrequencyData() {
             if (!dataArr) dataArr = new Uint8Array(128);
             const now = Date.now() / 160;
+            const currentVolume = audio.muted ? 0 : audio.volume;
+
             for (let i = 0; i < dataArr.length; i++) {
                 const progress = i / dataArr.length;
                 // Envolvente acústica: inicio suave, medios dinámicos y caída suave en agudos
@@ -2550,8 +2552,10 @@
                 const wave3 = Math.cos(now * 2.2 + i * 0.3) * 15;
                 const base = 45 + (1 - progress) * 75;
                 
-                const val = (base + wave1 + wave2 + wave3) * envelope * 1.15;
-                dataArr[i] = Math.max(10, Math.min(235, val));
+                let val = (base + wave1 + wave2 + wave3) * envelope * 1.15;
+                val = val * currentVolume;
+                const baseFloor = currentVolume > 0.05 ? 10 : 0;
+                dataArr[i] = Math.max(baseFloor, Math.min(235, val));
             }
         }
 
