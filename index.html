@@ -2451,8 +2451,6 @@
                 } else {
                     // Animación sutil para Canvas en pausa
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    const canvasW = canvas.width / window.devicePixelRatio;
-                    const canvasH = canvas.height / window.devicePixelRatio;
 
                     if (currentVizMode === 'bars') {
                         const count = 32;
@@ -2486,14 +2484,31 @@
         }
         idleAnim();
 
-        // Manejo de redimensionado para el Canvas
+        let canvasW = 0;
+        let canvasH = 0;
+
+        if (canvas) {
+            const resizeObserver = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    if (entry.contentRect.width > 0) {
+                        const dpr = window.devicePixelRatio || 1;
+                        canvasW = entry.contentRect.width;
+                        canvasH = entry.contentRect.height;
+                        
+                        canvas.width = canvasW * dpr;
+                        canvas.height = canvasH * dpr;
+                        
+                        // Reset the transform matrix and scale
+                        ctx.setTransform(1, 0, 0, 1, 0, 0);
+                        ctx.scale(dpr, dpr);
+                    }
+                }
+            });
+            resizeObserver.observe(canvas);
+        }
+
+        // Manejo de redimensionado para otros elementos
         window.addEventListener('resize', () => {
-            if (currentVizMode !== 'led') {
-                const canvasEl = document.getElementById('rxCanvas');
-                canvas.width = canvasEl.offsetWidth * window.devicePixelRatio;
-                canvas.height = canvasEl.offsetHeight * window.devicePixelRatio;
-                ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-            }
             checkTrackOverflow();
         });
 
@@ -2513,10 +2528,6 @@
             } else {
                 container.style.display = 'none';
                 canvasEl.style.display = 'block';
-                // Resize canvas to its display size
-                canvas.width = canvasEl.offsetWidth * window.devicePixelRatio;
-                canvas.height = canvasEl.offsetHeight * window.devicePixelRatio;
-                ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
             }
         }
 
@@ -2621,12 +2632,11 @@
         }
 
         function drawBars() {
+            if (canvasW === 0 || canvasH === 0) return;
             simulateFrequencyData();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             const barCount = 32;
-            const canvasW = canvas.width / window.devicePixelRatio;
-            const canvasH = canvas.height / window.devicePixelRatio;
             const barWidth = (canvasW / barCount) * 0.78;
             const gap = (canvasW / barCount) * 0.22;
             
@@ -2680,11 +2690,10 @@
         }
 
         function drawWave() {
+            if (canvasW === 0 || canvasH === 0) return;
             simulateFrequencyData();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const canvasW = canvas.width / window.devicePixelRatio;
-            const canvasH = canvas.height / window.devicePixelRatio;
             const pointsCount = 48;
             const usableBins = Math.min(dataArr.length, 64);
             const step = usableBins / pointsCount;
