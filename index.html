@@ -2538,24 +2538,48 @@
             draw();
         }
 
+        let simulatedBeatTime = 0;
+
         function simulateFrequencyData() {
             if (!dataArr) dataArr = new Uint8Array(128);
-            const now = Date.now() / 160;
+            const now = Date.now() / 150;
+            const ms = Date.now();
             const currentVolume = audio.muted ? 0 : audio.volume;
+
+            // Simular un golpe (beat) aleatorio de bajo/batería
+            if (ms > simulatedBeatTime) {
+                simulatedBeatTime = ms + 300 + Math.random() * 500;
+            }
+            // Decaimiento del beat
+            const beatIntensity = Math.max(0, 1 - (simulatedBeatTime - ms) / 300);
 
             for (let i = 0; i < dataArr.length; i++) {
                 const progress = i / dataArr.length;
-                // Envolvente acústica: inicio suave, medios dinámicos y caída suave en agudos
-                const envelope = Math.sin(progress * Math.PI);
-                const wave1 = Math.sin(now * 1.4 + i * 0.18) * 35;
-                const wave2 = Math.sin(now * 0.7 - i * 0.08) * 25;
-                const wave3 = Math.cos(now * 2.2 + i * 0.3) * 15;
-                const base = 45 + (1 - progress) * 75;
                 
-                let val = (base + wave1 + wave2 + wave3) * envelope * 1.15;
-                val = val * currentVolume;
+                // Envolvente: altos en los graves, baja en los agudos
+                const envelope = Math.sin(progress * Math.PI);
+                
+                // Ondas desfasadas para movimiento base
+                const wave1 = Math.sin(now * 2.1 + i * 0.2) * 40;
+                const wave2 = Math.sin(now * 1.3 - i * 0.1) * 25;
+                const wave3 = Math.cos(now * 3.5 + i * 0.3) * 15;
+                
+                // Ruido aleatorio que le da textura real
+                const noise = (Math.random() - 0.5) * 40;
+                
+                // Los graves reaccionan mucho al beat, los agudos menos
+                const beat = (progress < 0.25) ? beatIntensity * 90 : beatIntensity * 25;
+
+                const base = 40 + (1 - progress) * 70;
+                
+                let rawVal = (base + wave1 + wave2 + wave3 + noise + beat) * envelope;
+                
+                // Suavizado temporal
+                const prev = dataArr[i] || 0;
+                let val = prev * 0.5 + (rawVal * currentVolume) * 0.5;
+
                 const baseFloor = currentVolume > 0.05 ? 10 : 0;
-                dataArr[i] = Math.max(baseFloor, Math.min(235, val));
+                dataArr[i] = Math.max(baseFloor, Math.min(255, val));
             }
         }
 
