@@ -2560,19 +2560,19 @@
                 const envelope = Math.sin(progress * Math.PI);
                 
                 // Ondas desfasadas para movimiento base
-                const wave1 = Math.sin(now * 2.1 + i * 0.2) * 40;
-                const wave2 = Math.sin(now * 1.3 - i * 0.1) * 25;
-                const wave3 = Math.cos(now * 3.5 + i * 0.3) * 15;
+                const wave1 = Math.sin(now * 2.1 + i * 0.2) * 55;
+                const wave2 = Math.sin(now * 1.3 - i * 0.1) * 35;
+                const wave3 = Math.cos(now * 3.5 + i * 0.3) * 20;
                 
                 // Ruido aleatorio que le da textura real
-                const noise = (Math.random() - 0.5) * 40;
+                const noise = (Math.random() - 0.5) * 55;
                 
                 // Los graves reaccionan mucho al beat, los agudos menos
-                const beat = (progress < 0.25) ? beatIntensity * 90 : beatIntensity * 25;
+                const beat = (progress < 0.25) ? beatIntensity * 120 : beatIntensity * 40;
 
-                const base = 40 + (1 - progress) * 70;
+                const base = 70 + (1 - progress) * 90;
                 
-                let rawVal = (base + wave1 + wave2 + wave3 + noise + beat) * envelope;
+                let rawVal = (base + wave1 + wave2 + wave3 + noise + beat) * envelope * 1.4;
                 
                 // Suavizado temporal
                 const prev = dataArr[i] || 0;
