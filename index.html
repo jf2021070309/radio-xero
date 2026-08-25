@@ -82,6 +82,22 @@
             position: relative;
         }
 
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('fondo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.75;
+            z-index: 0;
+            pointer-events: none;
+        }
+
         .main-wrapper {
             width: 100%;
             max-width: 520px;
@@ -563,6 +579,16 @@
             }
         }
 
+        @keyframes rx-spin-disc {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .rx-spin-active {
+            animation: rx-spin-disc 12s linear infinite;
+        }
+
         /* ─── CONTENT & METADATA ─── */
         .rx-player-content {
             width: 100%;
@@ -852,13 +878,16 @@
 
         .rx-vu-segment {
             flex: 1;
-            height: 10px;
-            border-radius: 2px;
-            background: #e2e8f0;
+            height: 14px;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.05s ease;
         }
 
         .dark-theme .rx-vu-segment {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         .rx-viz-canvas {
@@ -868,19 +897,23 @@
             border-radius: 6px;
         }
 
+        .rx-vu-segment.active {
+            border-color: transparent;
+        }
+
         .rx-vu-segment.active.low {
-            background: #22c55e;
-            box-shadow: 0 0 6px rgba(34, 197, 94, 0.7);
+            background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.4);
         }
 
         .rx-vu-segment.active.mid {
-            background: #f97316;
-            box-shadow: 0 0 6px rgba(249, 115, 22, 0.7);
+            background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.4);
         }
 
         .rx-vu-segment.active.high {
-            background: #ef4444;
-            box-shadow: 0 0 8px rgba(239, 68, 68, 0.9);
+            background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.4);
         }
 
         /* ─── BOTTOM CONTROLS ROW (MODELO 1) ─── */
@@ -2118,8 +2151,8 @@
                 <div class="rx-art-container">
                     <div class="rx-pulse" id="artPulse"></div>
                     <img id="rxCoverImg" src="icon-512.png" alt="Radio Xero"
-                        onerror="this.src='icon-512.png';">
-                    <div class="rx-art-fallback" id="artFallback" style="display:none;">
+                        onerror="this.src='icon-512.png';" class="rx-spin-active" style="animation-play-state: paused;">
+                    <div class="rx-art-fallback rx-spin-active" id="artFallback" style="display:none; animation-play-state: paused;">
                         <svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="40" cy="40" r="38" fill="white" />
                             <circle cx="40" cy="40" r="30" fill="#ED1C24" />
@@ -2154,11 +2187,11 @@
                         <i class="fas fa-volume-low" id="muteIconLeft"></i>
                     </button>
                     <div class="rx-vol-slider-wrap">
-                        <input type="range" min="0" max="100" value="80" id="volSlider" class="rx-vol-slider"
+                        <input type="range" min="0" max="100" value="100" id="volSlider" class="rx-vol-slider"
                             oninput="rxSetVol(this.value)" aria-label="Volumen">
                     </div>
                     <div class="rx-vol-right-info">
-                        <span class="rx-vol-value" id="volValue">80%</span>
+                        <span class="rx-vol-value" id="volValue">100%</span>
                         <i class="fas fa-volume-high"></i>
                     </div>
                 </div>
@@ -2232,9 +2265,7 @@
             </div>
         </section>
 
-        <footer>
-            <p>&copy; 2025 Radio Xero - Todos los derechos reservados</p>
-        </footer>
+
     </div>
 
     <!-- Audio element oculto -->
@@ -2319,11 +2350,11 @@
                 rxToggleMute();
             }
         }
-        rxSetVol(80);
+        rxSetVol(100);
 
         // Mute / Unmute
         let isMuted = false;
-        let volumeBeforeMute = 80;
+        let volumeBeforeMute = 100;
 
         function rxToggleMute() {
             const muteBtn = document.getElementById('muteBtn');
@@ -2501,10 +2532,28 @@
         }
 
         function drawLed() {
-            const baseL = 0.5 + Math.random() * 0.2;
-            simL += (Math.min(1.2, baseL + (Math.random() * 0.1)) - simL) * 0.25;
-            let activeValL = Math.round(Math.pow(simL, 1.5) * SEGMENT_COUNT * 1.3);
-            let activeValR = Math.round(Math.min(SEGMENT_COUNT, activeValL + (Math.random() - 0.5) * 4));
+            simulateFrequencyData();
+            
+            // Promedio para simular canal izquierdo
+            let avgL = 0;
+            for(let i = 0; i < 16; i++) avgL += dataArr[i];
+            avgL /= 16;
+            
+            // Promedio para simular canal derecho
+            let avgR = 0;
+            for(let i = 16; i < 32; i++) avgR += dataArr[i];
+            avgR /= 16;
+
+            // Mapear de 0-255 a 0-SEGMENT_COUNT (amplificando un poco el valor)
+            let targetL = (avgL / 255) * SEGMENT_COUNT * 1.3;
+            let targetR = (avgR / 255) * SEGMENT_COUNT * 1.3;
+            
+            // Suavizado del movimiento
+            simL += (targetL - simL) * 0.25;
+            simR += (targetR - simR) * 0.25;
+
+            let activeValL = Math.round(simL);
+            let activeValR = Math.round(simR);
 
             activeValL = Math.max(0, Math.min(SEGMENT_COUNT, activeValL));
             activeValR = Math.max(0, Math.min(SEGMENT_COUNT, activeValR));
@@ -2657,6 +2706,8 @@
                         isPlaying = true;
                         setIcon('playing');
                         document.getElementById('artPulse').style.animationPlayState = 'running';
+                        document.getElementById('rxCoverImg').style.animationPlayState = 'running';
+                        if (document.getElementById('artFallback')) document.getElementById('artFallback').style.animationPlayState = 'running';
                         setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
                         if (animId) cancelAnimationFrame(animId);
                         startAnalyser();
@@ -2672,6 +2723,8 @@
                 isPlaying = false;
                 setIcon('paused');
                 document.getElementById('artPulse').style.animationPlayState = 'paused';
+                document.getElementById('rxCoverImg').style.animationPlayState = 'paused';
+                if (document.getElementById('artFallback')) document.getElementById('artFallback').style.animationPlayState = 'paused';
                 setStatus('Pausado');
                 if (animId) cancelAnimationFrame(animId);
                 idleAnim();
@@ -2728,6 +2781,8 @@
                 isPlaying = false;
                 setIcon('paused');
                 document.getElementById('artPulse').style.animationPlayState = 'paused';
+                document.getElementById('rxCoverImg').style.animationPlayState = 'paused';
+                if (document.getElementById('artFallback')) document.getElementById('artFallback').style.animationPlayState = 'paused';
                 setStatus('Pausado por sistema');
                 if (animId) cancelAnimationFrame(animId);
                 idleAnim();
@@ -2759,6 +2814,8 @@
                 isPlaying = true;
                 setIcon('playing');
                 document.getElementById('artPulse').style.animationPlayState = 'running';
+                document.getElementById('rxCoverImg').style.animationPlayState = 'running';
+                if (document.getElementById('artFallback')) document.getElementById('artFallback').style.animationPlayState = 'running';
                 setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
                 if (animId) cancelAnimationFrame(animId);
                 startAnalyser();
