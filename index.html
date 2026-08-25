@@ -1042,18 +1042,18 @@
         }
 
         @keyframes rxLiveNeon {
-            0%, 49% { 
+            0%, 100% { 
+                color: #1a1a1a; /* Negro suave/apagado */
+                text-shadow: none; 
+            }
+            50% { 
                 color: #ff4a4a; /* Rojo brillante encendido */
                 text-shadow: 0 0 10px rgba(255, 74, 74, 0.8), 0 0 20px rgba(255, 74, 74, 0.6), 0 0 30px rgba(255, 74, 74, 0.4); 
-            }
-            50%, 100% { 
-                color: #222222; /* Negro completamente apagado */
-                text-shadow: none; 
             }
         }
 
         .rx-live-pill.active i, .rx-live-pill.active span {
-            animation: rxLiveNeon 1.5s infinite;
+            animation: rxLiveNeon 2.5s infinite ease-in-out;
         }
 
         .rx-status {
@@ -2810,7 +2810,7 @@
 
         function rxToggle() {
             if (!isPlaying) {
-                setStatus('Conectando...');
+                setStatus('');
                 setIcon('loading');
 
                 if (audio.src !== STREAM_URL) {
