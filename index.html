@@ -2937,7 +2937,7 @@
                 document.getElementById('artPulse').style.animationPlayState = 'running';
                 document.getElementById('rxCoverImg').style.animationPlayState = 'running';
                 if (document.getElementById('artFallback')) document.getElementById('artFallback').style.animationPlayState = 'running';
-                setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
+                setStatus('', 'playing');
                 if (animId) cancelAnimationFrame(animId);
                 startAnalyser();
             }
@@ -2972,7 +2972,7 @@
         });
 
         audio.addEventListener('playing', () => {
-            if (isPlaying) setStatus('<span class="rx-dot"></span>&nbsp;Transmitiendo en vivo', 'playing');
+            if (isPlaying) setStatus('', 'playing');
         });
 
         const sse = new EventSource('https://api.zeno.fm/mounts/metadata/subscribe/n7fm3s6537zuv');
