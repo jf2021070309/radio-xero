@@ -1042,13 +1042,17 @@
         }
 
         @keyframes rxLiveNeon {
-            0% { opacity: 0.85; text-shadow: 0 0 5px rgba(239, 68, 68, 0.4); }
-            50% { opacity: 1; text-shadow: 0 0 10px rgba(239, 68, 68, 0.8), 0 0 20px rgba(239, 68, 68, 0.6); }
-            100% { opacity: 0.85; text-shadow: 0 0 5px rgba(239, 68, 68, 0.4); }
+            0%, 100% { 
+                color: #7f1d1d; /* Rojo oscuro apagado */
+                text-shadow: 0 0 2px rgba(239, 68, 68, 0.3); 
+            }
+            50% { 
+                color: #ff4a4a; /* Rojo brillante encendido */
+                text-shadow: 0 0 10px rgba(255, 74, 74, 0.8), 0 0 20px rgba(255, 74, 74, 0.6), 0 0 30px rgba(255, 74, 74, 0.4); 
+            }
         }
 
         .rx-live-pill.active i, .rx-live-pill.active span {
-            color: #ef4444 !important;
             animation: rxLiveNeon 2.5s infinite ease-in-out;
         }
 
