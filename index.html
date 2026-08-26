@@ -126,6 +126,10 @@
                 gap: 1rem !important;
             }
 
+            .rx-station-logo {
+                height: 42px !important;
+            }
+
             .rx-art-wrapper {
                 width: 175px !important;
                 height: 175px !important;
@@ -676,24 +680,27 @@
             margin-top: 0.4rem;
         }
 
-        .rx-station-title {
+        .rx-station-header {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 2px;
+            width: 100%;
+            margin-bottom: 0.4rem;
+            z-index: 2;
         }
 
         .rx-station-logo {
-            height: 32px;
+            height: 48px;
             width: auto;
-            max-width: 160px;
+            max-width: 220px;
             object-fit: contain;
-            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
-            transition: transform 0.3s ease, filter 0.3s ease;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.35));
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease;
         }
 
         .rx-station-logo:hover {
-            transform: scale(1.05);
+            transform: scale(1.06);
+            filter: drop-shadow(0 6px 14px rgba(237, 28, 36, 0.35));
         }
 
         .rx-track-centered {
@@ -2283,6 +2290,11 @@
         <!-- ─── CUSTOM PLAYER (MODELO 1 + 3 VIZ EFFECTS) ─── -->
         <section class="player-card">
 
+            <!-- Logo superior de la estación -->
+            <div class="rx-station-header">
+                <img src="logo%20xero.png" alt="Radio Xero" class="rx-station-logo">
+            </div>
+
             <!-- Artwork Section with Circular Frame & Ambient Glow -->
             <div class="rx-art-wrapper">
                 <div class="rx-art-ambient" id="artAmbient"></div>
@@ -2309,13 +2321,9 @@
                 </div>
             </div>
 
-            <!-- Middle: Metadata (Station & Song Title) -->
+            <!-- Middle: Metadata (Song Title) -->
             <div class="rx-player-content">
                 <div class="rx-meta-centered">
-                    <div class="rx-station-title">
-                        <img src="logo%20xero.png" alt="Radio Xero" class="rx-station-logo">
-                    </div>
-
                     <div class="rx-track rx-track-centered" id="trackInfo">
                         <div class="rx-track-scroller">
                             <div class="rx-track-content">
