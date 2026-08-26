@@ -127,7 +127,7 @@
             }
 
             .rx-station-logo {
-                height: 42px !important;
+                height: 56px !important;
             }
 
             .rx-art-wrapper {
@@ -690,9 +690,9 @@
         }
 
         .rx-station-logo {
-            height: 48px;
+            height: 64px;
             width: auto;
-            max-width: 220px;
+            max-width: 280px;
             object-fit: contain;
             filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.35));
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease;
@@ -1009,7 +1009,11 @@
             justify-content: center;
             gap: 2rem;
             width: 100%;
-            margin-top: 0.5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
         }
 
         .rx-side-ctrl-btn {
@@ -2319,6 +2323,27 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Controls Row Overlay -->
+                <div class="rx-controls-row">
+                    <!-- Left: Visualizer Cycle Button -->
+                    <button class="rx-side-ctrl-btn" onclick="rxCycleVizMode()" title="Cambiar modo de visualizador">
+                        <i class="fas fa-bars-staggered"></i>
+                    </button>
+
+                    <!-- Center: Main Play Button -->
+                    <button class="rx-play-btn" id="playBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
+                        <svg id="playIcon" width="34" height="34" viewBox="0 0 24 24" fill="none">
+                            <polygon points="6,4 20,12 6,20" fill="currentColor" />
+                        </svg>
+                    </button>
+
+                    <!-- Right: Live Indicator Badge -->
+                    <div class="rx-live-pill" id="livePill" title="Transmisión en vivo">
+                        <i class="fas fa-tower-broadcast"></i>
+                        <span>LIVE</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Middle: Metadata (Song Title) -->
@@ -2363,27 +2388,6 @@
                     </div>
 
                     <canvas id="rxCanvas" class="rx-viz-canvas"></canvas>
-                </div>
-
-                <!-- Bottom Controls Row (Modelo 1: EQ button, Center Play button, LIVE icon) -->
-                <div class="rx-controls-row">
-                    <!-- Left: Visualizer Cycle Button -->
-                    <button class="rx-side-ctrl-btn" onclick="rxCycleVizMode()" title="Cambiar modo de visualizador">
-                        <i class="fas fa-bars-staggered"></i>
-                    </button>
-
-                    <!-- Center: Main Play Button -->
-                    <button class="rx-play-btn" id="playBtn" onclick="rxToggle()" aria-label="Reproducir / Pausar">
-                        <svg id="playIcon" width="34" height="34" viewBox="0 0 24 24" fill="none">
-                            <polygon points="6,4 20,12 6,20" fill="currentColor" />
-                        </svg>
-                    </button>
-
-                    <!-- Right: Live Indicator Badge -->
-                    <div class="rx-live-pill" id="livePill" title="Transmisión en vivo">
-                        <i class="fas fa-tower-broadcast"></i>
-                        <span>LIVE</span>
-                    </div>
                 </div>
 
                 <div class="rx-status" id="rxStatus">Listo para escuchar</div>
