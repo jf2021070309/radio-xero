@@ -677,11 +677,23 @@
         }
 
         .rx-station-title {
-            font-family: 'Poppins', 'Inter', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 500;
-            color: var(--text-dim);
-            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2px;
+        }
+
+        .rx-station-logo {
+            height: 32px;
+            width: auto;
+            max-width: 160px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .rx-station-logo:hover {
+            transform: scale(1.05);
         }
 
         .rx-track-centered {
@@ -2300,7 +2312,9 @@
             <!-- Middle: Metadata (Station & Song Title) -->
             <div class="rx-player-content">
                 <div class="rx-meta-centered">
-                    <div class="rx-station-title">Radio Xero</div>
+                    <div class="rx-station-title">
+                        <img src="logo%20xero.png" alt="Radio Xero" class="rx-station-logo">
+                    </div>
 
                     <div class="rx-track rx-track-centered" id="trackInfo">
                         <div class="rx-track-scroller">
