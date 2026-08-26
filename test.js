@@ -157,7 +157,7 @@
                     });
                 } else {
                     // Animación sutil para Canvas en pausa
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.clearRect(0, 0, canvasW, canvasH);
 
                     if (currentVizMode === 'bars') {
                         const count = 32;
@@ -343,7 +343,7 @@
         function drawBars() {
             if (canvasW === 0 || canvasH === 0) return;
             simulateFrequencyData();
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvasW, canvasH);
             
             const barCount = 32;
             const barWidth = (canvasW / barCount) * 0.78;
@@ -401,7 +401,7 @@
         function drawWave() {
             if (canvasW === 0 || canvasH === 0) return;
             simulateFrequencyData();
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvasW, canvasH);
 
             const pointsCount = 48;
             const usableBins = Math.min(dataArr.length, 64);
