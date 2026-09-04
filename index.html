@@ -2440,8 +2440,8 @@
 
                 // Assign color class based on position
                 const percent = (i / SEGMENT_COUNT) * 100;
-                if (percent < 50) seg.classList.add('low');
-                else if (percent < 80) seg.classList.add('mid');
+                if (percent < 45) seg.classList.add('low');
+                else if (percent < 65) seg.classList.add('mid');
                 else seg.classList.add('high');
 
                 container.appendChild(seg);
@@ -2464,7 +2464,7 @@
         let systemPauseAutoResume = false;
 
         // Variables de Visualización
-        let currentVizMode = 'bars';
+        let currentVizMode = 'led';
         let canvas = document.getElementById('rxCanvas');
         let ctx = canvas ? canvas.getContext('2d') : null;
 
@@ -2557,7 +2557,7 @@
                 t += 0.05;
 
                 if (currentVizMode === 'led') {
-                    const val = Math.abs(Math.sin(t)) * 0.35;
+                    const val = Math.abs(Math.sin(t)) * 0.75;
                     const activeCount = Math.round(val * SEGMENT_COUNT);
 
                     barsL.forEach((seg, i) => {
@@ -2727,7 +2727,7 @@
             const avg = total / bins;
 
             // Mapear de 0-255 a 0-SEGMENT_COUNT
-            let target = (avg / 255) * SEGMENT_COUNT * 1.35;
+            let target = (avg / 255) * SEGMENT_COUNT * 1.7;
             
             // Suavizado del movimiento a la par
             simL += (target - simL) * 0.28;
