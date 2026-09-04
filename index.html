@@ -2557,15 +2557,17 @@
                 t += 0.05;
 
                 if (currentVizMode === 'led') {
-                    const val = Math.abs(Math.sin(t)) * 0.9;
-                    const activeCount = Math.round(val * SEGMENT_COUNT);
+                    const valL = Math.abs(Math.sin(t)) * 0.9;
+                    const valR = Math.abs(Math.sin(t + 0.6)) * 0.9; // desfasado para canales independientes
+                    const activeCountL = Math.round(valL * SEGMENT_COUNT);
+                    const activeCountR = Math.round(valR * SEGMENT_COUNT);
 
                     barsL.forEach((seg, i) => {
-                        if (i < activeCount) seg.classList.add('active');
+                        if (i < activeCountL) seg.classList.add('active');
                         else seg.classList.remove('active');
                     });
                     barsR.forEach((seg, i) => {
-                        if (i < activeCount) seg.classList.add('active');
+                        if (i < activeCountR) seg.classList.add('active');
                         else seg.classList.remove('active');
                     });
                 } else {
@@ -2720,27 +2722,36 @@
         function drawLed() {
             simulateFrequencyData();
             
-            // Nivel promedio maestro para ambos canales equilibrados
-            let total = 0;
+            // Separar canales L y R usando diferentes rangos y variación estéreo
+            let totalL = 0;
+            let totalR = 0;
             const bins = 24;
-            for(let i = 0; i < bins; i++) total += dataArr[i];
-            const avg = total / bins;
-
-            // Mapear de 0-255 a 0-SEGMENT_COUNT
-            let target = (avg / 255) * SEGMENT_COUNT * 2.2;
+            const halfBins = bins / 2;
             
-            // Suavizado del movimiento a la par
-            simL += (target - simL) * 0.28;
-            simR = simL;
+            for(let i = 0; i < halfBins; i++) {
+                totalL += dataArr[i];
+                totalR += dataArr[i + halfBins];
+            }
+            const avgL = totalL / halfBins;
+            const avgR = totalR / halfBins;
 
-            let activeVal = Math.max(0, Math.min(SEGMENT_COUNT, Math.round(simL)));
+            // Mapear de 0-255 a 0-SEGMENT_COUNT con leve asimetría
+            let targetL = (avgL / 255) * SEGMENT_COUNT * 2.2 * (0.9 + Math.random() * 0.2);
+            let targetR = (avgR / 255) * SEGMENT_COUNT * 2.2 * (0.9 + Math.random() * 0.2);
+            
+            // Suavizado del movimiento independiente
+            simL += (targetL - simL) * 0.28;
+            simR += (targetR - simR) * 0.28;
+
+            let activeValL = Math.max(0, Math.min(SEGMENT_COUNT, Math.round(simL)));
+            let activeValR = Math.max(0, Math.min(SEGMENT_COUNT, Math.round(simR)));
 
             barsL.forEach((seg, i) => {
-                if (i < activeVal) seg.classList.add('active');
+                if (i < activeValL) seg.classList.add('active');
                 else seg.classList.remove('active');
             });
             barsR.forEach((seg, i) => {
-                if (i < activeVal) seg.classList.add('active');
+                if (i < activeValR) seg.classList.add('active');
                 else seg.classList.remove('active');
             });
         }
