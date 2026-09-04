@@ -2440,9 +2440,9 @@
 
                 // Assign color class based on position
                 const percent = (i / SEGMENT_COUNT) * 100;
-                if (percent < 45) seg.classList.add('low');
-                else if (percent < 65) seg.classList.add('mid');
-                else seg.classList.add('high');
+                if (percent < 35) seg.classList.add('low'); // First ~8 LEDs green
+                else if (percent < 50) seg.classList.add('mid'); // Next ~4 LEDs orange
+                else seg.classList.add('high'); // Rest are red
 
                 container.appendChild(seg);
                 array.push(seg);
@@ -2557,7 +2557,7 @@
                 t += 0.05;
 
                 if (currentVizMode === 'led') {
-                    const val = Math.abs(Math.sin(t)) * 0.75;
+                    const val = Math.abs(Math.sin(t)) * 0.9;
                     const activeCount = Math.round(val * SEGMENT_COUNT);
 
                     barsL.forEach((seg, i) => {
@@ -2727,7 +2727,7 @@
             const avg = total / bins;
 
             // Mapear de 0-255 a 0-SEGMENT_COUNT
-            let target = (avg / 255) * SEGMENT_COUNT * 1.7;
+            let target = (avg / 255) * SEGMENT_COUNT * 2.2;
             
             // Suavizado del movimiento a la par
             simL += (target - simL) * 0.28;
