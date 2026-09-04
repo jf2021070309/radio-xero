@@ -2722,22 +2722,15 @@
         function drawLed() {
             simulateFrequencyData();
             
-            // Separar canales L y R usando diferentes rangos y variación estéreo
-            let totalL = 0;
-            let totalR = 0;
+            // Nivel promedio maestro para ambos canales equilibrados
+            let total = 0;
             const bins = 24;
-            const halfBins = bins / 2;
-            
-            for(let i = 0; i < halfBins; i++) {
-                totalL += dataArr[i];
-                totalR += dataArr[i + halfBins];
-            }
-            const avgL = totalL / halfBins;
-            const avgR = totalR / halfBins;
+            for(let i = 0; i < bins; i++) total += dataArr[i];
+            const avg = total / bins;
 
-            // Mapear de 0-255 a 0-SEGMENT_COUNT con leve asimetría
-            let targetL = (avgL / 255) * SEGMENT_COUNT * 2.2 * (0.9 + Math.random() * 0.2);
-            let targetR = (avgR / 255) * SEGMENT_COUNT * 2.2 * (0.9 + Math.random() * 0.2);
+            // Mapear de 0-255 a 0-SEGMENT_COUNT con asimetría para separarlos visualmente
+            let targetL = (avg / 255) * SEGMENT_COUNT * 2.2 * (0.95 + Math.random() * 0.1);
+            let targetR = (avg / 255) * SEGMENT_COUNT * 2.2 * (0.95 + Math.random() * 0.1);
             
             // Suavizado del movimiento independiente
             simL += (targetL - simL) * 0.28;
